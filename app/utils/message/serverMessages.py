@@ -1,3 +1,0 @@
-invalidData=  """
-Dados invalidos.
-"""
