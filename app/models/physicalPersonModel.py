@@ -8,6 +8,10 @@ class PhysicalPerson(db.Model):
     full_name = db.Column(db.String(255),nullable=False)
     cpf = db.Column(db.String(20),nullable=False,unique=True)
     birth_date =  db.Column(db.DateTime,nullable=False)
+    
+    physical_children = db.relationship(
+        "Users", back_populates="physical_ship",
+        cascade="all, delete",passive_deletes=True) 
 
     def __init__(self,full_name,cpf,birth_date):
 

@@ -9,7 +9,6 @@ class Events(db.Model):
     name = db.Column(db.String(255),nullable=False)
     image = db.Column(db.String(255),nullable=False)
     video = db.Column(db.String(255),nullable=False)
-    # category = db.Column(db.String(255),nullable=False)
     
     cep = db.Column(db.String(30),nullable=False)
     state = db.Column(db.String(30),nullable=False)
@@ -24,19 +23,23 @@ class Events(db.Model):
     end_date = db.Column(db.DateTime,nullable=False)
     created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
     
-    active = db.Column(db.Boolean,default=False)
+    status = db.Column(db.Boolean,default=False)
+    
+    category_id = db.Column(db.ForeignKey("category.id",ondelete='cascade'),nullable=False)
+    category_ship = db.relationship('Category', back_populates="category_children")
 
-    def __init__(self,name,image,video,cep,address,number_address,state,
-                 complement,district,city,start_date,end_date,active=False,created_at=actualDate):
+    def __init__(self,name,image,video,cep,address,number_address,state,category_id,
+                 complement,district,city,start_date,end_date,status=False,created_at=actualDate):
 
         self.number_address= number_address
         self.created_at  = created_at()
+        self.category_id = category_id
         self.complement = complement
         self.start_date = start_date
         self.end_date = end_date
         self.district = district
         self.address = address
-        self.active = active
+        self.status = status
         self.image = image
         self.video = video
         self.state = state
