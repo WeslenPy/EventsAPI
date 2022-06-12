@@ -1,7 +1,6 @@
 from flask import request,jsonify,session
 from app.utils.functions import validity_password,decorators
-from app.utils.message import userMessages
-from app.models import User
+from app.models import Users
 from app import app,jwtGen
 
 
@@ -17,16 +16,13 @@ def auth_user():
     email = data.get('email',None)
     password = data.get('password',None)
 
-    user = User.query.filter_by(email=email).first()
+    user = Users.query.filter_by(email=email).first()
 
     if user:
         if validity_password.comparePassword(password,user.password):
-            if not user.active:return jsonify({'message':userMessages.notActiveAccount,'error':401}),401
+            if not user.active:return jsonify({'message':'Ative sua conta para prosseguir com o login.','error':401}),401
         
-            token = jwtGen.get_token(user.id,email,user.first_name,user.last_name,user.cpf)
-
-            if user.is_admin:session['user'] = [token,True]
-            else:session['user'] = [token,False]
+            token = jwtGen.get_token(user.id,email)
 
             return jsonify({'message':'success','error':0,'jwt':token}),200
 
