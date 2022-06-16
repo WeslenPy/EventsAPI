@@ -44,9 +44,9 @@ executor = Executor(app)
 jwtGen = GenerateJWT(app.config['SECRET_KEY'])
 
 db.create_all()
-db.session.execute("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));")
-db.session.execute("SET GLOBAL max_connections = 6000;")
-db.session.commit()
+# db.session.execute("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));")
+# db.session.execute("SET GLOBAL max_connections = 6000;")
+# db.session.commit()
 
 from .controllers.router_erros import *
 from .controllers.router_user import *
