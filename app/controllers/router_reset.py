@@ -13,23 +13,23 @@ import hashlib
 def change_password(currentUser):
 
     data = request.json
-    user = User.query.filter_by(id=currentUser['some']['id']).first()
+    user = Users.query.filter_by(id=currentUser['some']['id']).first()
     if user:
         if validity_password.validity_password(data['actualPassword'],user.password):
             user.password =encrypt_password.encryptPassword(data['newPassword'])
             db.session.commit()
-            return jsonify({'status':True,'message':'Senha alterada com sucesso','error':0}),200
+            return jsonify({'status':200,'message':'Senha alterada com sucesso','success':True}),200
         
-        return jsonify({'status':False,'message':'Senha invalida','error':1}),200
+        return jsonify({'status':200,'message':'Senha invalida','success':False}),200
     
-    return jsonify({'status':False,'message':'Usuário não encontrado','error':1}),200
+    return jsonify({'status':404,'message':'Usuário não encontrado','success':False}),404
     
 
 @app.route('/confirm/<token>',methods=['GET'])
 def validity_email(token):
     try:
         email = tokenSafe.loads(token,salt='emailConfirmUser',max_age=2000)
-        user  = User.query.filter_by(email=email).first()
+        user  = Users.query.filter_by(email=email).first()
         if user: 
             if not user.active:
                 user.active = True
@@ -38,11 +38,7 @@ def validity_email(token):
                 msg = Message("Bem-vindo!",
                   sender="noreply@meunumerovirtual.com",
                   recipients=[email])
-                msg.html = str(render_template('welcome.html'))
-                
-                executor.submit(mail.send,msg)
-                
-        return render_template('email_validity.html')
+        return ''
     except:
         return abort(404)
 
@@ -65,7 +61,7 @@ def forgot_password_reset():
     msg.html = str(render_template('email_reset.html',url_reset=f"{request.url}/{token_url}",username=user.first_name))
     executor.submit(mail.send,msg)
     
-    return jsonify({'data':{},'message':'E-mail para recuperação de senha enviado.','error':0}),200
+    return jsonify({'data':{},'message':'E-mail para recuperação de senha enviado.','success':True}),200
 
 @app.route('/forgot/password/<token>',methods=['POST'])
 @decorators.validityDecorator({"password":str})
@@ -78,6 +74,6 @@ def forgot_password(token):
         user.password = hashlib.sha256(str.encode(data['password'])).hexdigest()
         db.session.commit()
 
-        return jsonify({'data':{},'message':'Senha atualizada com sucesso','error':0}),200
+        return jsonify({'data':{},'message':'Senha atualizada com sucesso','success':True}),200
     except:
         return abort(404)

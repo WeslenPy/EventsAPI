@@ -19,10 +19,15 @@ class GenreTypes(db.Model):
     def __init__(self,type,description,status=True,created_at=actualDate):
 
         self.type = type
-        self.active = active
+        self.status = status
         self.description = description
         self.created_at  = created_at()
         
     def __repr__(self) -> str:
         return self.type
+
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
         

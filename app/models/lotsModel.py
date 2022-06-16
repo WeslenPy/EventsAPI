@@ -31,3 +31,8 @@ class Lots(db.Model):
         self.ticket_id = ticket_id
         self.status = status
         
+
+        
+    def save(self):
+        db.session.add(self)
+        db.session.commit()

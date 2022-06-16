@@ -22,4 +22,9 @@ class Category(db.Model):
         
     def __repr__(self) -> str:
         return self.name
+
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
         

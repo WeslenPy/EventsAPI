@@ -30,3 +30,7 @@ class Tickets(db.Model):
     def __repr__(self) -> str:
         return self.title
         
+        
+    def save(self):
+        db.session.add(self)
+        db.session.commit()

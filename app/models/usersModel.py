@@ -26,7 +26,7 @@ class Users(db.Model):
     
     physical_id = db.Column(db.ForeignKey("physical_person.id",ondelete='cascade'),nullable=True)
     legal_id = db.Column(db.ForeignKey("legal_person.id",ondelete='cascade'),nullable=True)
-    genre_id = db.Column(db.ForeignKey("genre_types.id",ondelete='cascade'),nullable=False)
+    genre_id = db.Column(db.ForeignKey("genre_types.id",ondelete='cascade'),nullable=True)
 
     physical_ship = db.relationship('PhysicalPerson', back_populates="physical_children")
     legal_ship = db.relationship('LegalPerson', back_populates="legal_children")
@@ -36,19 +36,17 @@ class Users(db.Model):
         "Orders", back_populates="user_ship",
         cascade="all, delete",passive_deletes=True)
 
-    def __init__(self,first_name,last_name,password,email,phone,cep,address,number_address,
-                 complement,district,city,physical_id,legal_ship,genre_ship,
+    def __init__(self,email,password,phone,cep,address,number_address,
+                 complement,district,city,genre_id=None,physical_id=None,legal_id=None,
                  is_admin=False,active=False,created_at=actualDate):
 
         self.password = hashlib.sha256(str.encode(password)).hexdigest()
         self.number_address= number_address
         self.created_at  = created_at()
         self.physical_id = physical_id
-        self.legal_ship = legal_ship
-        self.genre_ship = genre_ship
+        self.legal_id = legal_id
+        self.genre_id = genre_id
         self.complement = complement
-        self.first_name = first_name
-        self.last_name = last_name
         self.is_admin = is_admin
         self.district = district
         self.address = address
@@ -57,5 +55,5 @@ class Users(db.Model):
         self.phone = phone
         self.city = city
         self.cep = cep
-    
-   
+
+

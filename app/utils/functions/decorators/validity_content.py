@@ -7,18 +7,20 @@ def validityDecorator(data):
         @wraps(func)
         def wrapper(*args):
             typeData = type(data)
-            message = jsonify({'message':'Revise os dados e tente novamente!','error':1}),200
+            message = jsonify({'message':'missing or invalid field','arg':'','success':False}),200
 
             for item in data:
-                current = request.json.get(item,None)
+                current = request.json.get(item,'NOTCONTENT')
 
-                if current==None or not current:return message
+                if current=='NOTCONTENT' or not current:return message
                 elif typeData == dict:
                     if type(data[item]) in [list,tuple]:
                         if type(current) not in data[item]:
+                            message['arg'] = item
                             return message
                     else:
                         if type(current) != data[item]:
+                            message['arg'] = item
                             return message
 
             return func(*args)

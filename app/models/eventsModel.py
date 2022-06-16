@@ -12,18 +12,21 @@ class Events(db.Model):
     
     cep = db.Column(db.String(30),nullable=False)
     state = db.Column(db.String(30),nullable=False)
-    address = db.Column(db.String(60),nullable=False)
+    address = db.Column(db.String(255),nullable=False)
     number_address = db.Column(db.BigInteger,nullable=True)
     
     complement = db.Column(db.String(255),nullable=False)
-    district = db.Column(db.String(60),nullable=False)
-    city = db.Column(db.String(60),nullable=False)
+    district = db.Column(db.String(100),nullable=False)
+    city = db.Column(db.String(100),nullable=False)
     
     start_date = db.Column(db.DateTime,nullable=False)
     end_date = db.Column(db.DateTime,nullable=False)
     created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
     
     status = db.Column(db.Boolean,default=False)
+    
+    category_id = db.Column(db.ForeignKey("category.id",ondelete='cascade'),nullable=False)
+    category_ship = db.relationship('Category', back_populates="category_children")
     
     category_id = db.Column(db.ForeignKey("category.id",ondelete='cascade'),nullable=False)
     category_ship = db.relationship('Category', back_populates="category_children")
@@ -48,5 +51,9 @@ class Events(db.Model):
         self.cep = cep
     
     def __repr__(self) -> str:
-        return self.first_name
+        return self.name
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
         

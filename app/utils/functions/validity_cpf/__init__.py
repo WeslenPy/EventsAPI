@@ -1,4 +1,8 @@
-def validatyCPF(cpf):
+def validatyCPF(cpf:str):
+    
+    cpfRepeater = cpf.replace('-','.').split('.')
+    cpf = cpf.replace('.','').replace('-','')
+
     if cpf.isdigit(): return False
     if len(cpf) < 11 or len(cpf)>14:
         return False
@@ -18,7 +22,6 @@ def validatyCPF(cpf):
             total = 0
             novo_cpf += str(d)
 
-    sequencia = novo_cpf == str(novo_cpf[0]) * len(cpf)
-    if cpf == novo_cpf and not sequencia:
-        return True
+    if cpf == novo_cpf and not len(set(cpfRepeater))==1:
+        return cpf
     return False

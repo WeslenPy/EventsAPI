@@ -1,51 +1,103 @@
-from flask import render_template,request,jsonify,session
-from flask_mail import Message
-
-from sqlalchemy.sql import functions
-
-from app.utils.functions import decorators,not_found,validity_cpf
+from flask import render_template,request,jsonify
+from app.utils.functions import decorators,validity_cpf
 from app import app,db,tokenSafe,executor,mail
-from app.api import NumberAPI
+from flask_mail import Message
+from datetime import datetime
 from app.models import *
 from app.schema import *
 
 
-@app.route('/register',methods=['POST'])
-@decorators.validityDecorator({'first_name':str,'last_name':str,'email':str,'password':str})
-def register():
+@app.route('/api/v1/register/physical',methods=['POST'])
+@decorators.validityDecorator({'email':str,'password':str,'phone':str,'cep':str,'address':str,'number_address':int,
+                 'complement':str,'district':str,'city':str,'cpf':str,'full_name':str,'birth_day':[str,datetime],'genre_id':int})
+def register_physical():
 
     data = request.json
+    if Users.query.filter_by(email=data['email']).first():
+        return jsonify({'status':200,
+                        'message':'Email has already been registered.',
+                        'success':False}),200
 
-    first_name = str(data['first_name']).strip()
-    last_name = str(data['last_name']).strip()
-    email = str(data['email']).strip()
-    password = str(data['password']).strip()
+    cpf =  validity_cpf.validatyCPF(data['cpf'])
+    if not cpf:
+        return ({'status':200,
+                'message':'CPF is invalid.',
+                'success':False}),200
 
-    if Users.query.filter_by(email=email).first():
-        return jsonify({'message':'Email já foi cadastrado.','error':1}),200
+    elif PhysicalPerson.query.filter_by(cpf=cpf).first():
+        return ({'status':200,
+                'message':'CPF has already been registered.',
+                'success':False}),200
 
-    user = Users(first_name=first_name,last_name=last_name,password=password,
-                email=email)
 
-    db.session.add(user)
+    physical = PhysicalPerson(data['full_name'],data['cpf'],data['birth_date'])
+    db.session.add(physical)
     db.session.commit()
 
-    token_url = tokenSafe.dumps(email,salt='emailConfirmUser')
+    new_user = Users(data['email'],data['password'],data['phone'],data['cep'],
+                    data['address'],data['number_address'],data['complement'],data['district'],data['city'],
+                    physical_id=physical.id,genre_id=data['genre_id'])
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    token_url = tokenSafe.dumps(data['email'],salt='emailConfirmUser')
     msg = Message("Não responda este e-mail",
-            sender="noreply@meunumerovirtual.com",
-            recipients=[email])
+            sender=app.config[''],
+            recipients=[data['email']])
 
     url_root = request.base_url.replace(request.path,f'/confirm/{token_url}')
     
-    msg.html = str(render_template('confirm_email.html',url_validity=url_root,username=first_name))
+    msg.html = str(render_template('confirm_email.html',url_validity=url_root,username=data['full_name']))
     executor.submit(mail.send,msg)
     
-    session['admin_logger'] = [False,False]
-
     return jsonify({
             'status':200,
-            'message':'Enviamos um link de confirmação para seu e-mail, acesse-o para ativar sua conta!',
-            'error':0}),200
+            'message':'Link send to your email',
+            'success':True}),200
+
+
+@app.route('/api/v1/register/juridical',methods=['POST'])
+@decorators.validityDecorator({'email':str,'password':str,'phone':str,'cep':str,'address':str,'number_address':int,
+                 'complement':str,'district':str,'city':str,'cnpj':str,"corporate_name":str})
+def register_legal():
+
+    data = request.json
+    if Users.query.filter_by(email=data['email']).first():
+        return jsonify({'status':200,
+                        'message':'Email has already been registered.',
+                        'success':False}),200
+
+    elif LegalPerson.query.filter_by(cnpj=data['cnpj']).first():
+        return ({'status':200,
+                'message':'CNPJ has already been registered.',
+                'success':False}),200
+
+    new_juridical = LegalPerson(data['corporate_name'],data['cnpj'])
+    db.session.add(new_juridical)
+    db.session.commit()
+
+    new_user = Users(data['email'],data['password'],data['phone'],data['cep'],data['address'],
+                        data['number_address'],data['complement'],data['district'],data['city'],
+                        legal_id=new_juridical.id)
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    token_url = tokenSafe.dumps(data['email'],salt='emailConfirmUser')
+    msg = Message("Não responda este e-mail",
+            sender=app.config[''],
+            recipients=[data['email']])
+
+    url_root = request.base_url.replace(request.path,f'/confirm/{token_url}')
+    
+    msg.html = str(render_template('confirm_email.html',url_validity=url_root,username=data['corporate_name']))
+    executor.submit(mail.send,msg)
+    
+    return jsonify({
+            'status':200,
+            'message':'Link send to your email',
+            'success':True}),200
 
 
 

@@ -1,7 +1,7 @@
 from app import ma
+from app.models import Users
 
-class UserSchema(ma.Schema):
-    created_at = ma.DateTime(format='%d/%m/%Y H %H:%M:%S')
+class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        fields = ('id','cpf','first_name','last_name','email','balance',
-                            'created_at','blocked_time','cancellation_count')
+        model = Users
+        load_instance = True

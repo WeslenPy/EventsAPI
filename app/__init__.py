@@ -13,7 +13,7 @@ from .auth import GenerateJWT
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:54U*%HGihgiGY#$Q@localhost/Storage'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:54U*%HGihgiGY#$Q@localhost/StorageDev'
 app.config['SECRET_KEY'] = '54U*%HGihgiGY#$Q@54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -54,6 +54,5 @@ from .controllers.router_api import *
 from .controllers.router_auth import *
 from .controllers.router_order import *
 from .controllers.router_reset import *
-from .controllers.router_templates import *
 from .controllers.router_webhooks import *
 from .controllers.router_admin import *

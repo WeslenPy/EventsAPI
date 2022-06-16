@@ -1,4 +1,3 @@
-from coinbase_commerce.webhook import Webhook
 from datetime import datetime
 
 from flask import request,jsonify
