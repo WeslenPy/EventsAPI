@@ -34,4 +34,28 @@ def create_ticket():
     return jsonify({'status':200,'message':'ticket created successfully','data':ticketData,'success':True}),200
 
 
+@app.route('/api/v1/create/genre',methods=['POST'])
+# @decorators.authUserDecorator(is_admin=True)
+@decorators.validityDecorator({'type':str,'description':str})
+def create_genre():
+    data = request.get_json()
+    genre:GenreTypes = GenreTypeSchema().load(data)
+    genre.save()
+
+    genreData = GenreTypeSchema().dump(genre)
+    return jsonify({'status':200,'message':'genre created successfully','data':genreData,'success':True}),200
+
+   
+@app.route('/api/v1/create/category',methods=['POST'])
+@decorators.authUserDecorator(is_admin=True)
+@decorators.validityDecorator({'name':str,'description':str})
+def create_category():
+    data = request.get_json()
+    new_category:Category = CategorySchema().load(data)
+    new_category.save()
+
+    categoryData = CategorySchema().dump(new_category)
+    return jsonify({'status':200,'message':'category created successfully','data':categoryData,'success':True}),200
+
+
    

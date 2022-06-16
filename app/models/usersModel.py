@@ -37,20 +37,21 @@ class Users(db.Model):
         cascade="all, delete",passive_deletes=True)
 
     def __init__(self,email,password,phone,cep,address,number_address,
-                 complement,district,city,genre_id=None,physical_id=None,legal_id=None,
+                 complement,district,city,state,genre_id=None,physical_id=None,legal_id=None,
                  is_admin=False,active=False,created_at=actualDate):
 
         self.password = hashlib.sha256(str.encode(password)).hexdigest()
         self.number_address= number_address
         self.created_at  = created_at()
         self.physical_id = physical_id
+        self.complement = complement
         self.legal_id = legal_id
         self.genre_id = genre_id
-        self.complement = complement
         self.is_admin = is_admin
         self.district = district
         self.address = address
         self.active = active
+        self.state = state
         self.email = email
         self.phone = phone
         self.city = city
