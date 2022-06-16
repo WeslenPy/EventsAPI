@@ -8,7 +8,7 @@ from app.schema import *
 
 
 @app.route('/api/v1/register/physical',methods=['POST'])
-@decorators.validityDecorator({'email':str,'password':str,'phone':str,'cep':str,'address':str,'number_address':int,'state':str,
+@decorators.validityDecorator({'email':str,'password':str,'phone':str,'cep':int,'address':str,'number_address':int,'state':str,
                  'complement':str,'district':str,'city':str,'cpf':str,'full_name':str,'birth_day':[str,datetime],'genre_id':int})
 def register_physical():
 
@@ -58,7 +58,7 @@ def register_physical():
 
 
 @app.route('/api/v1/register/juridical',methods=['POST'])
-@decorators.validityDecorator({'email':str,'password':str,'phone':str,'cep':str,'address':str,'number_address':int,
+@decorators.validityDecorator({'email':str,'password':str,'phone':str,'cep':int,'address':str,'number_address':int,
                  'complement':str,'district':str,'city':str,'cnpj':str,"corporate_name":str,'state':str})
 def register_legal():
 

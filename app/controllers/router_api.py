@@ -39,11 +39,19 @@ def create_ticket():
 @decorators.validityDecorator({'type':str,'description':str})
 def create_genre():
     data = request.get_json()
-    genre:GenreTypes = GenreTypeSchema().load(data)
-    genre.save()
 
-    genreData = GenreTypeSchema().dump(genre)
-    return jsonify({'status':200,'message':'genre created successfully','data':genreData,'success':True}),200
+    genreFind =GenreTypes.query.filter_by(type=data['type']).first()
+    if not genreFind:
+        genre:GenreTypes = GenreTypeSchema().load(data)
+        genre.save()
+
+        genreData = GenreTypeSchema().dump(genre)
+        return jsonify({'status':200,'message':'genre created successfully','data':genreData,'success':True}),200
+
+    genreData = GenreTypeSchema().dump(genreFind)
+    return jsonify({'status':200,'message':'genre has already been registered','data':genreData,'success':False}),200
+    
+
 
    
 @app.route('/api/v1/create/category',methods=['POST'])
@@ -51,11 +59,18 @@ def create_genre():
 @decorators.validityDecorator({'name':str,'description':str})
 def create_category():
     data = request.get_json()
-    new_category:Category = CategorySchema().load(data)
-    new_category.save()
+    
+    categoryFind =Category.query.filter_by(name=data['name']).first()
+    if not categoryFind:
+        new_category:Category = CategorySchema().load(data)
+        new_category.save()
 
-    categoryData = CategorySchema().dump(new_category)
-    return jsonify({'status':200,'message':'category created successfully','data':categoryData,'success':True}),200
+        categoryData = CategorySchema().dump(new_category)
+        return jsonify({'status':200,'message':'category created successfully','data':categoryData,'success':True}),200
+    
+    categoryData = GenreTypeSchema().dump(categoryFind)
+    return jsonify({'status':200,'message':'category has already been registered','data':categoryData,'success':False}),200
+    
 
 
    
