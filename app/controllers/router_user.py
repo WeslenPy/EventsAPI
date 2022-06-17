@@ -1,5 +1,5 @@
 from flask import render_template,request,jsonify
-from app.utils.functions import decorators,validity_cpf
+from app.utils.functions import decorators,validitys
 from app import app,db,tokenSafe,executor,mail
 from flask_mail import Message
 from datetime import datetime
@@ -13,28 +13,12 @@ from app.schema import *
 def register_physical():
 
     data = request.get_json()
-    if Users.query.filter_by(email=data['email']).first():
-        return jsonify({'status':200,
-                        'message':'Email has already been registered.',
-                        'success':False}),200 
     
-    elif Users.query.filter_by(phone=data['phone']).first():
-        return jsonify({'status':200,
-                        'message':'Phone has already been registered.',
-                        'success':False}),200
+    print(data['cpf'])
+    result = validitys.validityAlready(data,'cpf')
+    if result:return result
 
-    cpf =  validity_cpf.validatyCPF(data['cpf'])
-    if not cpf:
-        return ({'status':200,
-                'message':'CPF is invalid.',
-                'success':False}),200
-
-    elif PhysicalPerson.query.filter_by(cpf=cpf).first():
-        return ({'status':200,
-                'message':'CPF has already been registered.',
-                'success':False}),200
-
-    data['cpf'] = cpf
+    print(data['cpf'])
 
     physical:PhysicalPerson = PhysicalPersonSchema().load(data)
     physical.save()
@@ -65,15 +49,8 @@ def register_physical():
 def register_legal():
 
     data = request.json
-    if Users.query.filter_by(email=data['email']).first():
-        return jsonify({'status':200,
-                        'message':'Email has already been registered.',
-                        'success':False}),200
-
-    elif LegalPerson.query.filter_by(cnpj=data['cnpj']).first():
-        return ({'status':200,
-                'message':'CNPJ has already been registered.',
-                'success':False}),200
+    result = validitys.validityAlready(data,'cnpj')
+    if result:return result
 
     new_juridical = LegalPersonSchema().load(data)
     new_juridical.save()

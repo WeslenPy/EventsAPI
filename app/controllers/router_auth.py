@@ -1,5 +1,5 @@
 from flask import request,jsonify
-from app.utils.functions import validity_password,decorators
+from app.utils.functions import validitys,decorators
 from app.models import Users
 from app import app,jwtGen
 
@@ -15,7 +15,7 @@ def login_user():
     user = Users.query.filter_by(email=email).first()
 
     if user:
-        if validity_password.comparePassword(password,user.password):
+        if validitys.comparePassword(password,user.password):
             # if not user.active:return jsonify({'message':'Activate your account to proceed with login.','success':False,'status':401}),401
         
             token = jwtGen.get_token(user.id,email)

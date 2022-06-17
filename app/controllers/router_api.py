@@ -66,8 +66,23 @@ def create_category():
         categoryData = CategorySchema().dump(new_category)
         return jsonify({'status':200,'message':'category created successfully','data':categoryData,'success':True}),200
     
-    categoryData = GenreTypeSchema().dump(categoryFind)
+    categoryData = CategorySchema().dump(categoryFind)
     return jsonify({'status':200,'message':'category has already been registered','data':categoryData,'success':False}),200
+    
+
+@app.route('/api/v1/create/lots',methods=['POST'])
+@decorators.authUserDecorator(is_admin=True)
+@decorators.validityDecorator({'quantity':int,'price':[float,int],'start_date':datetime,
+                                "end_date":datetime,'ticket_id':int,'status':bool})
+def create_lots():
+    data = request.get_json()
+    
+    new_lot:Lots = LotSchema().load(data)
+    new_lot.save()
+
+    lotData = LotSchema().dump(new_lot)
+    return jsonify({'status':200,'message':'lot created successfully','data':lotData,'success':True}),200
+
     
 
 

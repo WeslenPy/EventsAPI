@@ -1,7 +1,7 @@
 from flask import request,jsonify,render_template,abort
 from flask_mail import Message
 
-from app.utils.functions import validity_password,encrypt_password,decorators,not_found
+from app.utils.functions import encrypt_password,decorators,validitys
 from app import app,db,tokenSafe,mail,executor
 from app.models import *
 import hashlib
@@ -15,7 +15,7 @@ def change_password(currentUser):
     data = request.json
     user = Users.query.filter_by(id=currentUser['some']['id']).first()
     if user:
-        if validity_password.validity_password(data['actualPassword'],user.password):
+        if validitys.comparePassword(data['actualPassword'],user.password):
             user.password =encrypt_password.encryptPassword(data['newPassword'])
             db.session.commit()
             return jsonify({'status':200,'message':'Senha alterada com sucesso','success':True}),200
