@@ -40,7 +40,7 @@ def create_ticket():
 def create_genre():
     data = request.get_json()
 
-    genreFind =GenreTypes.query.filter_by(type=data['type']).first()
+    genreFind =GenreTypes.query.filter(GenreTypes.type==data['type']).first()
     if not genreFind:
         genre:GenreTypes = GenreTypeSchema().load(data)
         genre.save()
@@ -51,8 +51,6 @@ def create_genre():
     genreData = GenreTypeSchema().dump(genreFind)
     return jsonify({'status':200,'message':'genre has already been registered','data':genreData,'success':False}),200
     
-
-
    
 @app.route('/api/v1/create/category',methods=['POST'])
 @decorators.authUserDecorator(is_admin=True)

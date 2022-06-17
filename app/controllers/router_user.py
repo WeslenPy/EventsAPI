@@ -8,14 +8,19 @@ from app.schema import *
 
 
 @app.route('/api/v1/register/physical',methods=['POST'])
-@decorators.validityDecorator({'email':str,'password':str,'phone':str,'cep':int,'address':str,'number_address':int,'state':str,
-                 'complement':str,'district':str,'city':str,'cpf':str,'full_name':str,'birth_day':[str,datetime],'genre_id':int})
+@decorators.validityDecorator({'email':str,'password':str,'phone':int,'cep':int,'address':str,'number_address':int,'state':str,
+                 'complement':str,'district':str,'city':str,'cpf':str,'full_name':str,'birth_date':datetime,'genre_id':int})
 def register_physical():
 
-    data = request.json
+    data = request.get_json()
     if Users.query.filter_by(email=data['email']).first():
         return jsonify({'status':200,
                         'message':'Email has already been registered.',
+                        'success':False}),200 
+    
+    elif Users.query.filter_by(phone=data['phone']).first():
+        return jsonify({'status':200,
+                        'message':'Phone has already been registered.',
                         'success':False}),200
 
     cpf =  validity_cpf.validatyCPF(data['cpf'])
@@ -29,17 +34,14 @@ def register_physical():
                 'message':'CPF has already been registered.',
                 'success':False}),200
 
+    data['cpf'] = cpf
 
-    physical = PhysicalPerson(data['full_name'],data['cpf'],data['birth_day'])
-    db.session.add(physical)
-    db.session.commit()
+    physical:PhysicalPerson = PhysicalPersonSchema().load(data)
+    physical.save()
 
-    new_user = Users(data['email'],data['password'],data['phone'],data['cep'],
-                    data['address'],data['number_address'],data['complement'],data['district'],data['city'],data['state'],
-                    physical_id=physical.id,genre_id=data['genre_id'])
-
-    db.session.add(new_user)
-    db.session.commit()
+    data['physical_id'] = physical.id
+    new_user:Users = UserSchema().load(data)
+    new_user.save()
 
 #     token_url = tokenSafe.dumps(data['email'],salt='emailConfirmUser')
 #     msg = Message("Não responda este e-mail",
@@ -73,16 +75,12 @@ def register_legal():
                 'message':'CNPJ has already been registered.',
                 'success':False}),200
 
-    new_juridical = LegalPerson(data['corporate_name'],data['cnpj'])
-    db.session.add(new_juridical)
-    db.session.commit()
+    new_juridical = LegalPersonSchema().load(data)
+    new_juridical.save()
 
-    new_user = Users(data['email'],data['password'],data['phone'],data['cep'],data['address'],
-                        data['number_address'],data['complement'],data['district'],data['city'],
-                        legal_id=new_juridical.id)
-
-    db.session.add(new_user)
-    db.session.commit()
+    data['legal_id'] = new_juridical.id
+    new_user = UserSchema().load(data)
+    new_user.save()
 
     token_url = tokenSafe.dumps(data['email'],salt='emailConfirmUser')
     msg = Message("Não responda este e-mail",

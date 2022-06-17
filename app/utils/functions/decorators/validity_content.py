@@ -1,6 +1,6 @@
 from flask import request,jsonify
 from functools import wraps
-
+from datetime import datetime
 
 def validityDecorator(data):
     def returnDecorator(func):
@@ -25,27 +25,48 @@ def validityDecorator(data):
 
             for item in data:
 
-                current = json_data.get(item,'NOTCONTENT')
+                current = json_data.get(item,None)
 
-                if current=='NOTCONTENT' or not current:
+                if current is None or not current:
                     message['details']['param'] = item
                     return  jsonify(message),200
 
                 elif typeData == dict:
                     
                     if type(data[item]) in [list,tuple]:
-                        if type(current) not in data[item]:
-                            message['details']['param'] = item
-                            message['details']['invalid_type'] = True
-                            return jsonify(message),200
+                        if data[item] == datetime:
+                            new = convertToDatetime(current)
+                            if  new:json_data[item] = new
+                            else:return pattern_message(item,message)
+
+                        elif type(current) not in data[item]:
+                            return pattern_message(item,message)
+
                     else:
-                        if type(current) != data[item]:
-                            message['details']['param'] = item
-                            message['details']['invalid_type'] = True
-                            return  jsonify(message),200
+                        if data[item] == datetime:
+                            new = convertToDatetime(current)
+                            if new:json_data[item] = new
+                            else:return pattern_message(item,message)
+
+                        elif type(current) != data[item]:
+                           return pattern_message(item,message)
 
             return func(*args)
             
         return wrapper
         
     return returnDecorator
+
+
+def pattern_message(item,message):
+    message['details']['param'] = item
+    message['details']['invalid_type'] = True
+    return  jsonify(message),200
+
+
+def convertToDatetime(date):
+    try:
+        new = datetime.strptime(date, "%Y-%m-%d").isoformat()
+        return new
+    except:
+        return False

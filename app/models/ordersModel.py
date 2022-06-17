@@ -31,3 +31,6 @@ class Orders(db.Model):
         self.payment_at  =payment_at
         self.created_at  =created_at()
         
+    def save(self):
+        db.session.add(self)
+        db.session.commit()

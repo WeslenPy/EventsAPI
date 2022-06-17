@@ -20,3 +20,6 @@ class LegalPerson(db.Model):
     def __repr__(self) -> str:
         return self.corporate_name
         
+    def save(self):
+        db.session.add(self)
+        db.session.commit()

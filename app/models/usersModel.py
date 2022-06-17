@@ -10,8 +10,8 @@ class Users(db.Model):
     email = db.Column(db.String(60),unique=True,nullable=False)
     password = db.Column(db.String(67),nullable=False)
     
-    phone = db.Column(db.String(14),unique=True,nullable=False)
-    cep = db.Column(db.String(30),nullable=False)
+    phone = db.Column(db.BigInteger,unique=True,nullable=False)
+    cep = db.Column(db.BigInteger,nullable=False)
     address = db.Column(db.String(60),nullable=False)
     number_address = db.Column(db.BigInteger,nullable=True)
     
@@ -58,3 +58,6 @@ class Users(db.Model):
         self.cep = cep
 
 
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
