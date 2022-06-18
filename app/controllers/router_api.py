@@ -13,9 +13,16 @@ POST REGISTER DATA
 # @decorators.authUserDecorator(is_admin=True)
 @decorators.validityDecorator({'name':str,'image':str,'video':str,'cep':int,'state':str,'address':str,
                                 'number_address':int,'complement':str,'district':str,'city':str,"start_date":datetime,
-                                'end_date':datetime,'status':bool,"category_id":int})
+                                'end_date':datetime,'status':bool,"category_id":int,"ticket_id":int})
 def create_event():
     data = request.get_json()
+
+    getCategory = Category.query.get(data['category_id'])
+    if not getCategory:return jsonify({'status':200,'message':"Invalid category_id",'success':True}),200
+    
+    getTicket= Tickets.query.get(data['ticket_id'])
+    if not getTicket:return jsonify({'status':200,'message':"Invalid ticket_id",'success':True}),200
+
     event:Events = EventSchema().load(data)
     event.save()
 
