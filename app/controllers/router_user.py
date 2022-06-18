@@ -14,11 +14,8 @@ def register_physical():
 
     data = request.get_json()
     
-    print(data['cpf'])
     result = validitys.validityAlready(data,'cpf')
     if result:return result
-
-    print(data['cpf'])
 
     physical:PhysicalPerson = PhysicalPersonSchema().load(data)
     physical.save()
@@ -48,15 +45,15 @@ def register_physical():
                  'complement':str,'district':str,'city':str,'cnpj':str,"corporate_name":str,'state':str})
 def register_legal():
 
-    data = request.json
+    data =  request.get_json()
     result = validitys.validityAlready(data,'cnpj')
     if result:return result
 
-    new_juridical = LegalPersonSchema().load(data)
+    new_juridical:LegalPerson = LegalPersonSchema().load(data)
     new_juridical.save()
 
     data['legal_id'] = new_juridical.id
-    new_user = UserSchema().load(data)
+    new_user:Users = UserSchema().load(data)
     new_user.save()
 
     token_url = tokenSafe.dumps(data['email'],salt='emailConfirmUser')

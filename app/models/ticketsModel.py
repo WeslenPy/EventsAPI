@@ -14,8 +14,12 @@ class Tickets(db.Model):
 
     created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
     
-    ticket_children = db.relationship(
+    ticket_lot_children = db.relationship(
         "Lots", back_populates="ticket_ship",
+        cascade="all, delete",passive_deletes=True)
+      
+    ticket_event_children = db.relationship(
+        "Events", back_populates="ticket_ship",
         cascade="all, delete",passive_deletes=True)
     
     def __init__(self,title,description,max_buy,min_buy,paid,created_at=actualDate):

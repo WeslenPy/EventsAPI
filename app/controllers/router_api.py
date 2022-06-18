@@ -6,10 +6,11 @@ from app import app
 from app.models import *
 from app.schema import *
 
-
-
+"""
+POST REGISTER DATA 
+"""
 @app.route('/api/v1/create/event',methods=['POST'])
-@decorators.authUserDecorator(is_admin=True)
+# @decorators.authUserDecorator(is_admin=True)
 @decorators.validityDecorator({'name':str,'image':str,'video':str,'cep':str,'state':str,'address':str,
                                 'number_address':int,'complement':str,'district':str,'city':str,"start_date":[str,datetime],
                                 'end_date':[str,datetime],'status':bool,"category_id":int})
@@ -23,7 +24,7 @@ def create_event():
     
 
 @app.route('/api/v1/create/ticket',methods=['POST'])
-@decorators.authUserDecorator(is_admin=True)
+# @decorators.authUserDecorator(is_admin=True)
 @decorators.validityDecorator({'title':str,'description':str,'max_buy':int,'min_buy':int,'paid':bool})
 def create_ticket():
     data = request.get_json()
@@ -53,7 +54,7 @@ def create_genre():
     
    
 @app.route('/api/v1/create/category',methods=['POST'])
-@decorators.authUserDecorator(is_admin=True)
+# @decorators.authUserDecorator(is_admin=True)
 @decorators.validityDecorator({'name':str,'description':str})
 def create_category():
     data = request.get_json()
@@ -70,11 +71,11 @@ def create_category():
     return jsonify({'status':200,'message':'category has already been registered','data':categoryData,'success':False}),200
     
 
-@app.route('/api/v1/create/lots',methods=['POST'])
-@decorators.authUserDecorator(is_admin=True)
+@app.route('/api/v1/create/lot',methods=['POST'])
+# @decorators.authUserDecorator(is_admin=True)
 @decorators.validityDecorator({'quantity':int,'price':[float,int],'start_date':datetime,
                                 "end_date":datetime,'ticket_id':int,'status':bool})
-def create_lots():
+def create_lot():
     data = request.get_json()
     
     new_lot:Lots = LotSchema().load(data)
@@ -86,4 +87,64 @@ def create_lots():
     
 
 
-   
+"""
+GET API DATA ALL
+"""
+
+@app.route('/api/v1/get/users',methods=['GET'])
+# @decorators.authUserDecorator(is_admin=True)
+def get_users():
+
+    users:Users = Users.query.all()
+    users = UserSchema(many=True).dump(users)
+
+    return  jsonify({'status':200,'message':'success','data':users,'success':True}),200
+    
+@app.route('/api/v1/get/lots',methods=['GET'])
+# @decorators.authUserDecorator(is_admin=True)
+def get_lots():
+
+    lots:Lots = Lots.query.all()
+    lots = LotSchema(many=True).dump(lots)
+
+    return  jsonify({'status':200,'message':'success','data':lots,'success':True}),200
+    
+
+@app.route('/api/v1/get/genres',methods=['GET'])
+# @decorators.authUserDecorator(is_admin=True)
+def get_genres():
+
+    genres:GenreTypes = GenreTypes.query.all()
+    genres = GenreTypeSchema(many=True).dump(genres)
+
+    return  jsonify({'status':200,'message':'success','data':genres,'success':True}),200
+
+
+@app.route('/api/v1/get/categorys',methods=['GET'])
+# @decorators.authUserDecorator(is_admin=True)
+def get_categorys():
+
+    categorys:Category = Category.query.all()
+    categorys = CategorySchema(many=True).dump(categorys)
+
+    return  jsonify({'status':200,'message':'success','data':categorys,'success':True}),200
+
+
+@app.route('/api/v1/get/events',methods=['GET'])
+# @decorators.authUserDecorator(is_admin=True)
+def get_events():
+
+    events:Events = Events.query.all()
+    events = EventSchema(many=True).dump(events)
+
+    return  jsonify({'status':200,'message':'success','data':events,'success':True}),200
+
+
+@app.route('/api/v1/get/tickets',methods=['GET'])
+# @decorators.authUserDecorator(is_admin=True)
+def get_tickets():
+
+    tickets:Tickets = Tickets.query.all()
+    tickets = TicketSchema(many=True).dump(tickets)
+
+    return  jsonify({'status':200,'message':'success','data':tickets,'success':True}),200

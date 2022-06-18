@@ -14,7 +14,7 @@ class Lots(db.Model):
     status =  db.Column(db.Boolean,nullable=False,default=True)
     
     ticket_id = db.Column(db.ForeignKey("tickets.id",ondelete='cascade'),nullable=False)
-    ticket_ship = db.relationship('Tickets', back_populates="ticket_children")
+    ticket_ship = db.relationship('Tickets', back_populates="ticket_lot_children")
     
         
     lot_children = db.relationship(
