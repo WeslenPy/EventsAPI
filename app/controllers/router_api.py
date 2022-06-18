@@ -11,9 +11,9 @@ POST REGISTER DATA
 """
 @app.route('/api/v1/create/event',methods=['POST'])
 # @decorators.authUserDecorator(is_admin=True)
-@decorators.validityDecorator({'name':str,'image':str,'video':str,'cep':str,'state':str,'address':str,
-                                'number_address':int,'complement':str,'district':str,'city':str,"start_date":[str,datetime],
-                                'end_date':[str,datetime],'status':bool,"category_id":int})
+@decorators.validityDecorator({'name':str,'image':str,'video':str,'cep':int,'state':str,'address':str,
+                                'number_address':int,'complement':str,'district':str,'city':str,"start_date":datetime,
+                                'end_date':datetime,'status':bool,"category_id":int})
 def create_event():
     data = request.get_json()
     event:Events = EventSchema().load(data)
