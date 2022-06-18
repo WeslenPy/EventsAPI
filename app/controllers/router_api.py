@@ -19,7 +19,7 @@ def create_event():
 
     getCategory = Category.query.get(data['category_id'])
     if not getCategory:return jsonify({'status':200,'message':"Invalid category_id",'success':True}),200
-    
+
     getTicket= Tickets.query.get(data['ticket_id'])
     if not getTicket:return jsonify({'status':200,'message':"Invalid ticket_id",'success':True}),200
 
@@ -32,7 +32,7 @@ def create_event():
 
 @app.route('/api/v1/create/ticket',methods=['POST'])
 # @decorators.authUserDecorator(is_admin=True)
-@decorators.validityDecorator({'title':str,'description':str,'max_buy':int,'min_buy':int,'paid':bool})
+@decorators.validityDecorator({'title':str,'description':str,'max_buy':int,'min_buy':int,'paid':bool,'status':bool})
 def create_ticket():
     data = request.get_json()
     ticket:Tickets =TicketSchema().load(data)
@@ -44,7 +44,7 @@ def create_ticket():
 
 @app.route('/api/v1/create/genre',methods=['POST'])
 # @decorators.authUserDecorator(is_admin=True)
-@decorators.validityDecorator({'type':str,'description':str})
+@decorators.validityDecorator({'type':str,'description':str,"status":bool})
 def create_genre():
     data = request.get_json()
 
@@ -62,7 +62,7 @@ def create_genre():
    
 @app.route('/api/v1/create/category',methods=['POST'])
 # @decorators.authUserDecorator(is_admin=True)
-@decorators.validityDecorator({'name':str,'description':str})
+@decorators.validityDecorator({'name':str,'description':str,'status':bool})
 def create_category():
     data = request.get_json()
     

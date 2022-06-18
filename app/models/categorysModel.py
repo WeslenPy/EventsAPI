@@ -7,7 +7,7 @@ class Category(db.Model):
     
     name = db.Column(db.String(255),unique=True,nullable=False)
     description = db.Column(db.Text,nullable=True)
-    status  =  db.Column(db.Boolean,nullable=False)
+    status  =  db.Column(db.Boolean,nullable=False,default=True)
     
     category_children = db.relationship(
         "Events", back_populates="category_ship",
