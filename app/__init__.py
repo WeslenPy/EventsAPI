@@ -18,9 +18,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Weslen:54U*%HGihgiGY#$Q@Weslen.
 app.config['SECRET_KEY'] = '54U*%HGihgiGY#$Q@54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 86400
-app.config['SQLALCHEMY_POOL_TIMEOUT'] = 60
-app.config['SQLALCHEMY_POOL_SIZE'] = 3000
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
+app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
+app.config['SQLALCHEMY_POOL_SIZE'] = 300
 app.config['SQLALCHEMY_MAX_OVERFLOW'] = 500
 
 app.config['CORS_HEADERS'] = 'Content-Type'
