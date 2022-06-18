@@ -141,7 +141,7 @@ def get_categorys():
 # @decorators.authUserDecorator(is_admin=True)
 def get_events():
 
-    events:Events = Events.query.all()
+    events:Events = Events.query.join(Tickets,Tickets.id==Events.ticket_id).all()
     events = EventSchema(many=True).dump(events)
 
     return  jsonify({'status':200,'message':'success','data':events,'success':True}),200
