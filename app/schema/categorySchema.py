@@ -6,3 +6,4 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
         unknown = "exclude"
         model = Category
         load_instance = True
+        ordered = True

@@ -7,3 +7,4 @@ class PhysicalPersonSchema(ma.SQLAlchemyAutoSchema):
         unknown = EXCLUDE
         model = PhysicalPerson
         load_instance = True
+        ordered = True

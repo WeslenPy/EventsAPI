@@ -4,7 +4,7 @@ from app.models import Events,Tickets
 class EventSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         unknown = "exclude"
-
+        ordered = True
         model = Events
         load_instance = True
 
@@ -14,3 +14,4 @@ class TicketEventSchema(ma.SQLAlchemyAutoSchema):
         unknown = "exclude"
         model = Events
         load_instance = True
+        ordered = True
