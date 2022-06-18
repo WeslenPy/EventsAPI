@@ -7,12 +7,12 @@ def validityDecorator(data):
         @wraps(func)
         def wrapper(*args):
             typeData = type(data)
-            message = {'status':200,'message':'missing or invalid field','json_error':False,'details':{'param':'','invalid_type':False,'invalid_param':False},'success':False}
+            message = {'status':400,'message':'missing or invalid field','json_error':False,'details':{'param':'','invalid_type':False,'invalid_param':False},'success':False}
 
             try:json_data= request.get_json()
             except:
                 message['json_error'] = True
-                return  jsonify(message),200
+                return  jsonify(message),400
 
 
             for check in json_data:
@@ -20,8 +20,7 @@ def validityDecorator(data):
                     message['details']['param'] = check
                     message['details']['invalid_param'] = True
 
-                    return  jsonify(message),200
-
+                    return  jsonify(message),400
 
             for item in data:
 
@@ -29,7 +28,7 @@ def validityDecorator(data):
 
                 if current is None or not current:
                     message['details']['param'] = item
-                    return  jsonify(message),200
+                    return  jsonify(message),400
 
                 elif typeData == dict:
                     
@@ -61,7 +60,7 @@ def validityDecorator(data):
 def pattern_message(item,message):
     message['details']['param'] = item
     message['details']['invalid_type'] = True
-    return  jsonify(message),200
+    return  jsonify(message),400
 
 
 def convertToDatetime(date):
