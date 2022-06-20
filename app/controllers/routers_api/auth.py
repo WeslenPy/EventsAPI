@@ -4,10 +4,9 @@ from app.models import Users
 from app import app,jwtGen
 
 
-
-@app.route('/api/v1/login',methods=['POST'])
+@app.route('/api/v1/auth',methods=['POST'])
 @decorators.validityDecorator({"email":str,"password":str})
-def login_user():
+def auth_user():
     data = request.json
     email = data.get('email',None)
     password = data.get('password',None)
@@ -24,4 +23,3 @@ def login_user():
 
     return jsonify({'message':'Invalid email or password(s)!','success':False,"status":401}),401
         
-

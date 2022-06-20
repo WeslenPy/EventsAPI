@@ -7,7 +7,7 @@ from app.models import *
 import hashlib
 
 
-@app.route('/change/password',methods=['POST'])
+@app.route('/api/v1/change/password',methods=['POST'])
 @decorators.authUserDecorator(True)
 @decorators.validityDecorator({"actualPassword":str,"newPassword":str})
 def change_password(currentUser):
@@ -25,7 +25,7 @@ def change_password(currentUser):
     return jsonify({'status':404,'message':'Usuário não encontrado','success':False}),404
     
 
-@app.route('/confirm/<token>',methods=['GET'])
+@app.route('/api/v1/confirm/<token>',methods=['GET'])
 def validity_email(token):
     try:
         email = tokenSafe.loads(token,salt='emailConfirmUser',max_age=2000)
@@ -43,12 +43,12 @@ def validity_email(token):
         return abort(404)
 
 
-@app.route('/forgot/password',methods=['POST'])
+@app.route('/api/v1/forgot/password',methods=['POST'])
 @decorators.authUserDecorator()
 @decorators.validityDecorator({"email":str})
 def forgot_password_reset():
     data = request.json
-    user = User.query.filter_by(email=data['email']).first()
+    user = Users.query.filter_by(email=data['email']).first()
 
     result = not_found.checkContent(user)
     if result !=False:return result
@@ -63,12 +63,12 @@ def forgot_password_reset():
     
     return jsonify({'data':{},'message':'E-mail para recuperação de senha enviado.','success':True}),200
 
-@app.route('/forgot/password/<token>',methods=['POST'])
+@app.route('/api/v1/forgot/password/<token>',methods=['POST'])
 @decorators.validityDecorator({"password":str})
 def forgot_password(token):
     try:
         id_user = tokenSafe.loads(token,salt='passwordForgot',max_age=1200)
-        user  = User.query.get(id_user)
+        user  = Users.query.get(id_user)
 
         data = request.json
         user.password = hashlib.sha256(str.encode(data['password'])).hexdigest()

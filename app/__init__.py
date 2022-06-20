@@ -13,8 +13,8 @@ from .auth import GenerateJWT
 
 app = Flask(__name__)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:54U*%HGihgiGY#$Q@localhost/StorageDev'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Weslen:54U*%HGihgiGY#$Q@Weslen.mysql.pythonanywhere-services.com/Weslen$StorageDev'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:54U*%HGihgiGY#$Q@localhost/StorageDev'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Weslen:54U*%HGihgiGY#$Q@Weslen.mysql.pythonanywhere-services.com/Weslen$StorageDev'
 app.config['SECRET_KEY'] = '54U*%HGihgiGY#$Q@54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -49,11 +49,4 @@ db.create_all()
 # db.session.execute("SET GLOBAL max_connections = 6000;")
 # db.session.commit()
 
-from .controllers.router_erros import *
-from .controllers.router_user import *
-from .controllers.router_api import *
-from .controllers.router_auth import *
-from .controllers.router_order import *
-from .controllers.router_reset import *
-from .controllers.router_webhooks import *
-from .controllers.router_admin import *
+from .controllers.routers_api import *

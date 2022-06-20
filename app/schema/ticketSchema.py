@@ -7,3 +7,5 @@ class TicketSchema(ma.SQLAlchemyAutoSchema):
         ordered = True
         model = Tickets
         load_instance = True
+        dump_only = ("id",)
+

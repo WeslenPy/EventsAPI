@@ -23,7 +23,7 @@ def validityAlready(data:dict,attr='cpf'):
                 'message':'CNPJ has already been registered.',
                 'success':False}),200
 
-    elif Users.query.filter_by(email=data['email']).first():
+    if Users.query.filter_by(email=data['email']).first():
         return jsonify({'status':200,
                         'message':'Email has already been registered.',
                         'success':False}),200 
@@ -31,6 +31,11 @@ def validityAlready(data:dict,attr='cpf'):
     elif Users.query.filter_by(phone=data['phone']).first():
         return jsonify({'status':200,
                         'message':'Phone has already been registered.',
+                        'success':False}),200 
+                        
+    elif len(str(data['phone']))>11:
+        return jsonify({'status':200,
+                        'message':'Invalid number phone',
                         'success':False}),200
 
     return False

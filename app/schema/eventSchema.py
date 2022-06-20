@@ -1,13 +1,18 @@
-from unicodedata import category
 from app import ma
-from app.models import Events,Tickets,Category
+from app.models import Events
+from .categorySchema import CategorySchema
+from .ticketSchema import TicketSchema
 
 class EventSchema(ma.SQLAlchemyAutoSchema):
-    ticket = ma.Nested(Tickets)
-    category = ma.Nested(Category)
+    
+    ticket_ship = ma.Nested(TicketSchema)
+    category_ship = ma.Nested(CategorySchema)
+
     class Meta:
-        unknown = "exclude"
-        ordered = True
         model = Events
+        ordered = True
+        include_fk=True
         load_instance = True
+        unknown = "exclude"
+        dump_only = ("id",)
 

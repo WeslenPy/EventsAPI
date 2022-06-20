@@ -8,3 +8,4 @@ class LotSchema(ma.SQLAlchemyAutoSchema):
         unknown = "exclude"
         ordered = True
         load_instance = True
+        dump_only = ("id",)

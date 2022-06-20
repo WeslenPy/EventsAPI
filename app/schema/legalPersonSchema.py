@@ -7,3 +7,4 @@ class LegalPersonSchema(ma.SQLAlchemyAutoSchema):
         ordered = True
         model = LegalPerson
         load_instance = True
+        dump_only = ("id",)

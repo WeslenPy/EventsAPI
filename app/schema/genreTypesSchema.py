@@ -7,3 +7,4 @@ class GenreTypeSchema(ma.SQLAlchemyAutoSchema):
         ordered = True
         model = GenreTypes
         load_instance = True
+        dump_only = ("id",)

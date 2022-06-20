@@ -10,7 +10,7 @@ class Events(db.Model):
     image = db.Column(db.String(255),nullable=False)
     video = db.Column(db.String(255),nullable=False)
     
-    cep = db.Column(db.String(30),nullable=False)
+    cep = db.Column(db.BigInteger,nullable=False)
     state = db.Column(db.String(30),nullable=False)
     address = db.Column(db.String(255),nullable=False)
     number_address = db.Column(db.BigInteger,nullable=True)
@@ -26,13 +26,13 @@ class Events(db.Model):
     status = db.Column(db.Boolean,default=False)
     
     category_id = db.Column(db.ForeignKey("category.id",ondelete='cascade'),nullable=False)
-    category_ship = db.relationship('Category', back_populates="category_children")
-    
     ticket_id = db.Column(db.ForeignKey("tickets.id",ondelete='cascade'),nullable=False)
+    
+    category_ship = db.relationship('Category', back_populates="category_children")
     ticket_ship = db.relationship('Tickets', back_populates="ticket_event_children")
 
-    def __init__(self,name,image,video,cep,address,number_address,state,category_id,ticket_id,
-                 complement,district,city,start_date,end_date,status=False,created_at=actualDate):
+    def __init__(self,name,image,video,cep,address,number_address,state,
+                 complement,district,city,start_date,end_date,category_id,ticket_id,status=False,created_at=actualDate):
 
         self.number_address= number_address
         self.created_at  = created_at()

@@ -7,18 +7,18 @@ class Users(db.Model):
 
     id  = db.Column(db.Integer, primary_key=True,autoincrement=True)
     
-    email = db.Column(db.String(60),unique=True,nullable=False)
-    password = db.Column(db.String(67),nullable=False)
+    email = db.Column(db.String(100),unique=True,nullable=False)
+    password = db.Column(db.String(255),nullable=False)
     
     phone = db.Column(db.BigInteger,unique=True,nullable=False)
     cep = db.Column(db.BigInteger,nullable=False)
-    address = db.Column(db.String(60),nullable=False)
+    address = db.Column(db.String(100),nullable=False)
     number_address = db.Column(db.BigInteger,nullable=True)
     
     complement = db.Column(db.String(255),nullable=False)
-    district = db.Column(db.String(60),nullable=False)
-    state = db.Column(db.String(60),nullable=False)
-    city = db.Column(db.String(60),nullable=False)
+    district = db.Column(db.String(255),nullable=False)
+    state = db.Column(db.String(10),nullable=False)
+    city = db.Column(db.String(100),nullable=False)
     
     created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
     is_admin = db.Column(db.Boolean,default=False)
@@ -61,3 +61,13 @@ class Users(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+    def update(self,data):
+        default= ['password']
+        for key, value in data.items():
+            if key in default:continue
+            elif getattr(self,key,False):
+                setattr(self, key, value)
+
+        db.session.commit()
+        return self
