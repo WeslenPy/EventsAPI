@@ -13,7 +13,7 @@ def authUserDecorator(required=False,is_admin=False):
             if 'Authorization' not in request.headers:
                 return jsonify({'status':401,'message':'Access denied','success':False}),401
 
-            token= request.headers['Authorization']
+            token= request.headers.get('Authorization','')
             token = jwtGen.token_required(token)
 
             if token[1] !=200:return token
