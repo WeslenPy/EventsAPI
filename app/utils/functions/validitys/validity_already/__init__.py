@@ -38,7 +38,7 @@ def validityAlready(data:dict,attr='cpf'):
                         'message':'Invalid number phone',
                         'success':False}),400   
 
-    elif not GenreTypes.query.get(data['genre_id']):
+    elif attr=='cpf' and not GenreTypes.query.get(data['genre_id']):
         return jsonify({'status':400,
                         'message':'Invalid genre_id',
                         'success':False}),400
