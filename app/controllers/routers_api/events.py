@@ -11,10 +11,10 @@ from app.schema import EventSchema
 POST REGISTER DATA 
 """
 @app.route('/api/v1/create/event',methods=['POST'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator(required=True)
 @decorators.validityDecorator({'name':str,'image':str,'video':str,'cep':int,'state':str,'address':str,
                                 'number_address':int,'complement':str,'district':str,'city':str,'start_date':datetime,
-                                'end_date':datetime,'status':bool,'category_id':int,'ticket_id':int})
+                                'end_date':datetime,'status':bool,'category_id':int,'ticket_id':int,'user_id':int})
 def create_event():
 
     data = request.json
@@ -33,7 +33,7 @@ def create_event():
     
 
 @app.route('/api/v1/get/events',methods=['GET'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 def get_events():
 
     events:Events = Events.query.all()
@@ -43,7 +43,7 @@ def get_events():
 
 
 @app.route('/api/v1/get/event/<int:id_event>',methods=['GET'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 def get_event(id_event):
 
     event:Events = Events.query.get(id_event)

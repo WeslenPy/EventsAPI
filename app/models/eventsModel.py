@@ -27,12 +27,15 @@ class Events(db.Model):
     
     category_id = db.Column(db.ForeignKey("category.id",ondelete='cascade'),nullable=False)
     ticket_id = db.Column(db.ForeignKey("tickets.id",ondelete='cascade'),nullable=False)
+    user_id = db.Column(db.ForeignKey("users.id",ondelete='cascade'),nullable=False)
     
     category_ship = db.relationship('Category', back_populates="category_children")
     ticket_ship = db.relationship('Tickets', back_populates="ticket_event_children")
+    user_ship = db.relationship('Users', back_populates="user_event_children")
 
     def __init__(self,name,image,video,cep,address,number_address,state,
-                 complement,district,city,start_date,end_date,category_id,ticket_id,status=False,created_at=actualDate):
+                 complement,district,city,start_date,end_date,category_id,
+                 ticket_id,user_id,status=False,created_at=actualDate):
 
         self.number_address= number_address
         self.created_at  = created_at()
@@ -43,6 +46,7 @@ class Events(db.Model):
         self.end_date = end_date
         self.district = district
         self.address = address
+        self.user_id = user_id
         self.status = status
         self.image = image
         self.video = video

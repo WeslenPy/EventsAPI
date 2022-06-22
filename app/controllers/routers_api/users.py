@@ -86,7 +86,7 @@ CHANGE DATA TABLE
 
 
 @app.route('/api/v1/edit/user/physical/<int:id_user>',methods=['PUT'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 def edit_physical(id_user):
 
     data = request.get_json()
@@ -120,7 +120,7 @@ GET API DATA ALL
 """
 
 @app.route('/api/v1/get/users',methods=['GET'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 def get_users():
 
     users:Users = Users.query.all()
@@ -129,7 +129,7 @@ def get_users():
     return  jsonify({'status':200,'message':'success','data':users,'success':True}),200
     
 @app.route('/api/v1/get/user/<int:id_user>',methods=['GET'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 def get_user(id_user):
 
     user:Users = Users.query.get(id_user)

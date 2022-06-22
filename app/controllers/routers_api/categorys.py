@@ -13,7 +13,7 @@ POST REGISTER DATA
 
 
 @app.route('/api/v1/create/category',methods=['POST'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator(is_admin=True)
 @decorators.validityDecorator({'name':str,'description':str,'status':bool})
 def create_category():
     data = request.get_json()
@@ -31,7 +31,7 @@ def create_category():
     
 
 @app.route('/api/v1/get/categorys',methods=['GET'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 def get_categorys():
 
     categorys:Category = Category.query.all()
@@ -40,7 +40,7 @@ def get_categorys():
     return  jsonify({'status':200,'message':'success','data':categorys,'success':True}),200
 
 @app.route('/api/v1/get/category/<int:id_category>',methods=['GET'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 def get_category(id_category):
 
     category:Category = Category.query.get(id_category)

@@ -21,7 +21,7 @@ def authUserDecorator(required=False,is_admin=False):
                 user= Users.query.get(token[-1]['some']['id'])
                 if user and not user.is_admin: return jsonify({'status':401,'message':'Access denied','success':False}),401
 
-            if required:kwargs['currentUser'] = token[-1]
+            if required:request.json['user_id']=token[-1]['some']['id']
             return func(*args,**kwargs)
 
         return wrapper

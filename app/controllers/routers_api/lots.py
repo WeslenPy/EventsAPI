@@ -13,7 +13,7 @@ POST REGISTER DATA
 """
 
 @app.route('/api/v1/create/lot',methods=['POST'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 @decorators.validityDecorator({'quantity':int,'price':[float,int],'start_date':datetime,
                                 "end_date":datetime,'ticket_id':int,'status':bool})
 def create_lot():
@@ -28,7 +28,7 @@ def create_lot():
     
 
 @app.route('/api/v1/get/lots',methods=['GET'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 def get_lots():
 
     lots:Lots = Lots.query.all()
@@ -38,7 +38,7 @@ def get_lots():
 
 
 @app.route('/api/v1/get/lot/<int:id_lot>',methods=['GET'])
-# @decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 def get_lot(id_lot):
 
     lot:Lots = Lots.query.get(id_lot)
