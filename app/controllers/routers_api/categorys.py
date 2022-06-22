@@ -1,7 +1,6 @@
 
 from app.utils.functions import decorators
 from flask import request,jsonify
-from datetime import datetime
 from app import app
 
 from app.schema import CategorySchema
@@ -13,7 +12,7 @@ POST REGISTER DATA
 
 
 @app.route('/api/v1/create/category',methods=['POST'])
-@decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 @decorators.validityDecorator({'name':str,'description':str,'status':bool})
 def create_category():
     data = request.get_json()

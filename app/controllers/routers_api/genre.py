@@ -13,7 +13,7 @@ POST REGISTER DATA
 """
 
 @app.route('/api/v1/create/genre',methods=['POST'])
-@decorators.authUserDecorator(is_admin=True)
+@decorators.authUserDecorator()
 @decorators.validityDecorator({'type':str,'description':str,"status":bool})
 def create_genre():
     data = request.get_json()
