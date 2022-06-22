@@ -1,7 +1,6 @@
 
 from app.utils.functions import decorators
 from flask import request,jsonify
-from datetime import datetime
 from app import app
 
 from app.schema import TicketSchema

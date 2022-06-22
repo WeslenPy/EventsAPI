@@ -20,8 +20,6 @@ def register_physical():
 
     data = request.get_json()
 
-    
-    
     result = validitys.validityAlready(data,'cpf')
     if result:return result
 

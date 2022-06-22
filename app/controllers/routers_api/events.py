@@ -19,10 +19,10 @@ def create_event():
 
     data = request.json
 
-    getCategory = Category.query.filter_by(id=data['category_id'],status=True)
+    getCategory = Category.query.filter_by(id=data['category_id'],status=True).first()
     if not getCategory:return jsonify({'status':200,'message':"Invalid category_id",'success':True}),200
 
-    getTicket= Tickets.query.filter_by(id=data['ticket_id'],status=True)
+    getTicket= Tickets.query.filter_by(id=data['ticket_id'],status=True).first()
     if not getTicket:return jsonify({'status':200,'message':"Invalid ticket_id",'success':True}),200
 
     event:Events = EventSchema().load(data)
