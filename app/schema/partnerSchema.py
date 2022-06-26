@@ -1,9 +1,10 @@
 from app import ma
 from app.models import Partner
-
+from dataclasses import dataclass
 from app.schema.eventSchema import EventSchema
 from app.schema.userSchema import UserSchema
 
+@dataclass
 class PartnerSchema(ma.SQLAlchemyAutoSchema):
     
     event_ship = ma.Nested(EventSchema)
