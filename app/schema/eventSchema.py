@@ -1,6 +1,10 @@
-from app.schema import CategorySchema,TicketSchema,UserSchema,PartnerSchema
-from app.models import Events
 from app import ma
+from app.models import Events
+
+from categorySchema import CategorySchema
+from ticketSchema import TicketSchema
+from userSchema import UserSchema
+from partnerSchema import PartnerSchema
 
 class EventSchema(ma.SQLAlchemyAutoSchema):
     
