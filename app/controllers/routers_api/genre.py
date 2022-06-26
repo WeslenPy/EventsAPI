@@ -13,7 +13,7 @@ POST REGISTER DATA
 """
 
 @app.route('/api/v1/create/genre',methods=['POST'])
-@decorators.authUserDecorator()
+@decorators.authUserDecorator(is_admin=True)
 @decorators.validityDecorator({'type':str,'description':str,"status":bool})
 def create_genre():
     data = request.get_json()
@@ -29,10 +29,8 @@ def create_genre():
     genreData = GenreTypeSchema().dump(genreFind)
     return jsonify({'status':200,'message':'genre has already been registered','data':genreData,'success':False}),200
     
-   
 
 @app.route('/api/v1/get/genres',methods=['GET'])
-@decorators.authUserDecorator()
 def get_genres():
 
     genres:GenreTypes = GenreTypes.query.all()

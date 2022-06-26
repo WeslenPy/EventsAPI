@@ -33,6 +33,12 @@ class Events(db.Model):
     ticket_ship = db.relationship('Tickets', back_populates="ticket_event_children")
     user_ship = db.relationship('Users', back_populates="user_event_children")
 
+
+    event_partner_children = db.relationship(
+        "Partner", back_populates="event_ship",
+        cascade="all, delete",passive_deletes=True)
+
+
     def __init__(self,name,image,video,cep,address,number_address,state,
                  complement,district,city,start_date,end_date,category_id,
                  ticket_id,user_id,status=False,created_at=actualDate):
