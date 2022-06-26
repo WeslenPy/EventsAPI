@@ -7,3 +7,4 @@ from .events import *
 from .users import *
 from .genre import *
 from .lots import *
+from .partner import *
