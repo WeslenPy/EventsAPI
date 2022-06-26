@@ -1,8 +1,6 @@
-from app import ma
+from app.schema import PhysicalPersonSchema,LegalPersonSchema,GenreTypeSchema
 from app.models import Users
-from .physicalPersonSchema import PhysicalPersonSchema
-from .legalPersonSchema import LegalPersonSchema
-from .genreTypesSchema import GenreTypeSchema
+from app import ma
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     

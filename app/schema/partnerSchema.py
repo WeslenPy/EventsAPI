@@ -1,7 +1,6 @@
 from app import ma
 from app.models import Partner
-from .eventSchema import EventSchema
-from .userSchema import UserSchema
+from app.schema import EventSchema,UserSchema
 
 class PartnerSchema(ma.SQLAlchemyAutoSchema):
     
