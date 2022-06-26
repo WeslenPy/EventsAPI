@@ -1,13 +1,10 @@
 from app import ma
 from app.models import Partner
-
-from app.schema.eventSchema import EventSchema
 from app.schema.userSchema import UserSchema
 
 
-class PartnerSchema(ma.SQLAlchemyAutoSchema):
-    
-    event_ship = ma.Nested(EventSchema)
+class PartnerUserSchema(ma.SQLAlchemyAutoSchema):
+
     user_ship = ma.Nested(UserSchema)
 
     class Meta:

@@ -4,11 +4,11 @@ from app.models import Events
 from app.schema.categorySchema import CategorySchema
 from app.schema.ticketSchema import TicketSchema
 from app.schema.userSchema import UserSchema
-from app.schema.partnerSchema import PartnerSchema
+from app.schema.partnerUserSchema import PartnerUserSchema
 
 class EventSchema(ma.SQLAlchemyAutoSchema):
     
-    event_partner_children = ma.Nested(PartnerSchema,many=True)
+    event_partner_children = ma.Nested(PartnerUserSchema,many=True)
     ticket_ship = ma.Nested(TicketSchema)
     category_ship = ma.Nested(CategorySchema)
     user_ship = ma.Nested(UserSchema)
