@@ -7,3 +7,4 @@ from .categorySchema import CategorySchema
 from .ticketSchema import TicketSchema
 from .lotsSchema import LotSchema
 from .physicalPersonSchema import PhysicalPersonSchema
+from .orderSchema import OrderSchema

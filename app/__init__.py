@@ -37,6 +37,7 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 migrate = Migrate(app,db)
 
+mpapi = ''
 #socketio = SocketIO(app)
 mail = Mail(app)
 tokenSafe = URLSafeTimedSerializer(app.config['SECRET_KEY'])

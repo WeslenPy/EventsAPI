@@ -1,3 +1,4 @@
+from app.utils.functions.date_fast import actualDate
 from app import db
 
 class Lots(db.Model):
@@ -10,8 +11,9 @@ class Lots(db.Model):
     
     start_date  = db.Column(db.DateTime,nullable=False)
     end_date  = db.Column(db.DateTime,nullable=False)
+    created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
     
-    status =  db.Column(db.Boolean,nullable=False,default=True)
+    status  = db.Column(db.Enum('Active','Disabled','Closed'),nullable=False,default='Active')
     
     ticket_id = db.Column(db.ForeignKey("tickets.id",ondelete='cascade'),nullable=False)
     ticket_ship = db.relationship('Tickets', back_populates="ticket_lot_children")
@@ -22,14 +24,16 @@ class Lots(db.Model):
         cascade="all, delete",passive_deletes=True)
     
 
-    def __init__(self,quantity,price,start_date,end_date,ticket_id,status=True):
+    def __init__(self,quantity,price,start_date,end_date,ticket_id,
+                                status='Active',created_at=actualDate):
 
-        self.quantity = quantity
         self.price = price
-        self.start_date  =start_date
-        self.end_date  =end_date
-        self.ticket_id = ticket_id
         self.status = status
+        self.end_date = end_date
+        self.quantity = quantity
+        self.ticket_id = ticket_id
+        self.start_date = start_date
+        self.created_at = created_at()
         
 
         
