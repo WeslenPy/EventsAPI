@@ -15,9 +15,14 @@ POST REGISTER DATA
 @app.route('/api/v1/create/lot',methods=['POST'])
 @decorators.authUserDecorator()
 @decorators.validityDecorator({'quantity':int,'price':[float,int],'start_date':datetime,
-                                "end_date":datetime,'ticket_id':int,'status':bool})
+                                "end_date":datetime,'ticket_id':int,'status':str})
 def create_lot():
+
+
     data = request.get_json()
+    if data['status'] not in ('ACTIVE','DISABLED'):
+        return jsonify({'status':400,'message':'missing or invalid field','json_error':False,
+                            'details':{'param':'status','invalid_type':True,'invalid_param':False},'success':False}),200
     
     new_lot:Lots = LotSchema().load(data)
     new_lot.save()

@@ -2,7 +2,8 @@ from app import ma
 from app.models import Lots,Tickets
 
 class LotSchema(ma.SQLAlchemyAutoSchema):
-    ticket = ma.Nested(Tickets)
+    ticket_ship = ma.Nested(Tickets)
+    
     class Meta:
         model = Lots
         unknown = "exclude"

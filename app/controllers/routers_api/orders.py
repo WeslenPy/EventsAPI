@@ -19,13 +19,18 @@ def create_order():
     data = request.get_json()
 
     actual  =datetime.now()
-    lotFind =Lots.query.filter_by(status='Active',id=data['lot_id']
+    lotFind:Lots =Lots.query.filter_by(status='ACTIVE',id=data['lot_id']
                     ).filter( Lots.start_date >=actual, Lots.end_date<=actual).first()
 
     if not lotFind:
         return jsonify({'status':400,'message':'Invalid lot_id','success':False}),200
 
-    data = {'lot_id':data['lot_id'],'user_id':data["user_id"],
+    if lotFind.lot_children and len (lotFind.lot_children) >=lotFind.quantity:
+        return jsonify({'status':400,'message':'available quantity',
+                            'quantity':lotFind.quantity-len(lotFind.lot_children),'success':False}),200
+
+
+    data = {'lot_id':lotFind.id,'user_id':data["user_id"],
                 'method':'teste','value':lotFind.price,'expired_at':datetime.now()}
 
     new:Orders = OrderSchema().load(data)

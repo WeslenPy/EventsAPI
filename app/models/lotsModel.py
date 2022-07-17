@@ -13,7 +13,7 @@ class Lots(db.Model):
     end_date  = db.Column(db.DateTime,nullable=False)
     created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
     
-    status  = db.Column(db.Enum('Active','Disabled','Closed'),nullable=False,default='Active')
+    status  = db.Column(db.Enum('ACTIVE','DISABLED','CLOSED'),nullable=False,default='ACTIVE')
     
     ticket_id = db.Column(db.ForeignKey("tickets.id",ondelete='cascade'),nullable=False)
     ticket_ship = db.relationship('Tickets', back_populates="ticket_lot_children")
@@ -25,7 +25,7 @@ class Lots(db.Model):
     
 
     def __init__(self,quantity,price,start_date,end_date,ticket_id,
-                                status='Active',created_at=actualDate):
+                                status='ACTIVE',created_at=actualDate):
 
         self.price = price
         self.status = status

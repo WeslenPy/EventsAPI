@@ -1,4 +1,4 @@
-from flask import request,jsonify,render_template,abort
+from flask import request,jsonify,render_template,abort,redirect
 from flask_mail import Message
 
 from app.utils.functions import encrypt_password,decorators,validitys
@@ -34,11 +34,8 @@ def validity_email(token):
             if not user.active:
                 user.active = True
                 db.session.commit()
-                
-                msg = Message("Bem-vindo!",
-                  sender="noreply@meunumerovirtual.com",
-                  recipients=[email])
-        return ''
+               
+        return redirect('/')
     except:
         return abort(404)
 
