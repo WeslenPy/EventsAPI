@@ -1,4 +1,5 @@
 
+from app.models.ticketsModel import Tickets
 from app.utils.functions import decorators
 from flask import request,jsonify
 from datetime import datetime
@@ -23,6 +24,10 @@ def create_lot():
     if data['status'] not in ('ACTIVE','DISABLED'):
         return jsonify({'status':400,'message':'missing or invalid field','json_error':False,
                             'details':{'param':'status','invalid_type':True,'invalid_param':False},'success':False}),200
+
+    findTicket = Tickets.query.get(data['ticket_id'])
+    if not findTicket:
+        return jsonify({'status':400,'message':'invalid ticket_id','success':False}),200
     
     new_lot:Lots = LotSchema().load(data)
     new_lot.save()
