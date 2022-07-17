@@ -8,7 +8,7 @@ from app import app
 from app.models import Lots
 from app.schema import LotSchema
 
-
+import sys
 """
 POST REGISTER DATA 
 """
@@ -19,15 +19,16 @@ POST REGISTER DATA
                                 "end_date":datetime,'ticket_id':int,'status':str})
 def create_lot():
 
-
     data = request.get_json()
     if data['status'] not in ('ACTIVE','DISABLED'):
-        return jsonify({'status':400,'message':'missing or invalid field','json_error':False,
-                            'details':{'param':'status','invalid_type':True,'invalid_param':False},'success':False}),200
+        return jsonify({'status':400,'message':'invalid field status','success':False}),200
 
     findTicket = Tickets.query.get(data['ticket_id'])
     if not findTicket:
         return jsonify({'status':400,'message':'invalid ticket_id','success':False}),200
+
+
+    print(data,file=sys.stderr)
     
     new_lot:Lots = LotSchema().load(data)
     new_lot.save()
