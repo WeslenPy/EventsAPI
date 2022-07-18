@@ -14,7 +14,7 @@ POST REGISTER DATA
 @decorators.authUserDecorator(required=True)
 @decorators.validityDecorator({'name':str,'image':str,'video':str,'cep':int,'state':str,'address':str,
                                 'number_address':int,'complement':str,'district':str,'city':str,'start_date':datetime,
-                                'end_date':datetime,'status':bool,'category_id':int,'ticket_id':int,'user_id':int})
+                                'end_date':datetime,'status':bool,'category_id':int,'ticket_id':int,"user_id":int})
 def create_event():
 
     data = request.json
@@ -22,8 +22,11 @@ def create_event():
     getCategory = Category.query.filter_by(id=data['category_id'],status=True).first()
     if not getCategory:return jsonify({'status':400,'message':"Invalid category_id",'success':False}),400
 
-    getTicket= Tickets.query.filter_by(id=data['ticket_id'],status=True).first()
+    getTicket:Tickets = Tickets.query.filter_by(id=data['ticket_id'],status=True).first()
     if not getTicket:return jsonify({'status':400,'message':"Invalid ticket_id",'success':False}),400
+
+    if data['user_id'] != getTicket.user_id:
+        return jsonify({'status':400,'message':"inaccessible event",'success':False}),400
 
     event:Events = EventSchema().load(data)
     event.save()

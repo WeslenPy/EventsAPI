@@ -1,12 +1,13 @@
 
-from functools import partial
 from app.utils.functions import decorators,validitys
-from app import app,tokenSafe,executor
+from app import app,tokenSafe,executor,db
 from flask import request,jsonify
 from datetime import datetime
 
 from app.models import Users,PhysicalPerson,LegalPerson
 from app.schema import UserSchema,PhysicalPersonSchema,LegalPersonSchema
+
+from marshmallow import ValidationError
 
 """
 POST REGISTER DATA 
@@ -27,7 +28,15 @@ def register_physical():
     physical.save()
 
     data['physical_id'] = physical.id
-    new_user:Users = UserSchema().load(data)
+
+    try:new_user:Users = UserSchema().load(data)
+    except ValidationError as err: 
+        physical = PhysicalPerson.query.get(physical.id)
+        db.session.delete(physical)
+        db.session.commit()
+        
+        return jsonify({'status':400,'message':err.messages,'success':False}),200
+
     new_user.save()
 
 #     token_url = tokenSafe.dumps(data['email'],salt='emailConfirmUser')

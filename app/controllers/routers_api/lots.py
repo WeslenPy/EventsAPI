@@ -1,35 +1,32 @@
 
-from app.models.ticketsModel import Tickets
 from app.utils.functions import decorators
 from flask import request,jsonify
 from datetime import datetime
 from app import app
 
-from app.models import Lots
+from app.models import Lots,Tickets,Users
 from app.schema import LotSchema
 
-import sys
 """
 POST REGISTER DATA 
 """
 
 @app.route('/api/v1/create/lot',methods=['POST'])
-@decorators.authUserDecorator()
-@decorators.validityDecorator({'quantity':int,'price':[float,int],'start_date':datetime,
-                                "end_date":datetime,'ticket_id':int,'status':str})
+@decorators.authUserDecorator(required=True)
+@decorators.validityDecorator({'quantity':int,'price':[float,int],'start_date':datetime,"user_id":int,
+                                "end_date":datetime,'ticket_lot_id':int,'status':bool})
 def create_lot():
 
     data = request.get_json()
-    if data['status'] not in ('ACTIVE','DISABLED'):
-        return jsonify({'status':400,'message':'invalid field status','success':False}),200
 
-    findTicket = Tickets.query.get(data['ticket_id'])
+    findTicket:Tickets = Tickets.query.get(data['ticket_lot_id'])
     if not findTicket:
-        return jsonify({'status':400,'message':'invalid ticket_id','success':False}),200
+        return jsonify({'status':400,'message':'invalid ticket_lot_id','success':False}),200
+
+    if data['user_id'] != findTicket.user_id:
+        return jsonify({'status':400,'message':"inaccessible event",'success':False}),400
 
 
-    print(data,file=sys.stderr)
-    
     new_lot:Lots = LotSchema().load(data)
     new_lot.save()
 

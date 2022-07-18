@@ -14,21 +14,27 @@ class Tickets(db.Model):
     status =  db.Column(db.Boolean,nullable=False,default=True)
 
     created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
+
+    user_id = db.Column(db.ForeignKey("users.id",ondelete='cascade'),nullable=False)
+    
+    user_ticket_ship = db.relationship('Users', back_populates="user_tickets_children")
     
     ticket_lot_children = db.relationship(
-        "Lots", back_populates="ticket_ship",
+        "Lots", back_populates="ticket_lot_ship",
         cascade="all, delete",passive_deletes=True)
       
     ticket_event_children = db.relationship(
         "Events", back_populates="ticket_ship",
         cascade="all, delete",passive_deletes=True)
     
-    def __init__(self,title,description,max_buy,min_buy,paid,status=True,created_at=actualDate):
+    def __init__(self,title,description,max_buy,min_buy,paid,user_id,
+                        status=True,created_at=actualDate):
 
         self.description = description
         self.created_at = created_at()
         self.max_buy = max_buy
         self.min_buy = min_buy
+        self.user_id = user_id
         self.status = status
         self.title = title
         self.paid = paid

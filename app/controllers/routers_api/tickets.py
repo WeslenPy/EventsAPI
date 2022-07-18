@@ -11,9 +11,11 @@ POST REGISTER DATA
 """
 
 @app.route('/api/v1/create/ticket',methods=['POST'])
-@decorators.authUserDecorator()
-@decorators.validityDecorator({'title':str,'description':str,'max_buy':int,'min_buy':int,'paid':bool,'status':bool})
+@decorators.authUserDecorator(required=True)
+@decorators.validityDecorator({'title':str,'description':str,"user_id":int,
+                            'max_buy':int,'min_buy':int,'paid':bool,'status':bool})
 def create_ticket():
+
     data = request.get_json()
     ticket:Tickets =TicketSchema().load(data)
     ticket.save()

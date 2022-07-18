@@ -8,3 +8,4 @@ from .users import *
 from .genre import *
 from .lots import *
 from .partner import *
+from .orders import *

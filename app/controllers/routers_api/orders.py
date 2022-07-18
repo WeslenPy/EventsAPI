@@ -1,11 +1,12 @@
 
 from app.utils.functions import decorators
 from flask import request,jsonify
-from app import app
+from app import app,mp_api
 
 from datetime import datetime
 from app.models import Orders,Lots
 from app.schema import OrderSchema
+
 
 
 """
@@ -13,14 +14,14 @@ POST REGISTER DATA
 """
 
 @app.route('/api/v1/create/order',methods=['POST'])
-@decorators.authUserDecorator()
-@decorators.validityDecorator({'lot_id':int})
+@decorators.authUserDecorator(required=True)
+@decorators.validityDecorator({'lot_id':int,'quantity':int,"user_id":int})
 def create_order():
     data = request.get_json()
 
     actual  =datetime.now()
-    lotFind:Lots =Lots.query.filter_by(status='ACTIVE',id=data['lot_id']
-                    ).filter( Lots.start_date >=actual, Lots.end_date<=actual).first()
+    lotFind:Lots =Lots.query.filter_by(status=True,closed=False,id=data['lot_id']
+                    ).first()
 
     if not lotFind:
         return jsonify({'status':400,'message':'Invalid lot_id','success':False}),200
@@ -31,13 +32,15 @@ def create_order():
 
 
     data = {'lot_id':lotFind.id,'user_id':data["user_id"],
-                'method':'teste','value':lotFind.price,'expired_at':datetime.now()}
+                'method':'teste','value':lotFind.price,'quantity':data['quantity']}
 
     new:Orders = OrderSchema().load(data)
     new.save()
 
     order = OrderSchema().dump(new)
-    return jsonify({'status':200,'message':'order created successfully',"data":order,'success':False}),200
+    order_generate = mp_api.create_preference(new.id,lotFind.price,quantity=new.quantity)
+
+    return jsonify({'status':200,'message':'order created successfully',"data":order,'order':order_generate,'success':False}),200
     
 
 # @app.route('/api/v1/get/genres',methods=['GET'])
