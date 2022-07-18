@@ -2,7 +2,6 @@ from flask import Flask
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-#from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_mail import Mail
 from itsdangerous import URLSafeTimedSerializer
@@ -15,8 +14,8 @@ from .auth import GenerateJWT
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:54U*%HGihgiGY#$Q@localhost/StorageDev'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Weslen:54U*%HGihgiGY#$Q@Weslen.mysql.pythonanywhere-services.com/Weslen$StorageDev'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:54U*%HGihgiGY#$Q@localhost/StorageDev'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Weslen:54U*%HGihgiGY#$Q@Weslen.mysql.pythonanywhere-services.com/Weslen$StorageDev'
 app.config['SECRET_KEY'] = '54U*%HGihgiGY#$Q@54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -50,7 +49,6 @@ migrate = Migrate(app,db)
 
 mp_api = MercadoPago(app.config['ACCESS_TOKEN_MP'],app.config['WEBHOOKS_URLS_MP'])
 
-#socketio = SocketIO(app)
 mail = Mail(app)
 tokenSafe = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 executor = Executor(app)
