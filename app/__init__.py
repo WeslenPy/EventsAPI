@@ -32,7 +32,6 @@ app.config['WEBHOOKS_URLS_MP'] = {
     "notify":"https://weslen.pythonanywhere.com/webhook/notify"
 }
 
-
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.config['MAIL_PORT'] = 465
