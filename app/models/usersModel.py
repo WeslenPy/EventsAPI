@@ -17,7 +17,7 @@ class Users(db.Model):
     
     complement = db.Column(db.String(255),nullable=False)
     district = db.Column(db.String(255),nullable=False)
-    state = db.Column(db.String(10),nullable=False)
+    state = db.Column(db.String(2),nullable=False)
     city = db.Column(db.String(100),nullable=False)
     
     created_at = db.Column(db.DateTime,nullable=False,default=actualDate)

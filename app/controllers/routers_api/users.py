@@ -34,8 +34,8 @@ def register_physical():
         physical = PhysicalPerson.query.get(physical.id)
         db.session.delete(physical)
         db.session.commit()
-        
-        return jsonify({'status':400,'message':err.messages,'success':False}),200
+        message = err.messages.get('email',['missing or invalid field'])[0]
+        return jsonify({'status':400,'message':message,'success':False}),200
 
     new_user.save()
 
@@ -69,7 +69,14 @@ def register_legal():
     new_juridical.save()
 
     data['legal_id'] = new_juridical.id
-    new_user:Users = UserSchema().load(data)
+    try:new_user:Users = UserSchema().load(data)
+    except ValidationError as err: 
+        juridical = LegalPerson.query.get(new_juridical.id)
+        db.session.delete(juridical)
+        db.session.commit()
+        message = err.messages.get('email',['missing or invalid field'])[0]
+        return jsonify({'status':400,'message':message,'success':False}),200
+
     new_user.save()
 
     # token_url = tokenSafe.dumps(data['email'],salt='emailConfirmUser')
@@ -90,8 +97,6 @@ def register_legal():
 """
 CHANGE DATA TABLE
 """
-
-
 @app.route('/api/v1/edit/user/physical/<int:id_user>',methods=['PUT'])
 @decorators.authUserDecorator()
 def edit_physical(id_user):
@@ -102,8 +107,6 @@ def edit_physical(id_user):
             'status':404,
             'message':'fields not found',
             'success':False}),200
-
-
 
     edit_user:Users = Users.query.get(id_user)
     if edit_user:

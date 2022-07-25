@@ -1,6 +1,8 @@
 from app.models import PhysicalPerson,Users,LegalPerson,GenreTypes
 from app.utils.functions.validitys import validatyCPF
+from app import brasil_api
 from flask import jsonify
+
 
 def validityAlready(data:dict,attr='cpf'):
 
@@ -42,5 +44,17 @@ def validityAlready(data:dict,attr='cpf'):
         return jsonify({'status':400,
                         'message':'Invalid genre_id',
                         'success':False}),400
+
+    validity = brasil_api.searchCEP(data['cep'],data['city'],data['state'])
+    if not validity[0]: 
+        return jsonify({'status':400,
+                        'message':validity[1],
+                        'success':False}),400
+
+    if len(data['password']) <8:
+        return jsonify({'status':400,
+                        'message':'invalid password, your password must be at least 8 characters long',
+                        'success':False}),400
+
 
     return False

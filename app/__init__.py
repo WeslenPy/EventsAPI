@@ -8,14 +8,14 @@ from itsdangerous import URLSafeTimedSerializer
 from flask_executor import Executor
 from flask_migrate import Migrate
 
-from app.api import MercadoPago
+from app.api import MercadoPago,ApiBrasil
 
 from .auth import GenerateJWT
 
 app = Flask(__name__)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:54U*%HGihgiGY#$Q@localhost/StorageDev'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Weslen:54U*%HGihgiGY#$Q@Weslen.mysql.pythonanywhere-services.com/Weslen$StorageDev'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:54U*%HGihgiGY#$Q@localhost/StorageDev'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Weslen:54U*%HGihgiGY#$Q@Weslen.mysql.pythonanywhere-services.com/Weslen$StorageDev'
 app.config['SECRET_KEY'] = '54U*%HGihgiGY#$Q@54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -47,6 +47,7 @@ ma = Marshmallow(app)
 migrate = Migrate(app,db)
 
 mp_api = MercadoPago(app.config['ACCESS_TOKEN_MP'],app.config['WEBHOOKS_URLS_MP'])
+brasil_api = ApiBrasil()
 
 mail = Mail(app)
 tokenSafe = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -55,8 +56,5 @@ executor = Executor(app)
 jwtGen = GenerateJWT(app.config['SECRET_KEY'])
 
 db.create_all()
-# db.session.execute("SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));")
-# db.session.execute("SET GLOBAL max_connections = 6000;")
-# db.session.commit()
 
 from .controllers.routers_api import *
