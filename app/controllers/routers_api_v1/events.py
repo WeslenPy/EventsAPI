@@ -21,8 +21,7 @@ def create_event():
 
     data = request.json
 
-    print(data,file=sys.sdterr)
-    raise Exception
+    print(data,file=sys.stderr)
 
     if not validitys.dateValidity(data['start_date'],data['end_date']):
         return jsonify({'status':400,'message':"Invalid end_date",'success':False}),400
