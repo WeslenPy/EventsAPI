@@ -13,7 +13,7 @@ def dateValidity(start:datetime,end:datetime) -> bool:
 
 def parseToDatetime(date):
     try:
-        new = datetime.strptime(date, "%Y-%m-%d")
+        new = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S")
         return new
     except:
         return False
