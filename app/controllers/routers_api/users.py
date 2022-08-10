@@ -35,7 +35,7 @@ def register_physical():
         db.session.delete(physical)
         db.session.commit()
         message = err.messages.get('email',['missing or invalid field'])[0]
-        return jsonify({'status':400,'message':message,'success':False}),200
+        return jsonify({'status':400,'message':message,'success':False}),400
 
     new_user.save()
 
@@ -74,8 +74,8 @@ def register_legal():
         juridical = LegalPerson.query.get(new_juridical.id)
         db.session.delete(juridical)
         db.session.commit()
-        message = err.messages.get('email',['missing or invalid field'])[0]
-        return jsonify({'status':400,'message':message,'success':False}),200
+        message = err.messages.get('email',['missing or invalid field'])
+        return jsonify({'status':400,'message':message[0],'success':False}),400
 
     new_user.save()
 

@@ -1,5 +1,5 @@
 
-from app.utils.functions import decorators
+from app.utils.functions import decorators,validitys
 from flask import request,jsonify
 from datetime import datetime
 from app import app
@@ -19,12 +19,15 @@ def create_lot():
 
     data = request.get_json()
 
+    if not validitys.dateValidity(data['start_date'],data['end_date']):
+        return jsonify({'status':400,'message':"Invalid end_date",'success':False}),400
+
     findTicket:Tickets = Tickets.query.get(data['ticket_lot_id'])
     if not findTicket:
         return jsonify({'status':400,'message':'invalid ticket_lot_id','success':False}),200
 
     if data['user_id'] != findTicket.user_id:
-        return jsonify({'status':400,'message':"inaccessible event",'success':False}),400
+        return jsonify({'status':404,'message':"event not found",'success':False}),404
 
 
     new_lot:Lots = LotSchema().load(data)

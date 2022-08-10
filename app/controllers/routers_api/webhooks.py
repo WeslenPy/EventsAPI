@@ -10,5 +10,4 @@ def webhook_mercadopago():
         id_pagamento = data['data']['id']
 
 
-
-    return jsonify({}) ,200
+    return jsonify({}),200

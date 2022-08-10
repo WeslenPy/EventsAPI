@@ -1,5 +1,5 @@
 
-from app.utils.functions import decorators
+from app.utils.functions import decorators,validitys
 from flask import request,jsonify
 from datetime import datetime
 from app import app
@@ -18,6 +18,9 @@ POST REGISTER DATA
 def create_event():
 
     data = request.json
+
+    if not validitys.dateValidity(data['start_date'],data['end_date']):
+        return jsonify({'status':400,'message':"Invalid end_date",'success':False}),400
 
     getCategory = Category.query.filter_by(id=data['category_id'],status=True).first()
     if not getCategory:return jsonify({'status':400,'message':"Invalid category_id",'success':False}),400

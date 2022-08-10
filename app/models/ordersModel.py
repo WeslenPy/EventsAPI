@@ -1,4 +1,3 @@
-from email.policy import default
 from app.utils.functions.date_fast import actualDate
 from app import db
 
