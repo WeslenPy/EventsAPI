@@ -57,4 +57,4 @@ jwtGen = GenerateJWT(app.config['SECRET_KEY'])
 
 db.create_all()
 
-from .controllers.routers_api import *
+from .controllers.routers_api_v1 import *

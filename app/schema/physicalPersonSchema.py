@@ -6,5 +6,6 @@ class PhysicalPersonSchema(ma.SQLAlchemyAutoSchema):
         unknown = 'exclude'
         model = PhysicalPerson
         load_instance = True
+        include_fk=True
         ordered = True
         dump_only = ("id",)

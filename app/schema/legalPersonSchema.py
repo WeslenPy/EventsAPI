@@ -6,5 +6,6 @@ class LegalPersonSchema(ma.SQLAlchemyAutoSchema):
         unknown = "exclude"
         ordered = True
         model = LegalPerson
+        include_fk=True
         load_instance = True
         dump_only = ("id",)

@@ -7,4 +7,5 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
         model = Category
         load_instance = True
         ordered = True
+        include_fk=True
         dump_only = ("id",)
