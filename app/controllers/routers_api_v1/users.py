@@ -1,5 +1,5 @@
 
-from app.utils.functions import decorators,validitys
+from app.utils.functions import decorators,validitys,error_messages
 from app import app,tokenSafe,executor,db
 from flask import request,jsonify
 from datetime import datetime
@@ -65,8 +65,6 @@ def register_legal():
     result = validitys.validityAlready(data,'cnpj')
     if result:return result
 
-    print(data,file=sys.stderr)
-
     new_juridical:LegalPerson = LegalPersonSchema().load(data)
     new_juridical.save()
 
@@ -76,8 +74,9 @@ def register_legal():
         juridical = LegalPerson.query.get(new_juridical.id)
         db.session.delete(juridical)
         db.session.commit()
-        message = err.messages.get('email',['missing or invalid field'])
-        return jsonify({'status':400,'message':message[0],'success':False}),400
+        message = error_messages.parseMessage(err.messages)
+
+        return jsonify({'status':400,'message':message,'success':False}),400
 
     new_user.save()
 
