@@ -7,7 +7,6 @@ from app import app
 from app.models import Events,Category,Tickets
 from app.schema import EventSchema
 
-import sys
 
 """
 POST REGISTER DATA 
@@ -21,7 +20,7 @@ def create_event():
 
     data = request.json
 
-    print(data,file=sys.stderr)
+    print(data,file=open('logErro.log','a'))
 
     if not validitys.dateValidity(data['start_date'],data['end_date']):
         return jsonify({'status':400,'message':"Invalid end_date",'success':False}),400
