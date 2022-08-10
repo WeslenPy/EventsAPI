@@ -57,7 +57,7 @@ def register_physical():
 
 
 @app.route('/api/v1/register/juridical',methods=['POST'])
-@decorators.validityDecorator({'email':str,'password':str,'phone':str,'cep':int,'address':str,'number_address':int,
+@decorators.validityDecorator({'email':str,'password':str,'phone':int,'cep':int,'address':str,'number_address':int,
                  'complement':str,'district':str,'city':str,'cnpj':str,"corporate_name":str,'state':str})
 def register_legal():
 
