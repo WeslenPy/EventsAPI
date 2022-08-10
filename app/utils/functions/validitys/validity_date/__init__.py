@@ -1,19 +1,15 @@
 from datetime import datetime
-import traceback
 
 def dateValidity(start:str,end:str) -> bool:
     try:
 
-        end = parseToDatetime(end)
-        start = parseToDatetime(start)
+        end:datetime = parseToDatetime(end)
+        start:datetime = parseToDatetime(start)
 
-        print(end,start,file=open('./newLogError.log','a'))
-
-        if end > start:True
+        if end > start:return True
         return False
 
     except:
-        traceback.print_exc(file=open('./newLog.log','a'))
         return False
 
 
