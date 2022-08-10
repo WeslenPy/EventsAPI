@@ -8,7 +8,6 @@ from app.models import Users,PhysicalPerson,LegalPerson
 from app.schema import UserSchema,PhysicalPersonSchema,LegalPersonSchema
 
 from marshmallow import ValidationError
-import sys
 """
 POST REGISTER DATA 
 """
