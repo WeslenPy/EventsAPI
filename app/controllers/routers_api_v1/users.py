@@ -34,7 +34,7 @@ def register_physical():
         physical = PhysicalPerson.query.get(physical.id)
         db.session.delete(physical)
         db.session.commit()
-        message = err.messages.get('email',['missing or invalid field'])[0]
+        message = error_messages.parseMessage(err.messages)
         return jsonify({'status':400,'message':message,'success':False}),400
 
     new_user.save()
