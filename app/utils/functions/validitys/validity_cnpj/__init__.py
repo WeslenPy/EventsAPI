@@ -16,7 +16,7 @@ def validityCNPJ(cnpj:str):
 
         if first_digit == digitValidity(first_part,0
                             ) and second_digit == digitValidity(second_part,1):
-            return True
+            return cnpj
 
         return False
 
