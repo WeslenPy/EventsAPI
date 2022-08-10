@@ -1,4 +1,4 @@
-def validatyCPF(cpf:str):
+def validityCPF(cpf:str):
     try:
         cpf = cpf.translate(str.maketrans({".": None, "-": None})).strip()
 

@@ -1,5 +1,5 @@
 from app.models import PhysicalPerson,Users,LegalPerson,GenreTypes
-from app.utils.functions.validitys import validatyCPF,validityCNPJ
+from app.utils.functions.validitys import validityCPF,validityCNPJ
 from app import brasil_api
 from flask import jsonify
 
@@ -12,7 +12,7 @@ def validityAlready(data:dict,attr='cpf'):
                     'message':'CPF has already been registered.',
                     'success':False}),400
         
-        cpf =  validatyCPF(data['cpf'])
+        cpf =  validityCPF(data['cpf'])
         if not cpf:
             return ({'status':400,
                 'message':'CPF is invalid.',
