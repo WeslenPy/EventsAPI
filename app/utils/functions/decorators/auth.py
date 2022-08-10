@@ -5,7 +5,7 @@ from app import jwtGen
 
 
 
-def authUserDecorator(required=False,is_admin=False):
+def authUserDecorator(required=False,is_admin=False,param=False):
     def returnDecorator(func):
 
         @wraps(func)
@@ -21,7 +21,9 @@ def authUserDecorator(required=False,is_admin=False):
                 user= Users.query.get(token[-1]['some']['id'])
                 if user and not user.is_admin: return jsonify({'status':401,'message':'Access denied','success':False}),401
 
-            if required:request.json['user_id']=token[-1]['some']['id']
+            user_id = token[-1]['some']['id']
+            if required:request.json['user_id']=user_id
+            elif param: kwargs['currentUser'] = user_id
             return func(*args,**kwargs)
 
         return wrapper

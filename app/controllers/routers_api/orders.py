@@ -43,20 +43,21 @@ def create_order():
     return jsonify({'status':200,'message':'order created successfully',"data":order,'order':order_generate,'success':False}),200
     
 
-# @app.route('/api/v1/get/genres',methods=['GET'])
-# def get_genres():
+@app.route('/api/v1/get/orders',methods=['GET'])
+@decorators.authUserDecorator(param=True)
+def get_orders(currentUser):
 
-#     genres:GenreTypes = GenreTypes.query.all()
-#     genres = GenreTypeSchema(many=True).dump(genres)
+    orders:Orders = Orders.query.filter_by(user_id=currentUser).all()
+    orders = OrderSchema(many=True).dump(orders)
 
-#     return  jsonify({'status':200,'message':'success','data':genres,'success':True}),200
+    return  jsonify({'status':200,'message':'success','data':orders,'success':True}),200
 
-# @app.route('/api/v1/get/genre/<int:id_genre>',methods=['GET'])
-# @decorators.authUserDecorator()
-# def get_genre(id_genre):
+@app.route('/api/v1/get/order/<int:id_order>',methods=['GET'])
+@decorators.authUserDecorator(param=True)
+def get_order(id_order,currentUser):
 
-#     genre:GenreTypes = GenreTypes.query.get(id_genre)
-#     genre = GenreTypeSchema().dump(genre)
+    order:Orders = Orders.query.filter_by(user_id=currentUser).get(id_order)
+    order = OrderSchema().dump(order)
 
-#     return  jsonify({'status':200,'message':'success','data':genre,'success':True}),200
+    return  jsonify({'status':200,'message':'success','data':order,'success':True}),200
 
