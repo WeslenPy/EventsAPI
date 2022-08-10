@@ -1,5 +1,5 @@
 from app.models import PhysicalPerson,Users,LegalPerson,GenreTypes
-from app.utils.functions.validitys import validatyCPF
+from app.utils.functions.validitys import validatyCPF,validityCNPJ
 from app import brasil_api
 from flask import jsonify
 
@@ -24,6 +24,14 @@ def validityAlready(data:dict,attr='cpf'):
             return ({'status':400,
                 'message':'CNPJ has already been registered.',
                 'success':False}),400
+
+        cnpj =  validityCNPJ(data['cnpj'])
+        if not cnpj:
+            return ({'status':400,
+                'message':'cnpj is invalid.',
+                'success':False}),400
+                
+        data['cnpj'] =cnpj
 
     if Users.query.filter_by(email=data['email']).first():
         return jsonify({'status':400,
