@@ -8,7 +8,7 @@ from app.models import Users,PhysicalPerson,LegalPerson
 from app.schema import UserSchema,PhysicalPersonSchema,LegalPersonSchema
 
 from marshmallow import ValidationError
-
+import sys
 """
 POST REGISTER DATA 
 """
@@ -64,6 +64,8 @@ def register_legal():
     data =  request.get_json()
     result = validitys.validityAlready(data,'cnpj')
     if result:return result
+
+    print(data,file=sys.stderr)
 
     new_juridical:LegalPerson = LegalPersonSchema().load(data)
     new_juridical.save()
