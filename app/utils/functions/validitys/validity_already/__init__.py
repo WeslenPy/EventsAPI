@@ -45,7 +45,7 @@ def validityAlready(data:dict,attr='cpf'):
 
         
                         
-    elif len(str(data['phone']))<11 or len(str(data['phone']))<13:
+    elif len(str(data['phone']))<11 or len(str(data['phone']))>13:
         return jsonify({'status':400,
                         'message':'Invalid number phone',
                         'success':False}),400   
