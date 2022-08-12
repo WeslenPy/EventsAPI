@@ -28,7 +28,7 @@ def validityAlready(data:dict,attr='cpf'):
         cnpj =  validityCNPJ(data['cnpj'])
         if not cnpj:
             return ({'status':400,
-                'message':'cnpj is invalid.',
+                'message':'CNPJ is invalid.',
                 'success':False}),400
                 
         data['cnpj'] =cnpj
