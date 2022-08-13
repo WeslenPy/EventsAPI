@@ -74,8 +74,8 @@ class Users(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def update(self,data):
-        default= ['password']
+    def update(self,data:dict):
+        default= ['password','id']
         for key, value in data.items():
             if key in default:continue
             elif getattr(self,key,False):

@@ -2,7 +2,7 @@
 from app.utils.functions import decorators,validitys
 from flask import request,jsonify
 from datetime import datetime
-from app import app
+from app import app,db
 
 from app.models import Events,Category,Tickets
 from app.schema import EventSchema
@@ -37,7 +37,29 @@ def create_event():
 
     eventData = EventSchema().dump(event)
     return jsonify({'status':200,'message':'event created successfully','data':eventData,'success':True}),200
+
+
+"""
+DELETE EVENT API DATA 
+"""
+@app.route('/api/v1/delete/event/<int:id_event>',methods=['DELETE'])
+@decorators.authUserDecorator()
+def delete_event(id_event):
+
+    event:Events = Events.query.filter_by(id=id_event,status=False).first()
+    if event:
+        db.session.delete(event)
+        db.session.commit()
     
+        return  jsonify({'status':200,'message':'success','success':True}),200
+
+    return  jsonify({'status':404,'message':'event not found or not eligible','success':False}),404
+
+
+
+"""
+GET DATA EVENT API
+"""
 
 @app.route('/api/v1/get/events',methods=['GET'])
 @decorators.authUserDecorator()
@@ -57,3 +79,5 @@ def get_event(id_event):
     event = EventSchema().dump(event)
 
     return  jsonify({'status':200,'message':'success','data':event,'success':True}),200
+
+

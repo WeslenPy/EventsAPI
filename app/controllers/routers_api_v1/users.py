@@ -1,4 +1,6 @@
 
+from ...schema.eventSchema import EventSchema
+from ...models.eventsModel import Events
 from app.utils.functions import decorators,validitys,error_messages
 from app import app,tokenSafe,executor,db
 from flask import request,jsonify
@@ -101,7 +103,8 @@ CHANGE DATA TABLE
 @decorators.authUserDecorator()
 def edit_physical(id_user):
 
-    data = request.get_json()
+
+    data = request.get_json() 
     if not data:
         return jsonify({
             'status':404,
@@ -110,7 +113,11 @@ def edit_physical(id_user):
 
     edit_user:Users = Users.query.get(id_user)
     if edit_user:
+        edit_physical:PhysicalPerson = PhysicalPerson.query.get(edit_user.physical_id)
+
         edit_user.update(data)
+        edit_physical.update(data)
+
         edit_user = UserSchema().dump(edit_user)
 
         return jsonify({
@@ -125,6 +132,25 @@ def edit_physical(id_user):
             'message':'user not found',
             'success':False}),200
 
+
+
+"""
+DELETE USER API DATA 
+"""
+@app.route('/api/v1/delete/user/<int:id_user>',methods=['DELETE'])
+@decorators.authUserDecorator()
+def delete_user(id_user):
+
+    user:Users = Users.query.get(id_user)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+    
+        return  jsonify({'status':200,'message':'success','success':True}),200
+
+    return  jsonify({'status':404,'message':'user not found','success':False}),404
+
+
 """
 GET API DATA ALL
 """
@@ -138,11 +164,29 @@ def get_users():
 
     return  jsonify({'status':200,'message':'success','data':users,'success':True}),200
     
+    
+    
 @app.route('/api/v1/get/user/<int:id_user>',methods=['GET'])
 @decorators.authUserDecorator()
 def get_user(id_user):
 
     user:Users = Users.query.get(id_user)
-    user = UserSchema().dump(user)
+    if user:
+        user = UserSchema().dump(user)
 
-    return  jsonify({'status':200,'message':'success','data':user,'success':True}),200
+        return  jsonify({'status':200,'message':'success','data':user,'success':True}),200
+
+    return  jsonify({'status':404,'message':'user not found','success':False}),404
+    
+    
+@app.route('/api/v1/get/user/events/<int:id_user>',methods=['GET'])
+@decorators.authUserDecorator()
+def get_user_events(id_user):
+
+    event:Events = Events.query.filter_by(user_id=id_user).all()
+    if event:
+        event = EventSchema(many=True).dump(event)
+
+        return  jsonify({'status':200,'message':'success','data':event,'success':True}),200
+
+    return  jsonify({'status':404,'message':'events not found','success':False}),404
