@@ -1,13 +1,11 @@
 
-from ...schema.eventSchema import EventSchema
-from ...models.eventsModel import Events
 from app.utils.functions import decorators,validitys,error_messages
 from app import app,tokenSafe,executor,db
 from flask import request,jsonify
 from datetime import datetime
 
-from app.models import Users,PhysicalPerson,LegalPerson
-from app.schema import UserSchema,PhysicalPersonSchema,LegalPersonSchema
+from app.models import Users,PhysicalPerson,LegalPerson,Events
+from app.schema import UserSchema,PhysicalPersonSchema,LegalPersonSchema,EventSchema
 
 from marshmallow import ValidationError
 """
