@@ -13,7 +13,7 @@ POST REGISTER DATA
 """
 @app.route('/api/v1/create/event',methods=['POST'])
 @decorators.authUserDecorator(required=True)
-@decorators.validityDecorator({'name':str,'image':str,'video':str,'cep':int,'state':str,'address':str,
+@decorators.validityDecorator({'name':str,'image':str,'video':str,'cep':int,'state':str,'address':str,"local_name":str,
                                 'number_address':int,'complement':str,'district':str,'city':str,'start_date':datetime,
                                 'end_date':datetime,'status':bool,'category_id':int,'ticket_id':int,"user_id":int})
 def create_event():
