@@ -1,26 +1,26 @@
-
-from app.utils.functions import decorators,validitys
 from flask import request,jsonify
-from datetime import datetime
-from app import app,db
 
+from app import app,db
+from app.utils.functions import decorators,validitys,error_messages
 from app.models import Events,Category,Tickets
 from app.schema import EventSchema
 
+from marshmallow import ValidationError
+from werkzeug.datastructures import FileStorage
+from werkzeug.utils import secure_filename
+import os
 
 """
 POST REGISTER DATA 
 """
 @app.route('/api/v1/create/event',methods=['POST'])
-@decorators.authUserDecorator(required=True)
-@decorators.validityDecorator({'name':str,'image':str,'video':str,'cep':int,'state':str,'address':str,"local_name":str,
-                                'number_address':int,'complement':str,'district':str,'city':str,'start_date':datetime,
-                                'end_date':datetime,'status':bool,'category_id':int,'ticket_id':int,"user_id":int})
-def create_event():
+@decorators.authUserDecorator(param=True)
+@decorators.validityDecoratorForm(['name','image','video','cep','state','address',"locale_name",
+                                'number_address','complement','district','city','start_date',
+                                'end_date','status','category_id','ticket_id','user_id'])
+def create_event(currentUser,data):
 
-    data = request.json
-
-    if not validitys.dateValidity(data['start_date'],data['end_date']):
+    if not validitys.dateValidity(data['start_date'],data['end_date'],format="%Y-%m-%dT%H:%M:%S.%fZ"):
         return jsonify({'status':400,'message':"Invalid end_date",'success':False}),400
 
     getCategory = Category.query.filter_by(id=data['category_id'],status=True).first()
@@ -32,8 +32,22 @@ def create_event():
     if data['user_id'] != getTicket.user_id:
         return jsonify({'status':400,'message':"inaccessible event",'success':False}),400
 
-    event:Events = EventSchema().load(data)
-    event.save()
+    image,image_filename= data['image'],secure_filename(data['image'].filename)
+    video,video_filename = data['video'],secure_filename(data['video'].filename)
+
+    data["image"] = image_filename
+    data["video"] = video_filename
+
+    try:
+        event:Events = EventSchema().load(data)
+        event.save()
+        
+        image.save(os.path.join('./app/static/img/',image_filename))
+        video.save(os.path.join('./app/static/video/',video_filename))
+
+    except ValidationError as err: 
+        message = error_messages.parseMessage(err.messages)
+        return jsonify({'status':400,'message':message,'success':False}),400
 
     eventData = EventSchema().dump(event)
     return jsonify({'status':200,'message':'event created successfully','data':eventData,'success':True}),200

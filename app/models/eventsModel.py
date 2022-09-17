@@ -7,11 +7,11 @@ class Events(db.Model):
     id  = db.Column(db.Integer, primary_key=True,autoincrement=True)
 
     name = db.Column(db.String(255),nullable=False)
-    local_name = db.Column(db.String(256),nullable=False,default='')
+    locale_name = db.Column(db.String(256),nullable=False)
     image = db.Column(db.String(255),nullable=False)
     video = db.Column(db.String(255),nullable=False)
     
-    cep = db.Column(db.BigInteger,nullable=False)
+    cep = db.Column(db.String(25),nullable=False)
     state = db.Column(db.String(30),nullable=False)
     address = db.Column(db.String(255),nullable=False)
     number_address = db.Column(db.BigInteger,nullable=True)
@@ -42,11 +42,12 @@ class Events(db.Model):
 
     def __init__(self,name,image,video,cep,address,number_address,state,
                  complement,district,city,start_date,end_date,category_id,
-                 ticket_id,user_id,status=False,created_at=actualDate):
+                 ticket_id,user_id,locale_name,status=False,created_at=actualDate):
 
         self.number_address= number_address
         self.created_at  = created_at()
         self.category_id = category_id
+        self.locale_name = locale_name
         self.ticket_id = ticket_id
         self.complement = complement
         self.start_date = start_date

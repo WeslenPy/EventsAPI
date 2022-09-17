@@ -1,10 +1,10 @@
 from datetime import datetime
 
-def dateValidity(start:str,end:str) -> bool:
+def dateValidity(start:str,end:str,format="%Y-%m-%dT%H:%M:%S") -> bool:
     try:
 
-        end:datetime = parseToDatetime(end)
-        start:datetime = parseToDatetime(start)
+        end:datetime = parseToDatetime(end,format)
+        start:datetime = parseToDatetime(start,format)
 
         if end > start:return True
         return False
@@ -13,9 +13,10 @@ def dateValidity(start:str,end:str) -> bool:
         return False
 
 
-def parseToDatetime(date):
+def parseToDatetime(date,format):
     try:
-        new = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S")
+        new = datetime.strptime(date,format )
         return new
-    except:
+    except Exception as erro:
+        print(erro)
         return False
