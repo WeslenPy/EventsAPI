@@ -1,14 +1,13 @@
-from flask import request,jsonify
+from flask import jsonify
 
-from app import app,db
+from app import app,db,s3
 from app.utils.functions import decorators,validitys,error_messages
 from app.models import Events,Category,Tickets
 from app.schema import EventSchema
 
 from marshmallow import ValidationError
-from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
-import os
+
 
 """
 POST REGISTER DATA 
@@ -32,8 +31,12 @@ def create_event(currentUser,data):
     if data['user_id'] != getTicket.user_id:
         return jsonify({'status':400,'message':"inaccessible event",'success':False}),400
 
-    image,image_filename= data['image'],secure_filename(data['image'].filename)
-    video,video_filename = data['video'],secure_filename(data['video'].filename)
+    image,image_filename= data['image'].read(),secure_filename(data['image'].filename)
+    video,video_filename = data['video'].read(),secure_filename(data['video'].filename)
+
+    bucket = s3.Bucket('moderna-pass')
+    result_image= bucket.put_object(Key=image_filename, Body=image)
+    result_video= bucket.put_object(Key=video_filename, Body=video)
 
     data["image"] = image_filename
     data["video"] = video_filename
@@ -42,9 +45,6 @@ def create_event(currentUser,data):
         event:Events = EventSchema().load(data)
         event.save()
         
-        image.save(os.path.join('./app/static/img/',image_filename))
-        video.save(os.path.join('./app/static/video/',video_filename))
-
     except ValidationError as err: 
         message = error_messages.parseMessage(err.messages)
         return jsonify({'status':400,'message':message,'success':False}),400
