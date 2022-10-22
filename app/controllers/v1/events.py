@@ -34,7 +34,7 @@ def create_event(currentUser,data):
     image,image_filename= data['image'],secure_filename(data['image'].filename)
     video,video_filename = data['video'],secure_filename(data['video'].filename)
 
-    bucket_name = 'moderna-teste'
+    bucket_name = 'moderna-pass'
     bucket = s3.Bucket(bucket_name)
 
     bucket.upload_fileobj(image,image_filename)
