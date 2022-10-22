@@ -1,13 +1,10 @@
 from app import ma
-from app.db.models  import Tickets
+from app.database.models    import GenreTypes
 
-class TicketSchema(ma.SQLAlchemyAutoSchema):
-
+class GenreTypeSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         unknown = "exclude"
-        include_fk=True
         ordered = True
-        model = Tickets
+        model = GenreTypes
         load_instance = True
         dump_only = ("id",)
-

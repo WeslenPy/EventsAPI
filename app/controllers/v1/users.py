@@ -4,8 +4,8 @@ from app import app,tokenSafe,executor,db
 from flask import request,jsonify
 from datetime import datetime
 
-from app.db.models  import Users,PhysicalPerson,LegalPerson,Events
-from app.db.schema  import UserSchema,PhysicalPersonSchema,LegalPersonSchema,EventSchema
+from app.database.models    import Users,PhysicalPerson,LegalPerson,Events
+from app.database.schema  import UserSchema,PhysicalPersonSchema,LegalPersonSchema,EventSchema
 
 from marshmallow import ValidationError
 """

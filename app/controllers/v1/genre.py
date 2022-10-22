@@ -4,8 +4,8 @@ from flask import request,jsonify
 from datetime import datetime
 from app import app
 
-from app.db.models  import GenreTypes
-from app.db.schema  import GenreTypeSchema
+from app.database.models    import GenreTypes
+from app.database.schema  import GenreTypeSchema
 
 
 """

@@ -1,5 +1,5 @@
 from app import ma
-from app.db.models  import Orders
+from app.database.models    import Orders
 from marshmallow import fields,validate
 
 class OrderSchema(ma.SQLAlchemyAutoSchema):

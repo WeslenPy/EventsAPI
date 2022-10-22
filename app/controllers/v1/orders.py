@@ -4,8 +4,8 @@ from flask import request,jsonify
 from app import app,mp_api
 
 from datetime import datetime
-from app.db.models  import Orders,Lots
-from app.db.schema  import OrderSchema
+from app.database.models    import Orders,Lots
+from app.database.schema  import OrderSchema
 
 
 

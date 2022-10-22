@@ -3,8 +3,8 @@ from app.utils.functions import decorators
 from flask import request,jsonify
 from app import app
 
-from app.db.schema  import CategorySchema
-from app.db.models  import Category
+from app.database.schema  import CategorySchema
+from app.database.models    import Category
 
 """
 POST REGISTER DATA 

@@ -1,4 +1,4 @@
-from app.db.models  import PhysicalPerson,Users,LegalPerson,GenreTypes
+from app.database.models    import PhysicalPerson,Users,LegalPerson,GenreTypes
 from app.utils.functions.validitys import validityCPF,validityCNPJ
 from app import brasil_api
 from flask import jsonify

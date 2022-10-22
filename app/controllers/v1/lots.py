@@ -4,8 +4,8 @@ from flask import request,jsonify
 from datetime import datetime
 from app import app
 
-from app.db.models  import Lots,Tickets,Users
-from app.db.schema  import LotSchema
+from app.database.models    import Lots,Tickets,Users
+from app.database.schema  import LotSchema
 
 """
 POST REGISTER DATA 
