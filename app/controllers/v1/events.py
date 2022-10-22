@@ -31,8 +31,8 @@ def create_event(currentUser,data):
     if data['user_id'] != getTicket.user_id:
         return jsonify({'status':400,'message':"inaccessible event",'success':False}),400
 
-    image,image_filename= data['image'].read(),secure_filename(data['image'].filename)
-    video,video_filename = data['video'].read(),secure_filename(data['video'].filename)
+    image,image_filename= data['image'],secure_filename(data['image'].filename)
+    video,video_filename = data['video'],secure_filename(data['video'].filename)
 
     bucket_name = 'moderna-teste'
     bucket = s3.Bucket(bucket_name)
