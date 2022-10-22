@@ -1,6 +1,7 @@
 from flask import request,jsonify
 from functools import wraps
 from datetime import datetime
+import sys
 
 def validityDecorator(data):
     def returnDecorator(func):
@@ -63,7 +64,10 @@ def validityDecoratorForm(data):
         @wraps(func)
         def wrapper(*args,**kwargs):
 
-            message = {'status':400,'message':'missing or invalid field','form_error':False,'details':{'param':'','invalid_type':False,'invalid_param':False},'success':False}
+            print(request.form,file=sys.stderr)
+
+            message = {'status':400,'message':'missing or invalid field','form_error':False,
+                                'details':{'param':'','invalid_type':False,'invalid_param':False},'success':False}
 
             try:
                 json_data = {}
