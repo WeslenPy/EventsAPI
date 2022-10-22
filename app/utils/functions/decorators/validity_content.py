@@ -64,9 +64,6 @@ def validityDecoratorForm(data):
         @wraps(func)
         def wrapper(*args,**kwargs):
 
-            print(request.form,file=sys.stderr)
-            print(request.files,file=sys.stderr)
-
             message = {'status':400,'message':'missing or invalid field','form_error':False,
                                 'details':{'param':'','invalid_type':False,'invalid_param':False},'success':False}
 
