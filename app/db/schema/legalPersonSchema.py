@@ -1,13 +1,11 @@
 from app import ma
-from app.models import Tickets
+from app.db.models  import LegalPerson
 
-class TicketSchema(ma.SQLAlchemyAutoSchema):
-
+class LegalPersonSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         unknown = "exclude"
-        include_fk=True
         ordered = True
-        model = Tickets
+        model = LegalPerson
+        include_fk=True
         load_instance = True
         dump_only = ("id",)
-

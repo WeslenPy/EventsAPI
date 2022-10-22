@@ -1,6 +1,6 @@
 from flask import request,jsonify
 from functools import wraps
-from app.models import Users
+from app.db.models  import Users
 from app import jwtGen
 
 

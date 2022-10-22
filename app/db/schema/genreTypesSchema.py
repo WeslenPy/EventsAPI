@@ -1,11 +1,10 @@
 from app import ma
-from app.models import LegalPerson
+from app.db.models  import GenreTypes
 
-class LegalPersonSchema(ma.SQLAlchemyAutoSchema):
+class GenreTypeSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         unknown = "exclude"
         ordered = True
-        model = LegalPerson
-        include_fk=True
+        model = GenreTypes
         load_instance = True
         dump_only = ("id",)

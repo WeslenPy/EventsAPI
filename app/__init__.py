@@ -56,6 +56,7 @@ tokenSafe = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 executor = Executor(app)
 
 s3 = boto3.resource('s3')
+client_s3 = boto3.client('s3')
 
 jwtGen = GenerateJWT(app.config['SECRET_KEY'])
 

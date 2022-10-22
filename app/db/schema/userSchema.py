@@ -1,9 +1,9 @@
 from app import ma
-from app.models import Users
+from app.db.models  import Users
 
-from app.schema.physicalPersonSchema import PhysicalPersonSchema
-from app.schema.legalPersonSchema import LegalPersonSchema
-from app.schema.genreTypesSchema import GenreTypeSchema
+from app.db.schema .physicalPersonSchema import PhysicalPersonSchema
+from app.db.schema .legalPersonSchema import LegalPersonSchema
+from app.db.schema .genreTypesSchema import GenreTypeSchema
 
 from marshmallow import fields
 

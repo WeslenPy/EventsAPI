@@ -1,9 +1,9 @@
 from flask import jsonify
 
 from app import app,db,s3
-from app.utils.functions import decorators,validitys,error_messages
-from app.models import Events,Category,Tickets
-from app.schema import EventSchema
+from app.utils.functions import decorators,validitys,error_messages,get_url
+from app.db.models  import Events,Category,Tickets
+from app.db.schema  import EventSchema
 
 from marshmallow import ValidationError
 from werkzeug.utils import secure_filename
@@ -34,12 +34,14 @@ def create_event(currentUser,data):
     image,image_filename= data['image'].read(),secure_filename(data['image'].filename)
     video,video_filename = data['video'].read(),secure_filename(data['video'].filename)
 
-    bucket = s3.Bucket('moderna-pass')
-    result_image= bucket.put_object(Key=image_filename, Body=image)
-    result_video= bucket.put_object(Key=video_filename, Body=video)
+    bucket_name = 'moderna-pass'
+    bucket = s3.Bucket(bucket_name)
 
-    data["image"] = image_filename
-    data["video"] = video_filename
+    bucket.put_object(Key=image_filename, Body=image)
+    bucket.put_object(Key=video_filename, Body=video)
+
+    data["image"] = get_url.generate_uri(bucket_name,image_filename)
+    data["video"] =  get_url.generate_uri(bucket_name,image_filename)
 
     try:
         event:Events = EventSchema().load(data)

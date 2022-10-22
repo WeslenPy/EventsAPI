@@ -1,6 +1,6 @@
 from flask import request,jsonify
 from app.utils.functions import validitys,decorators
-from app.models import Users
+from app.db.models  import Users
 from app import app,jwtGen
 
 

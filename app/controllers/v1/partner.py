@@ -3,8 +3,8 @@ from app.utils.functions import decorators
 from flask import request,jsonify
 from app import app
 
-from app.models import Partner,Users,Events
-from app.schema import PartnerSchema
+from app.db.models  import Partner,Users,Events
+from app.db.schema  import PartnerSchema
 
 
 """
