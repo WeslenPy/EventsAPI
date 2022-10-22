@@ -37,8 +37,8 @@ def create_event(currentUser,data):
     bucket_name = 'moderna-teste'
     bucket = s3.Bucket(bucket_name)
 
-    bucket.upload_file(image,image_filename)
-    bucket.upload_file(video,video_filename)
+    bucket.upload_file(image_filename,image)
+    bucket.upload_file(video_filename,video)
 
     data["image"] = get_url.generate_uri(bucket_name,image_filename)
     data["video"] =  get_url.generate_uri(bucket_name,image_filename)
