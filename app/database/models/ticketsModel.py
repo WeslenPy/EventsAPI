@@ -10,6 +10,7 @@ class Tickets(db.Model):
     description = db.Column(db.Text,nullable=False)
     max_buy =  db.Column(db.BigInteger,nullable=False)
     min_buy =  db.Column(db.BigInteger,nullable=False)
+    price = db.Column(db.Float(precision=2),nullable=False)
     paid = db.Column(db.Boolean,nullable=False)
     status =  db.Column(db.Boolean,nullable=False,default=True)
 
@@ -27,7 +28,7 @@ class Tickets(db.Model):
         "Events", back_populates="ticket_ship",
         cascade="all, delete",passive_deletes=True)
     
-    def __init__(self,title,description,max_buy,min_buy,paid,user_id,
+    def __init__(self,title,description,max_buy,min_buy,paid,user_id,price,
                         status=True,created_at=actualDate):
 
         self.description = description
@@ -36,6 +37,7 @@ class Tickets(db.Model):
         self.min_buy = min_buy
         self.user_id = user_id
         self.status = status
+        self.price = price
         self.title = title
         self.paid = paid
         
