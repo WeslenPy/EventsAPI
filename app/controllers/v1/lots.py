@@ -7,11 +7,13 @@ from app import app
 from app.database.models    import Lots,Tickets,Users
 from app.database.schema  import LotSchema
 
+from app.blueprints import v1
+
 """
 POST REGISTER DATA 
 """
 
-@app.route('/api/v1/create/lot',methods=['POST'])
+@v1.route('create/lot',methods=['POST'])
 @decorators.authUserDecorator(required=True)
 @decorators.validityDecorator({'quantity':int,'price':[float,int],'start_date':datetime,"user_id":int,
                                 "end_date":datetime,'ticket_lot_id':int,'status':bool})
@@ -38,7 +40,7 @@ def create_lot():
 
     
 
-@app.route('/api/v1/get/lots',methods=['GET'])
+@v1.route('get/lots',methods=['GET'])
 @decorators.authUserDecorator()
 def get_lots():
 
@@ -48,7 +50,7 @@ def get_lots():
     return  jsonify({'status':200,'message':'success','data':lots,'success':True}),200
 
 
-@app.route('/api/v1/get/lot/<int:id_lot>',methods=['GET'])
+@v1.route('get/lot/<int:id_lot>',methods=['GET'])
 @decorators.authUserDecorator()
 def get_lot(id_lot):
 

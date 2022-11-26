@@ -1,10 +1,11 @@
-from flask import request,jsonify
 from app.utils.functions import validitys,decorators
-from app.database.models    import Users
-from app import app,jwtGen
+from app.database.models import Users
+from flask import request,jsonify
+from app.blueprints import v1
+from app import jwtGen
 
 
-@app.route('/api/v1/auth',methods=['POST'])
+@v1.route('auth',methods=['POST'])
 @decorators.validityDecorator({"email":str,"password":str})
 def auth_user():
     data = request.json

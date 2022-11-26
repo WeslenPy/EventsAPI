@@ -3,11 +3,12 @@ from flask_mail import Message
 
 from app.utils.functions import encrypt_password,decorators,validitys
 from app import app,db,tokenSafe,mail,executor
-from app.database.models    import *
+from app.database.models import *
+from app.blueprints import v1
 import hashlib
 
 
-@app.route('/api/v1/change/password',methods=['POST'])
+@v1.route('change/password',methods=['POST'])
 @decorators.authUserDecorator(True)
 @decorators.validityDecorator({"actualPassword":str,"newPassword":str})
 def change_password(currentUser):
@@ -25,7 +26,7 @@ def change_password(currentUser):
     return jsonify({'status':404,'message':'Usuário não encontrado','success':False}),404
     
 
-@app.route('/api/v1/confirm/<token>',methods=['GET'])
+@v1.route('confirm/<token>',methods=['GET'])
 def validity_email(token):
     try:
         email = tokenSafe.loads(token,salt='emailConfirmUser',max_age=2000)
@@ -40,7 +41,7 @@ def validity_email(token):
         return abort(404)
 
 
-@app.route('/api/v1/forgot/password',methods=['POST'])
+@v1.route('forgot/password',methods=['POST'])
 @decorators.authUserDecorator()
 @decorators.validityDecorator({"email":str})
 def forgot_password_reset():
@@ -60,7 +61,7 @@ def forgot_password_reset():
     
     return jsonify({'data':{},'message':'E-mail para recuperação de senha enviado.','success':True}),200
 
-@app.route('/api/v1/forgot/password/<token>',methods=['POST'])
+@v1.route('forgot/password/<token>',methods=['POST'])
 @decorators.validityDecorator({"password":str})
 def forgot_password(token):
     try:

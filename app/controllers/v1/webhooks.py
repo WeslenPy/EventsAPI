@@ -2,7 +2,9 @@ from app import app, db, mp_api
 from flask import jsonify, request
 from app.utils.functions import logging
 
-@app.route('/api/v1/webhook/payment', methods=['POST'])
+from app.blueprints import v1
+
+@v1.route('webhook/payment', methods=['POST'])
 def webhook_mercadopago():
     data = request.get_json()
 

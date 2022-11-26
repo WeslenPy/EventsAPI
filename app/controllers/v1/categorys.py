@@ -1,17 +1,18 @@
 
 from app.utils.functions import decorators
 from flask import request,jsonify
-from app import app
 
 from app.database.schema  import CategorySchema
 from app.database.models    import Category
+
+from app.blueprints import v1
 
 """
 POST REGISTER DATA 
 """
 
 
-@app.route('/api/v1/create/category',methods=['POST'])
+@v1.route('create/category',methods=['POST'])
 @decorators.authUserDecorator()
 @decorators.validityDecorator({'name':str,'description':str,'status':bool})
 def create_category():
@@ -29,7 +30,7 @@ def create_category():
     return jsonify({'status':200,'message':'category has already been registered','data':categoryData,'success':False}),200
     
 
-@app.route('/api/v1/get/categorys',methods=['GET'])
+@v1.route('get/categorys',methods=['GET'])
 @decorators.authUserDecorator()
 def get_categorys():
 
@@ -38,7 +39,7 @@ def get_categorys():
 
     return  jsonify({'status':200,'message':'success','data':categorys,'success':True}),200
 
-@app.route('/api/v1/get/category/<int:id_category>',methods=['GET'])
+@v1.route('get/category/<int:id_category>',methods=['GET'])
 @decorators.authUserDecorator()
 def get_category(id_category):
 

@@ -8,12 +8,15 @@ from app.database.models    import Users,PhysicalPerson,LegalPerson,Events
 from app.database.schema  import UserSchema,PhysicalPersonSchema,LegalPersonSchema,EventSchema
 
 from marshmallow import ValidationError
+from app.blueprints import v1
+
+
 """
 POST REGISTER DATA 
 """
 
 
-@app.route('/api/v1/register/physical',methods=['POST'])
+@v1.route('register/physical',methods=['POST'])
 @decorators.validityDecorator({'email':str,'password':str,'phone':int,'cep':int,'address':str,'number_address':int,'state':str,
                  'complement':str,'district':str,'city':str,'cpf':str,'full_name':str,'birth_date':datetime,'genre_id':int})
 def register_physical():
@@ -55,7 +58,7 @@ def register_physical():
 
 
 
-@app.route('/api/v1/register/juridical',methods=['POST'])
+@v1.route('register/juridical',methods=['POST'])
 @decorators.validityDecorator({'email':str,'password':str,'phone':int,'cep':int,'address':str,'number_address':int,
                  'complement':str,'district':str,'city':str,'cnpj':str,"corporate_name":str,'state':str})
 def register_legal():
@@ -97,7 +100,7 @@ def register_legal():
 """
 CHANGE DATA TABLE
 """
-@app.route('/api/v1/edit/user/physical/<int:id_user>',methods=['PUT'])
+@v1.route('edit/user/physical/<int:id_user>',methods=['PUT'])
 @decorators.authUserDecorator()
 def edit_physical(id_user):
 
@@ -135,7 +138,7 @@ def edit_physical(id_user):
 """
 DELETE USER API DATA 
 """
-@app.route('/api/v1/delete/user/<int:id_user>',methods=['DELETE'])
+@v1.route('delete/user/<int:id_user>',methods=['DELETE'])
 @decorators.authUserDecorator()
 def delete_user(id_user):
 
@@ -153,7 +156,7 @@ def delete_user(id_user):
 GET API DATA ALL
 """
 
-@app.route('/api/v1/get/users',methods=['GET'])
+@v1.route('get/users',methods=['GET'])
 @decorators.authUserDecorator()
 def get_users():
 
@@ -164,7 +167,7 @@ def get_users():
     
     
     
-@app.route('/api/v1/get/user/<int:id_user>',methods=['GET'])
+@v1.route('get/user/<int:id_user>',methods=['GET'])
 @decorators.authUserDecorator()
 def get_user(id_user):
 
@@ -177,7 +180,7 @@ def get_user(id_user):
     return  jsonify({'status':404,'message':'user not found','success':False}),404
     
     
-@app.route('/api/v1/get/user/events/<int:id_user>',methods=['GET'])
+@v1.route('get/user/events/<int:id_user>',methods=['GET'])
 @decorators.authUserDecorator()
 def get_user_events(id_user):
 

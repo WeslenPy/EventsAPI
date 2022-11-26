@@ -7,13 +7,13 @@ from datetime import datetime
 from app.database.models    import Orders,Lots
 from app.database.schema  import OrderSchema
 
-
+from app.blueprints import v1
 
 """
 POST REGISTER DATA 
 """
 
-@app.route('/api/v1/create/order',methods=['POST'])
+@v1.route('create/order',methods=['POST'])
 @decorators.authUserDecorator(required=True)
 @decorators.validityDecorator({'lot_id':int,'quantity':int,"user_id":int})
 def create_order():
@@ -43,7 +43,7 @@ def create_order():
     return jsonify({'status':200,'message':'order created successfully',"data":order,'order':order_generate,'success':False}),200
     
 
-@app.route('/api/v1/get/orders',methods=['GET'])
+@v1.route('get/orders',methods=['GET'])
 @decorators.authUserDecorator(param=True)
 def get_orders(currentUser):
 
@@ -52,7 +52,7 @@ def get_orders(currentUser):
 
     return  jsonify({'status':200,'message':'success','data':orders,'success':True}),200
 
-@app.route('/api/v1/get/order/<int:id_order>',methods=['GET'])
+@v1.route('get/order/<int:id_order>',methods=['GET'])
 @decorators.authUserDecorator(param=True)
 def get_order(id_order,currentUser):
 

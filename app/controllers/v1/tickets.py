@@ -6,11 +6,13 @@ from app import app
 from app.database.schema  import TicketSchema
 from app.database.models    import Tickets
 
+from app.blueprints import v1
+
 """
 POST REGISTER DATA 
 """
 
-@app.route('/api/v1/create/ticket',methods=['POST'])
+@v1.route('create/ticket',methods=['POST'])
 @decorators.authUserDecorator(required=True)
 @decorators.validityDecorator({'title':str,'description':str,"user_id":int,"price":[float,int],
                             'max_buy':int,'min_buy':int,'paid':bool,'status':bool})
@@ -24,7 +26,7 @@ def create_ticket():
     return jsonify({'status':200,'message':'ticket created successfully','data':ticketData,'success':True}),200
 
 
-@app.route('/api/v1/get/tickets',methods=['GET'])
+@v1.route('get/tickets',methods=['GET'])
 @decorators.authUserDecorator()
 def get_tickets():
 
@@ -33,7 +35,7 @@ def get_tickets():
 
     return  jsonify({'status':200,'message':'success','data':tickets,'success':True}),200
     
-@app.route('/api/v1/get/ticket/<int:id_ticket>',methods=['GET'])
+@v1.route('get/ticket/<int:id_ticket>',methods=['GET'])
 @decorators.authUserDecorator()
 def get_ticket(id_ticket):
 

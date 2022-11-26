@@ -6,12 +6,13 @@ from app import app
 from app.database.models    import Partner,Users,Events
 from app.database.schema  import PartnerSchema
 
+from app.blueprints import v1
 
 """
 POST REGISTER DATA 
 """
 
-@app.route('/api/v1/add/partner',methods=['POST'])
+@v1.route('add/partner',methods=['POST'])
 @decorators.authUserDecorator()
 @decorators.validityDecorator({'user_id':int,'event_id':int,"status":bool})
 def add_partner():

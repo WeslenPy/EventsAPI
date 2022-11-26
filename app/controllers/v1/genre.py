@@ -1,18 +1,18 @@
 
 from app.utils.functions import decorators
 from flask import request,jsonify
-from datetime import datetime
 from app import app
 
 from app.database.models    import GenreTypes
 from app.database.schema  import GenreTypeSchema
 
+from app.blueprints import v1
 
 """
 POST REGISTER DATA 
 """
 
-@app.route('/api/v1/create/genre',methods=['POST'])
+@v1.route('create/genre',methods=['POST'])
 @decorators.authUserDecorator(is_admin=True)
 @decorators.validityDecorator({'type':str,'description':str,"status":bool})
 def create_genre():
@@ -30,7 +30,7 @@ def create_genre():
     return jsonify({'status':200,'message':'genre has already been registered','data':genreData,'success':False}),200
     
 
-@app.route('/api/v1/get/genres',methods=['GET'])
+@v1.route('get/genres',methods=['GET'])
 def get_genres():
 
     genres:GenreTypes = GenreTypes.query.all()
@@ -38,7 +38,7 @@ def get_genres():
 
     return  jsonify({'status':200,'message':'success','data':genres,'success':True}),200
 
-@app.route('/api/v1/get/genre/<int:id_genre>',methods=['GET'])
+@v1.route('get/genre/<int:id_genre>',methods=['GET'])
 @decorators.authUserDecorator()
 def get_genre(id_genre):
 

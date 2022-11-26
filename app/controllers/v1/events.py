@@ -8,11 +8,13 @@ from app.database.schema  import EventSchema
 from marshmallow import ValidationError
 from werkzeug.utils import secure_filename
 
+from app.blueprints import v1
+
 
 """
 POST REGISTER DATA 
 """
-@app.route('/api/v1/create/event',methods=['POST'])
+@v1.route('create/event',methods=['POST'])
 @decorators.authUserDecorator(param=True)
 @decorators.validityDecoratorForm(['name','image','video','cep','state','address',"locale_name",
                                 'number_address','complement','district','city','start_date',
@@ -58,7 +60,7 @@ def create_event(currentUser,data):
 """
 DELETE EVENT API DATA 
 """
-@app.route('/api/v1/delete/event/<int:id_event>',methods=['DELETE'])
+@v1.route('delete/event/<int:id_event>',methods=['DELETE'])
 @decorators.authUserDecorator()
 def delete_event(id_event):
 
@@ -77,7 +79,7 @@ def delete_event(id_event):
 GET DATA EVENT API
 """
 
-@app.route('/api/v1/get/events',methods=['GET'])
+@v1.route('get/events',methods=['GET'])
 @decorators.authUserDecorator()
 def get_events():
 
@@ -87,7 +89,7 @@ def get_events():
     return  jsonify({'status':200,'message':'success','data':events,'success':True}),200
 
 
-@app.route('/api/v1/get/event/<int:id_event>',methods=['GET'])
+@v1.route('get/event/<int:id_event>',methods=['GET'])
 @decorators.authUserDecorator()
 def get_event(id_event):
 
