@@ -63,3 +63,7 @@ jwtGen = GenerateJWT(app.config['SECRET_KEY'])
 db.create_all()
 
 from .controllers.v1 import *
+from .blueprints import v1
+
+
+app.register_blueprint(blueprint=v1)
