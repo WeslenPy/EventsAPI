@@ -20,6 +20,7 @@ class Events(db.Model):
     district = db.Column(db.String(100),nullable=False)
     city = db.Column(db.String(100),nullable=False)
     
+    start_hour = db.Column(db.DateTime,nullable=False)
     start_date = db.Column(db.DateTime,nullable=False)
     end_date = db.Column(db.DateTime,nullable=False)
     created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
@@ -41,7 +42,7 @@ class Events(db.Model):
 
 
     def __init__(self,name,image,video,cep,address,number_address,state,
-                 complement,district,city,start_date,end_date,category_id,
+                 complement,district,city,start_hour,start_date,end_date,category_id,
                  ticket_id,user_id,locale_name,status=False,created_at=actualDate):
 
         self.number_address= number_address
@@ -51,6 +52,7 @@ class Events(db.Model):
         self.ticket_id = ticket_id
         self.complement = complement
         self.start_date = start_date
+        self.start_hour = start_hour
         self.end_date = end_date
         self.district = district
         self.address = address

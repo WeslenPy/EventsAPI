@@ -1,14 +1,14 @@
 from flask import jsonify
 
-from app import app,db,s3
 from app.utils.functions import decorators,validitys,error_messages,get_url
-from app.database.models    import Events,Category,Tickets
-from app.database.schema  import EventSchema
+from app.database.models import Events,Category,Tickets
+from app.database.schema import EventSchema
 
-from marshmallow import ValidationError
 from werkzeug.utils import secure_filename
+from marshmallow import ValidationError
 
 from app.blueprints import v1
+from app import db,s3
 
 
 """
@@ -17,21 +17,18 @@ POST REGISTER DATA
 @v1.route('create/event',methods=['POST'])
 @decorators.authUserDecorator(param=True)
 @decorators.validityDecoratorForm(['name','image','video','cep','state','address',"locale_name",
-                                'number_address','complement','district','city','start_date',
+                                'number_address','complement','district','city','start_date',"start_hour",
                                 'end_date','status','category_id','ticket_id','user_id'])
 def create_event(currentUser,data):
 
-    if not validitys.dateValidity(data['start_date'],data['end_date'],format="%Y-%m-%dT%H:%M:%S.%fZ"):
-        return jsonify({'status':400,'message':"Invalid end_date",'success':False}),400
+    if not validitys.dateValidity(data['start_date'],data['end_date'],data['start_hour'],format="%Y-%m-%dT%H:%M:%S.%fZ"):
+        return jsonify({'status':400,'message':"Invalid date format",'success':False}),400
 
     getCategory = Category.query.filter_by(id=data['category_id'],status=True).first()
     if not getCategory:return jsonify({'status':400,'message':"Invalid category_id",'success':False}),400
 
-    getTicket:Tickets = Tickets.query.filter_by(id=data['ticket_id'],status=True).first()
+    getTicket:Tickets = Tickets.query.filter_by(id=data['ticket_id'],user_id=data['user_id'],status=True).first()
     if not getTicket:return jsonify({'status':400,'message':"Invalid ticket_id",'success':False}),400
-
-    if data['user_id'] != getTicket.user_id:
-        return jsonify({'status':400,'message':"inaccessible event",'success':False}),400
 
     image,image_filename= data['image'],secure_filename(data['image'].filename)
     video,video_filename = data['video'],secure_filename(data['video'].filename)

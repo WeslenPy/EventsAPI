@@ -1,12 +1,12 @@
-from flask import Flask
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from flask_cors import CORS
-from flask_mail import Mail
-from itsdangerous import URLSafeTimedSerializer
 from flask_executor import Executor
 from flask_migrate import Migrate
+from flask_cors import CORS
+from flask_mail import Mail
+from flask import Flask
+
+from itsdangerous import URLSafeTimedSerializer
 from app.api import MercadoPago,ApiBrasil
 from .auth import GenerateJWT
 import boto3
@@ -16,9 +16,6 @@ app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:54U*%HGihgiGY#$Q@localhost/StorageDev'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Weslen:54U*%HGihgiGY#$Q@Weslen.mysql.pythonanywhere-services.com/Weslen$StorageDev'
 app.config['SECRET_KEY'] = '54U*%HGihgiGY#$Q@54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q54U*%HGihgiGY#$Q'
-
-app.config['AWS_ACCESS_KEY_ID'] = ''
-app.config['AWS_SECRET_ACCESS_KEY'] = ''
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
@@ -37,11 +34,11 @@ app.config['WEBHOOKS_URLS_MP'] = {
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_SERVER'] = 'mail.meunumerovirtual.com'
+app.config['MAIL_SERVER'] = ''
 app.config['MAIL_USE_TLS'] = False 
 app.config['MAIL_USE_SSL'] = True 
-app.config['MAIL_USERNAME'] = 'noreply@meunumerovirtual.com'
-app.config['MAIL_PASSWORD'] = '290819943@kel'
+app.config['MAIL_USERNAME'] = ''
+app.config['MAIL_PASSWORD'] = ''
 
 cors = CORS(app)
 db = SQLAlchemy(app)
