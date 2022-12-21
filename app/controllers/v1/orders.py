@@ -1,7 +1,7 @@
 
 from app.utils.functions import decorators
 from flask import request,jsonify
-from app import app,mp_api
+from app import mp_api
 
 from datetime import datetime
 from app.database.models    import Orders,Lots

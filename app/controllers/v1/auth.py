@@ -16,7 +16,9 @@ def auth_user():
 
     if user:
         if validitys.comparePassword(password,user.password):
-            # if not user.active:return jsonify({'message':'Activate your account to proceed with login.','success':False,'status':401}),401
+            # if not user.active:
+                # return jsonify({'message':'Activate your account to proceed with login.',
+                #                  'success':False,'status':401}),401
         
             token = jwtGen.get_token(user.id,email)
 
