@@ -2,7 +2,7 @@ from app.utils.functions import validitys,decorators
 from app.database.models import Users
 from flask import request,jsonify
 from app.blueprints import v1
-from app import jwtGen
+from app import jwt
 
 
 @v1.route('auth',methods=['POST'])
@@ -12,7 +12,7 @@ def auth_user():
     email = data.get('email',None)
     password = data.get('password',None)
 
-    user = Users.query.filter_by(email=email).first()
+    user:Users = Users.query.filter_by(email=email).first()
 
     if user:
         if validitys.comparePassword(password,user.password):
@@ -20,9 +20,9 @@ def auth_user():
                 # return jsonify({'message':'Activate your account to proceed with login.',
                 #                  'success':False,'status':401}),401
         
-            token = jwtGen.get_token(user.id,email)
+            token = jwt.generate(user.id)
 
             return jsonify({'message':'login successfully','success':True,'token':token,"status":200}),200
 
-    return jsonify({'message':'Invalid email or password(s)!','success':False,"status":401}),401
+    return jsonify({'message':'Invalid email or password!','success':False,"status":401}),401
         

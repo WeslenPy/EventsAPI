@@ -8,7 +8,7 @@ from flask import Flask
 
 from itsdangerous import URLSafeTimedSerializer
 from app.api import MercadoPago,ApiBrasil
-from .auth import GenerateJWT
+from app.utils.functions.auth import GenerateJWT
 import boto3
 
 app = Flask(__name__)
@@ -55,7 +55,7 @@ executor = Executor(app)
 s3 = boto3.resource('s3')
 client_s3 = boto3.client('s3')
 
-jwtGen = GenerateJWT(app.config['SECRET_KEY'])
+jwt:GenerateJWT = GenerateJWT(app.config['SECRET_KEY'])
 
 db.create_all()
 

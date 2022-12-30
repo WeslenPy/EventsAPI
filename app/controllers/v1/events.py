@@ -22,7 +22,7 @@ POST REGISTER DATA
 def create_event(currentUser,data):
 
     if not validitys.dateValidity(data['start_date'],data['end_date'],data['start_hour'],format="%Y-%m-%dT%H:%M:%S.%fZ"):
-        return jsonify({'status':400,'message':"Invalid date format",'success':False}),400
+        return jsonify({'status':400,'message':"Invalid datetime format",'success':False}),400
 
     getCategory = Category.query.filter_by(id=data['category_id'],status=True).first()
     if not getCategory:return jsonify({'status':400,'message':"Invalid category_id",'success':False}),400
@@ -33,7 +33,7 @@ def create_event(currentUser,data):
     image,image_filename= data['image'],secure_filename(data['image'].filename)
     video,video_filename = data['video'],secure_filename(data['video'].filename)
 
-    bucket_name = 'accesspoint-moderna'
+    bucket_name = 'moderna-pass-bucket'
     bucket = s3.Bucket(bucket_name)
 
     bucket.upload_fileobj(image,image_filename)

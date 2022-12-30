@@ -9,10 +9,10 @@ class GenerateJWT:
         self.EXP = 1140
         self.ALG = 'HS256'
 
-    def get_token(self,_id,email,first_name,last_name,cpf):
+    def generate(self,_id:int)->str:
         exp =  datetime.timestamp(datetime.now()+timedelta(minutes=self.EXP))
         dados={
-            'some':{'id':_id,'email':email,'first_name':first_name,'last_name':last_name,'cpf':cpf},
+            'some':{'id':_id},
             'exp':exp}
         
         token_jwt = jwt.encode(dados,self.SECRET_KEY,algorithm=self.ALG)
