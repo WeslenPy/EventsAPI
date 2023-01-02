@@ -7,7 +7,7 @@ from flask_mail import Mail
 from flask import Flask
 
 from itsdangerous import URLSafeTimedSerializer
-from app.api import MercadoPago,ApiBrasil
+from api import MercadoPago,ApiBrasil
 from app.utils.functions.auth import GenerateJWT
 import boto3
 
