@@ -1,5 +1,5 @@
 from app import ma
-from app.database.models    import PhysicalPerson
+from app.databases.events.models    import PhysicalPerson
 
 class PhysicalPersonSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

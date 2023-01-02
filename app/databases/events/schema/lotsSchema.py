@@ -1,5 +1,5 @@
 from app import ma
-from app.database.models    import Lots
+from app.databases.events.models    import Lots
 from .ticketSchema import TicketSchema
 
 class LotSchema(ma.SQLAlchemyAutoSchema):

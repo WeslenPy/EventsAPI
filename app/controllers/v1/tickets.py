@@ -3,8 +3,8 @@ from app.utils.functions import decorators
 from flask import request,jsonify
 from app import app
 
-from app.database.schema  import TicketSchema
-from app.database.models    import Tickets
+from app.databases.events.schema  import TicketSchema
+from app.databases.events.models    import Tickets
 
 from app.blueprints import v1
 

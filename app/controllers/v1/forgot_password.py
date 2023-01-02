@@ -3,7 +3,7 @@ from flask_mail import Message
 
 from app.utils.functions import encrypt_password,decorators,validitys
 from app import app,db,tokenSafe,mail,executor
-from app.database.models import *
+from app.databases.events.models import *
 from app.blueprints import v1
 import hashlib
 

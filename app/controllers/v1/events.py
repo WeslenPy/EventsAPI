@@ -1,8 +1,8 @@
 from flask import jsonify
 
 from app.utils.functions import decorators,validitys,error_messages,get_url
-from app.database.models import Events,Category,Tickets
-from app.database.schema import EventSchema
+from app.databases.events.models import Events,Category,Tickets
+from app.databases.events.schema import EventSchema
 
 from werkzeug.utils import secure_filename
 from marshmallow import ValidationError
@@ -77,7 +77,7 @@ GET DATA EVENT API
 """
 
 @v1.route('get/events',methods=['GET'])
-@decorators.authUserDecorator()
+# @decorators.authUserDecorator()
 def get_events():
 
     events:Events = Events.query.all()

@@ -1,5 +1,5 @@
 from app import ma
-from app.database.models    import GenreTypes
+from app.databases.events.models    import GenreTypes
 
 class GenreTypeSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

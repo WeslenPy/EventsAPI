@@ -1,10 +1,10 @@
 from app import ma
-from app.database.models    import Events
+from app.databases.events.models    import Events
 
-from app.database.schema .categorySchema import CategorySchema
-from app.database.schema .ticketSchema import TicketSchema
-from app.database.schema .userSchema import UserSchema
-from app.database.schema .partnerUserSchema import PartnerUserSchema
+from app.databases.events.schema .categorySchema import CategorySchema
+from app.databases.events.schema .ticketSchema import TicketSchema
+from app.databases.events.schema .userSchema import UserSchema
+from app.databases.events.schema .partnerUserSchema import PartnerUserSchema
 
 class EventSchema(ma.SQLAlchemyAutoSchema):
     

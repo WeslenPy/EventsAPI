@@ -1,5 +1,5 @@
 from app import ma
-from app.database.models    import Category
+from app.databases.events.models    import Category
 
 class CategorySchema(ma.SQLAlchemyAutoSchema):
     class Meta:

@@ -2,8 +2,8 @@
 from app.utils.functions import decorators
 from flask import request,jsonify
 
-from app.database.schema  import CategorySchema
-from app.database.models    import Category
+from app.databases.events.schema  import CategorySchema
+from app.databases.events.models    import Category
 
 from app.blueprints import v1
 

@@ -1,5 +1,5 @@
 from app.utils.functions import validitys,decorators
-from app.database.models import Users
+from app.databases.events.models import Users
 from flask import request,jsonify
 from app.blueprints import v1
 from app import jwt

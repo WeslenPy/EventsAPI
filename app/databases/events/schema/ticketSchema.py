@@ -1,5 +1,5 @@
 from app import ma
-from app.database.models    import Tickets
+from app.databases.events.models    import Tickets
 
 class TicketSchema(ma.SQLAlchemyAutoSchema):
 

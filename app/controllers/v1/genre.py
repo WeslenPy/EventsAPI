@@ -3,8 +3,8 @@ from app.utils.functions import decorators
 from flask import request,jsonify
 from app import app
 
-from app.database.models    import GenreTypes
-from app.database.schema  import GenreTypeSchema
+from app.databases.events.models    import GenreTypes
+from app.databases.events.schema  import GenreTypeSchema
 
 from app.blueprints import v1
 
