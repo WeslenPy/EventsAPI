@@ -77,7 +77,7 @@ GET DATA EVENT API
 """
 
 @v1.route('get/events',methods=['GET'])
-# @decorators.authUserDecorator()
+@decorators.authUserDecorator()
 def get_events():
 
     events:Events = Events.query.all()

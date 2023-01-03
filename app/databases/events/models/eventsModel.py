@@ -40,6 +40,10 @@ class Events(db.Model):
         "Partner", back_populates="event_ship",
         cascade="all, delete",passive_deletes=True)
 
+    rules_event_children = db.relationship(
+        "RulesEvent", back_populates="event_ship",
+        cascade="all, delete",passive_deletes=True)
+
 
     def __init__(self,name,image,video,cep,address,number_address,state,
                  complement,district,city,start_hour,start_date,end_date,category_id,

@@ -48,6 +48,10 @@ class Users(db.Model):
         "Tickets", back_populates="user_ticket_ship",
         cascade="all, delete",passive_deletes=True)
 
+    rules_user_children = db.relationship(
+        "RulesEvent", back_populates="user_ship",
+        cascade="all, delete",passive_deletes=True)
+
     def __init__(self,email,password,phone,cep,address,number_address,
                  complement,district,city,state,genre_id=None,physical_id=None,legal_id=None,
                  is_admin=False,active=False,created_at=actualDate):
