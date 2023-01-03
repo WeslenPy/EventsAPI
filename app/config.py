@@ -1,4 +1,6 @@
-from urllib.parse import quote
+from dotenv import load_dotenv
+load_dotenv()
+
 from os import environ
 
 
@@ -15,7 +17,7 @@ JSON_AS_ASCII = False
 JSONIFY_PRETTYPRINT_REGULAR = True
 
 # secret key para as sessões
-SECRET_KEY = environ['SECRET_KEY']
+SECRET_KEY = environ.get('SECRET_KEY','secret fuerte')
 
 # configurações de email
 MAIL_PORT = int(environ.get('MAIL_PORT',0))
