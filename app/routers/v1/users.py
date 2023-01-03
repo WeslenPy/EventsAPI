@@ -1,6 +1,6 @@
 
 from app.utils.functions import decorators,validitys,error_messages
-from app import app,tokenSafe,executor,db
+from app import db
 from flask import request,jsonify
 from datetime import datetime
 
@@ -17,8 +17,10 @@ POST REGISTER DATA
 
 
 @v1.route('register/physical',methods=['POST'])
-@decorators.validityDecorator({'email':str,'password':str,'phone':int,'cep':int,'address':str,'number_address':int,'state':str,
-                 'complement':str,'district':str,'city':str,'cpf':str,'full_name':str,'birth_date':datetime,'genre_id':int})
+@decorators.validityDecorator({'email':str,'password':str,'phone':int,'cep':int,
+                                'address':str,'number_address':int,'state':str,
+                                'complement':str,'district':str,'city':str,'cpf':str,
+                                'full_name':str,'birth_date':datetime,'genre_id':int})
 def register_physical():
 
     data = request.get_json()
@@ -59,8 +61,10 @@ def register_physical():
 
 
 @v1.route('register/juridical',methods=['POST'])
-@decorators.validityDecorator({'email':str,'password':str,'phone':int,'cep':int,'address':str,'number_address':int,
-                 'complement':str,'district':str,'city':str,'cnpj':str,"corporate_name":str,'state':str})
+@decorators.validityDecorator({'email':str,'password':str,'phone':int,
+                                'cep':int,'address':str,'number_address':int,
+                                'complement':str,'district':str,'city':str,'cnpj':str,
+                                "corporate_name":str,'state':str})
 def register_legal():
 
     data =  request.get_json()

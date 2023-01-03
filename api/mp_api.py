@@ -1,5 +1,4 @@
 from mercadopago import SDK
-import app
 
 class MercadoPago:
     def __init__(self,token,webhooks) -> SDK:
