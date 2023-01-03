@@ -9,3 +9,4 @@ from .genre import *
 from .lots import *
 from .partner import *
 from .orders import *
+from .rules_event import *

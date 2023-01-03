@@ -4,7 +4,7 @@ from flask import request,jsonify
 from datetime import datetime
 from app import app
 
-from app.databases.events.models    import Lots,Tickets,Users
+from app.databases.events.models    import Lots,Tickets
 from app.databases.events.schema  import LotSchema
 
 from app.blueprints import v1

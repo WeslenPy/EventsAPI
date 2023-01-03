@@ -34,7 +34,7 @@ jwt:GenerateJWT = GenerateJWT(app.config['SECRET_KEY'])
 
 db.create_all()
 
-from .controllers.v1 import *
+from .routers import *
 from .blueprints import v1
 
 
