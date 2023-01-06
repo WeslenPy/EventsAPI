@@ -50,6 +50,10 @@ class Users(db.Model):
 
     rules_user_children = db.relationship(
         "RulesEvent", back_populates="user_ship",
+        cascade="all, delete",passive_deletes=True)   
+        
+    terms_children = db.relationship(
+        "TermsEvent", back_populates="user_ship",
         cascade="all, delete",passive_deletes=True)
 
     def __init__(self,email,password,phone,cep,address,number_address,

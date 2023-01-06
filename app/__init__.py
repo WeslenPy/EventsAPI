@@ -32,6 +32,8 @@ client_s3:boto3.client = boto3.client('s3')
 
 jwt:GenerateJWT = GenerateJWT(app.config['SECRET_KEY'])
 
+bucket_name = app.config['BUCKET_NAME']
+
 from .routers import *
 from .databases import *
 from .blueprints import v1

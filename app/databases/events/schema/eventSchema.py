@@ -6,10 +6,12 @@ from app.databases.events.schema.ticketSchema import TicketSchema
 from app.databases.events.schema.userSchema import UserSchema
 from app.databases.events.schema.partnerUserSchema import PartnerUserSchema
 from app.databases.events.schema.rulesEventSchema import RulesEventSchema
+from app.databases.events.schema.termsEventSchema import TermsEventSchema
 
 class EventSchema(ma.SQLAlchemyAutoSchema):
     
     event_partner_children = ma.Nested(PartnerUserSchema,many=True)
+    terms_children = ma.Nested(TermsEventSchema,many=True)
     rules_event_children = ma.Nested(RulesEventSchema,many=True)
     ticket_ship = ma.Nested(TicketSchema)
     category_ship = ma.Nested(CategorySchema)

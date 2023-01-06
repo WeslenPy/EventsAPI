@@ -1,6 +1,6 @@
 from flask import jsonify
 
-from app.utils.functions import decorators,validitys,error_messages,get_url
+from app.utils.functions import decorators,validitys,error_messages,aws
 from app.databases.events.models import Events,Category,Tickets
 from app.databases.events.schema import EventSchema
 
@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 from marshmallow import ValidationError
 
 from app.blueprints import v1
-from app import db,s3
+from app import db,s3,bucket_name
 
 
 """
@@ -33,14 +33,8 @@ def create_event(currentUser,data):
     image,image_filename= data['image'],secure_filename(data['image'].filename)
     video,video_filename = data['video'],secure_filename(data['video'].filename)
 
-    bucket_name = 'moderna-pass-bucket'
-    bucket = s3.Bucket(bucket_name)
-
-    bucket.upload_fileobj(image,image_filename)
-    bucket.upload_fileobj(video,video_filename)
-
-    data["image"] = get_url.generate_uri(bucket_name,image_filename)
-    data["video"] =  get_url.generate_uri(bucket_name,image_filename)
+    data["image"] = aws.upload_file(image,image_filename)
+    data["video"] =  aws.upload_file(video,video_filename)
 
     try:
         event:Events = EventSchema().load(data)

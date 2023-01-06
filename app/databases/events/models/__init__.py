@@ -9,3 +9,4 @@ from .legalPersonModel import LegalPerson
 from .ticketsModel import Tickets
 from .partnerModel import Partner
 from .rulesEventModel import RulesEvent
+from .termsEventModel import TermsEvent

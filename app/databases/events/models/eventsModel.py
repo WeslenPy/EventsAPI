@@ -43,6 +43,10 @@ class Events(db.Model):
     rules_event_children = db.relationship(
         "RulesEvent", back_populates="event_ship",
         cascade="all, delete",passive_deletes=True)
+        
+    terms_children = db.relationship(
+        "TermsEvent", back_populates="event_ship",
+        cascade="all, delete",passive_deletes=True)
 
 
     def __init__(self,name,image,video,cep,address,number_address,state,

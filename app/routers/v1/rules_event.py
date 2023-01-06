@@ -13,7 +13,7 @@ POST REGISTER DATA
 
 @v1.route('create/rule',methods=['POST'])
 @decorators.authUserDecorator(required=True)
-@decorators.validityDecorator({'type':str,'description':str,"event_id":int,"status":bool})
+@decorators.validityDecorator({'type':str,'description':str,"event_id":int,"user_id":int,"status":bool})
 def create_rule():
     data = request.get_json()
 
