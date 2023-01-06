@@ -17,7 +17,8 @@ POST REGISTER DATA
 def create_term():
     data = request.get_json()
 
-    eventFind:Events =Events.query.filter_by(status=True,id=data['event_id'],user_id=data['user_id']).first()
+    eventFind:Events =Events.query.filter_by(status=True,id=data['event_id'],
+                                             user_id=data['user_id']).first()
     if not eventFind:
         return jsonify({'status':400,'message':'Invalid event','success':False}),200
 
@@ -30,20 +31,4 @@ def create_term():
     return jsonify({'status':200,'message':'term created successfully',"data":term,'success':False}),200
     
 
-@v1.route('get/terms',methods=['GET'])
-@decorators.authUserDecorator(param=True)
-def get_terms(currentUser):
-
-    terms:TermsEvent = TermsEvent.query.filter_by(user_id=currentUser).all()
-    terms = TermsEventSchema(many=True).dump(terms)
-    return  jsonify({'status':200,'message':'success','data':terms,'success':True}),200
-
-@v1.route('get/term/<int:id_term>',methods=['GET'])
-@decorators.authUserDecorator(param=True)
-def get_term(id_term,currentUser):
-
-    term:TermsEvent = TermsEvent.query.filter_by(user_id=currentUser,id=id_term).first()
-    term = TermsEventSchema().dump(term)
-
-    return  jsonify({'status':200,'message':'success','data':term,'success':True}),200
 

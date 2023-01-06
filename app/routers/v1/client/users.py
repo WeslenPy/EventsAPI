@@ -4,7 +4,7 @@ from app import db
 from flask import request,jsonify
 from datetime import datetime
 
-from app.databases.events.models    import Users,PhysicalPerson,LegalPerson,Events
+from app.databases.events.models  import Users,PhysicalPerson,LegalPerson,Events
 from app.databases.events.schema  import UserSchema,PhysicalPersonSchema,LegalPersonSchema,EventSchema
 
 from marshmallow import ValidationError
