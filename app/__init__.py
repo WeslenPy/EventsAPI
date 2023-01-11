@@ -34,8 +34,8 @@ jwt:GenerateJWT = GenerateJWT(app.config['SECRET_KEY'])
 
 bucket_name = app.config['BUCKET_NAME']
 
-from .routers import *
 from .databases import *
+from .routers import *
 from .blueprints import v1
 
 db.create_all()
