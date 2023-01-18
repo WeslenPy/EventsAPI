@@ -42,6 +42,8 @@ def register_physical():
         return jsonify({'status':400,'message':message,'success':False}),400
 
     new_user.save()
+    
+
 
 #     token_url = tokenSafe.dumps(data['email'],salt='emailConfirmUser')
 #     msg = Message("Não responda este e-mail",

@@ -8,7 +8,7 @@ class TermsEvent(db.Model):
     type_term = db.Column(db.String(100),nullable=False)
     description = db.Column(db.Text,nullable=False)
     
-    term = db.Column(db.String(255),nullable=False)
+    url = db.Column(db.String(255),nullable=False)
     status  = db.Column(db.Boolean,nullable=False,default=True)
     created_at  = db.Column(db.DateTime,nullable=False,default=currentDate)
 
@@ -19,14 +19,14 @@ class TermsEvent(db.Model):
     user_ship = db.relationship('Users', back_populates="terms_children")
     
 
-    def __init__(self,type_term,description,term,event_id,user_id,
+    def __init__(self,type_term,description,url,event_id,user_id,
                                 status=True,created_at=currentDate):
 
         self.type_term = type_term
         self.user_id = user_id
         self.status = status
         self.description = description
-        self.term = term
+        self.url = url
         self.event_id = event_id
         self.created_at = created_at()
         

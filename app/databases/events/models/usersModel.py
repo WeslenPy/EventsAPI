@@ -1,3 +1,6 @@
+from .userTypeAccessModel import UserAccessTypes
+from .userTypesModel import UserTypes
+
 from app.utils.functions.date_fast import currentDate
 from app import db
 import bcrypt
@@ -56,7 +59,7 @@ class Users(db.Model):
         "TermsEvent", back_populates="user_ship",
         cascade="all, delete",passive_deletes=True)
 
-    user_types_children = db.relationship(
+    types_children = db.relationship(
         "UserAccessTypes", back_populates="user_ship",
         cascade="all, delete",passive_deletes=True) 
 
@@ -81,16 +84,23 @@ class Users(db.Model):
         self.city = city
         self.cep = cep
 
+    
+    def default_add(self):
+        type_:UserTypes = UserTypes.query.filter_by(type='user',status=True).first()
+        if type_:
+            new:UserAccessTypes  = UserAccessTypes(user_id=self.id,type_id=type_.id)
+            new.save()
 
     def save(self):
         db.session.add(self)
         db.session.commit()
+        self.default_add()
 
     def update(self,data:dict):
         default= ['password','id']
         for key, value in data.items():
             if key in default:continue
-            elif getattr(self,key,False):
+            elif getattr(self,key,"not data") != "not data":
                 setattr(self, key, value)
 
         db.session.commit()

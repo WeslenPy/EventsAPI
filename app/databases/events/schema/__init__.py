@@ -10,3 +10,5 @@ from .physicalPersonSchema import PhysicalPersonSchema
 from .orderSchema import OrderSchema
 from .rulesEventSchema import RulesEventSchema
 from .termsEventSchema import TermsEventSchema
+from .userAccessTypesSchema import UserAccessTypesSchema
+from .userTypesSchema import UserTypesSchema
