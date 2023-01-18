@@ -1,4 +1,4 @@
-from app.utils.functions.date_fast import actualDate
+from app.utils.functions.date_fast import currentDate
 from app import db
 
 class Lots(db.Model):
@@ -11,7 +11,7 @@ class Lots(db.Model):
     
     start_date  = db.Column(db.DateTime,nullable=False)
     end_date  = db.Column(db.DateTime,nullable=False)
-    created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
+    created_at = db.Column(db.DateTime,nullable=False,default=currentDate)
     
     status  = db.Column(db.Boolean,nullable=False,default=True)
     closed  = db.Column(db.Boolean,nullable=False,default=False)
@@ -25,7 +25,7 @@ class Lots(db.Model):
     
 
     def __init__(self,quantity,ticket_lot_id,price,start_date,end_date,
-                                status=True,closed=False,created_at=actualDate):
+                                status=True,closed=False,created_at=currentDate):
 
         
         self.price = price

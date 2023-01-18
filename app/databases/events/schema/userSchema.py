@@ -1,11 +1,9 @@
 from app import ma
 from app.databases.events.models    import Users
 
-from app.databases.events.schema .physicalPersonSchema import PhysicalPersonSchema
-from app.databases.events.schema .legalPersonSchema import LegalPersonSchema
-from app.databases.events.schema .genreTypesSchema import GenreTypeSchema
-
-from marshmallow import fields
+from app.databases.events.schema.physicalPersonSchema import PhysicalPersonSchema
+from app.databases.events.schema.legalPersonSchema import LegalPersonSchema
+from app.databases.events.schema.genreTypesSchema import GenreTypeSchema
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     
@@ -13,13 +11,12 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     legal_ship = ma.Nested(LegalPersonSchema)
     genre_ship = ma.Nested(GenreTypeSchema)
 
-    email = fields.Email()
+    email = ma.Email()
     
     class Meta:
         unknown = "exclude"
         model = Users
 
-        
         load_instance = True
         include_fk=True
         ordered = True

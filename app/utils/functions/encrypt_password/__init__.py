@@ -1,4 +1,5 @@
-from hashlib import sha256
+import bcrypt,hashlib,base64
 
 def encryptPassword(password):
-    return sha256(str.encode(password)).hexdigest()
+    return bcrypt.hashpw(base64.b64encode(hashlib.sha256(str.encode(password)).digest()),
+                            bcrypt.gensalt())

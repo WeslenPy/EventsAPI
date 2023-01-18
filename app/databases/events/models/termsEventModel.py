@@ -1,4 +1,4 @@
-from app.utils.functions.date_fast import actualDate
+from app.utils.functions.date_fast import currentDate
 from app import db
 
 class TermsEvent(db.Model):
@@ -10,7 +10,7 @@ class TermsEvent(db.Model):
     
     term = db.Column(db.String(255),nullable=False)
     status  = db.Column(db.Boolean,nullable=False,default=True)
-    created_at  = db.Column(db.DateTime,nullable=False,default=actualDate)
+    created_at  = db.Column(db.DateTime,nullable=False,default=currentDate)
 
     event_id = db.Column(db.ForeignKey("events.id",ondelete='cascade'),nullable=False)
     user_id = db.Column(db.ForeignKey("users.id",ondelete='cascade'),nullable=False)
@@ -20,7 +20,7 @@ class TermsEvent(db.Model):
     
 
     def __init__(self,type_term,description,term,event_id,user_id,
-                                status=True,created_at=actualDate):
+                                status=True,created_at=currentDate):
 
         self.type_term = type_term
         self.user_id = user_id

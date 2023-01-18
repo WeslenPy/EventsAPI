@@ -1,4 +1,4 @@
-from app.utils.functions.date_fast import actualDate
+from app.utils.functions.date_fast import currentDate
 from app import db
 
 class Orders(db.Model):
@@ -10,9 +10,9 @@ class Orders(db.Model):
     value = db.Column(db.Float(precision=2),nullable=False)
     quantity = db.Column(db.Integer,nullable=False)
     
-    created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
+    created_at = db.Column(db.DateTime,nullable=False,default=currentDate)
     payment_at = db.Column(db.DateTime,nullable=True)
-    expired_at = db.Column(db.DateTime,nullable=False,default=actualDate)
+    expired_at = db.Column(db.DateTime,nullable=False,default=currentDate)
     
     status  = db.Column(db.Enum('Pending','Approved','Expired'),nullable=False,default='Pending')
 
@@ -22,8 +22,8 @@ class Orders(db.Model):
     lot_ship = db.relationship('Lots', back_populates="lot_children")    
     user_ship = db.relationship('Users', back_populates="user_order_children")
     
-    def __init__(self,value,lot_id,user_id,quantity,method='',expired_at=actualDate,
-                            status='Pending',payment_at=None,created_at=actualDate):
+    def __init__(self,value,lot_id,user_id,quantity,method='',expired_at=currentDate,
+                            status='Pending',payment_at=None,created_at=currentDate):
 
         self.method = method
         self.value = value

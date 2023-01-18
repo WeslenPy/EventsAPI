@@ -1,4 +1,4 @@
-from app.utils.functions.date_fast import actualDate
+from app.utils.functions.date_fast import currentDate
 from app import db
 
 
@@ -7,7 +7,7 @@ class Partner(db.Model):
 
     id  = db.Column(db.Integer, primary_key=True,autoincrement=True)
     
-    created_at  = db.Column(db.DateTime,nullable=False,default=actualDate)
+    created_at  = db.Column(db.DateTime,nullable=False,default=currentDate)
     
     status =  db.Column(db.Boolean,nullable=False,default=True)
     
@@ -17,7 +17,7 @@ class Partner(db.Model):
     event_id = db.Column(db.ForeignKey("events.id",ondelete='cascade'),nullable=False)
     event_ship = db.relationship('Events', back_populates="event_partner_children")
         
-    def __init__(self,user_id,event_id,created_at=actualDate,status=True):
+    def __init__(self,user_id,event_id,created_at=currentDate,status=True):
 
         self.user_id = user_id
         self.event_id = event_id

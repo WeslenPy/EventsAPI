@@ -1,6 +1,6 @@
-from app.utils.functions.date_fast import actualDate
+from app.utils.functions.date_fast import currentDate
 from app import db
-import hashlib
+import bcrypt
 
 class Users(db.Model):
     __tablename__ = 'users'
@@ -20,7 +20,7 @@ class Users(db.Model):
     state = db.Column(db.String(2),nullable=False)
     city = db.Column(db.String(100),nullable=False)
     
-    created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
+    created_at = db.Column(db.DateTime,nullable=False,default=currentDate)
     is_admin = db.Column(db.Boolean,default=False)
     active = db.Column(db.Boolean,default=False)
     
@@ -56,11 +56,15 @@ class Users(db.Model):
         "TermsEvent", back_populates="user_ship",
         cascade="all, delete",passive_deletes=True)
 
+    user_types_children = db.relationship(
+        "UserAccessTypes", back_populates="user_ship",
+        cascade="all, delete",passive_deletes=True) 
+
     def __init__(self,email,password,phone,cep,address,number_address,
                  complement,district,city,state,genre_id=None,physical_id=None,legal_id=None,
-                 is_admin=False,active=False,created_at=actualDate):
+                 is_admin=False,active=False,created_at=currentDate):
 
-        self.password = hashlib.sha256(str.encode(password)).hexdigest()
+        self.password = bcrypt.hashpw(password,bcrypt.gensalt())
         self.number_address= number_address
         self.created_at  = created_at()
         self.physical_id = physical_id

@@ -14,7 +14,7 @@ import hashlib
 def change_password(currentUser):
 
     data = request.json
-    user = Users.query.filter_by(id=currentUser['some']['id']).first()
+    user:Users = Users.query.filter_by(id=currentUser['some']['id']).first()
     if user:
         if validitys.comparePassword(data['actualPassword'],user.password):
             user.password =encrypt_password.encryptPassword(data['newPassword'])
@@ -30,7 +30,7 @@ def change_password(currentUser):
 def validity_email(token):
     try:
         email = tokenSafe.loads(token,salt='emailConfirmUser',max_age=2000)
-        user  = Users.query.filter_by(email=email).first()
+        user:Users  = Users.query.filter_by(email=email).first()
         if user: 
             if not user.active:
                 user.active = True
@@ -47,10 +47,9 @@ def validity_email(token):
 def forgot_password_reset():
     data = request.json
     user = Users.query.filter_by(email=data['email']).first()
+    if not user:
+        return jsonify({'data':{},'message':'E-mail não encontrado','success':False}),200
 
-    result = not_found.checkContent(user)
-    if result !=False:return result
-    
     token_url = tokenSafe.dumps(user.id,salt='passwordForgot')
     msg = Message("Não responda este e-mail",
                 sender="noreply@meunumerovirtual.com",

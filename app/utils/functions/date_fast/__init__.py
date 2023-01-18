@@ -4,6 +4,9 @@ def actualDate():
     now=  datetime.now().strftime('%d-%m-%Y %H:%M:%S')
     return datetime.strptime(now, '%d-%m-%Y %H:%M:%S')
 
+def currentDate():
+    return datetime.now()
+
 def expirationTime(expires):
     return float(datetime.timestamp(datetime.now()+timedelta(**expires)))
 

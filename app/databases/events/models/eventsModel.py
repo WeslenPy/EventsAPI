@@ -1,4 +1,4 @@
-from app.utils.functions.date_fast import actualDate
+from app.utils.functions.date_fast import currentDate
 from app import db
 
 class Events(db.Model):
@@ -23,7 +23,7 @@ class Events(db.Model):
     start_hour = db.Column(db.DateTime,nullable=False)
     start_date = db.Column(db.DateTime,nullable=False)
     end_date = db.Column(db.DateTime,nullable=False)
-    created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
+    created_at = db.Column(db.DateTime,nullable=False,default=currentDate)
     
     status = db.Column(db.Boolean,default=False)
     
@@ -51,7 +51,7 @@ class Events(db.Model):
 
     def __init__(self,name,image,video,cep,address,number_address,state,
                  complement,district,city,start_hour,start_date,end_date,category_id,
-                 ticket_id,user_id,locale_name,status=False,created_at=actualDate):
+                 ticket_id,user_id,locale_name,status=False,created_at=currentDate):
 
         self.number_address= number_address
         self.created_at  = created_at()

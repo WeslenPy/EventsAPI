@@ -1,4 +1,4 @@
-from app.utils.functions.date_fast import actualDate
+from app.utils.functions.date_fast import currentDate
 from app import db
 
 class Tickets(db.Model):
@@ -14,7 +14,7 @@ class Tickets(db.Model):
     paid = db.Column(db.Boolean,nullable=False)
     status =  db.Column(db.Boolean,nullable=False,default=True)
 
-    created_at = db.Column(db.DateTime,nullable=False,default=actualDate)
+    created_at = db.Column(db.DateTime,nullable=False,default=currentDate)
 
     user_id = db.Column(db.ForeignKey("users.id",ondelete='cascade'),nullable=False)
     
@@ -29,7 +29,7 @@ class Tickets(db.Model):
         cascade="all, delete",passive_deletes=True)
     
     def __init__(self,title,description,max_buy,min_buy,paid,user_id,price,
-                        status=True,created_at=actualDate):
+                        status=True,created_at=currentDate):
 
         self.description = description
         self.created_at = created_at()

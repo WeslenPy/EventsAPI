@@ -1,4 +1,7 @@
+from .userTypeAccessModel import UserAccessTypes
+from .userTypesModel import UserTypes
 from .usersModel import Users
+
 from .categorysModel import Category 
 from .eventsModel import Events
 from .genreTypesModel import GenreTypes
