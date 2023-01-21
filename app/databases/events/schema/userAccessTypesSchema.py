@@ -1,11 +1,12 @@
-from app import ma
+from app.server.instance import app
+
 from app.databases.events.models import UserAccessTypes
 from app.databases.events.schema.userTypesSchema import UserTypesSchema
 
 
-class UserAccessTypesSchema(ma.SQLAlchemyAutoSchema):
+class UserAccessTypesSchema(app.ma.SQLAlchemyAutoSchema):
 
-    type_ship = ma.Nested(UserTypesSchema)
+    type_ship = app.ma.Nested(UserTypesSchema)
     
     class Meta:
         unknown = "exclude"

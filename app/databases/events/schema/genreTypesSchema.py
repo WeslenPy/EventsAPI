@@ -1,7 +1,8 @@
-from app import ma
+from app.server.instance import app
+
 from app.databases.events.models    import GenreTypes
 
-class GenreTypeSchema(ma.SQLAlchemyAutoSchema):
+class GenreTypeSchema(app.ma.SQLAlchemyAutoSchema):
     class Meta:
         unknown = "exclude"
         ordered = True

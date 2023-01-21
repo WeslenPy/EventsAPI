@@ -1,7 +1,8 @@
-from app import ma
+from app.server.instance import app
+
 from app.databases.events.models    import PhysicalPerson
 
-class PhysicalPersonSchema(ma.SQLAlchemyAutoSchema):
+class PhysicalPersonSchema(app.ma.SQLAlchemyAutoSchema):
     class Meta:
         unknown = 'exclude'
         model = PhysicalPerson

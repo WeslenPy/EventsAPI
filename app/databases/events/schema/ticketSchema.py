@@ -1,7 +1,8 @@
-from app import ma
+from app.server.instance import app
+
 from app.databases.events.models    import Tickets
 
-class TicketSchema(ma.SQLAlchemyAutoSchema):
+class TicketSchema(app.ma.SQLAlchemyAutoSchema):
 
     class Meta:
         unknown = "exclude"

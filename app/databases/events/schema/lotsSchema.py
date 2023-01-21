@@ -1,9 +1,10 @@
-from app import ma
+from app.server.instance import app
+
 from app.databases.events.models    import Lots
 from .ticketSchema import TicketSchema
 
-class LotSchema(ma.SQLAlchemyAutoSchema):
-    # ticket_ship = ma.Nested(TicketSchema)
+class LotSchema(app.ma.SQLAlchemyAutoSchema):
+    # ticket_ship = app.ma.Nested(TicketSchema)
     
     class Meta:
         unknown = "exclude"

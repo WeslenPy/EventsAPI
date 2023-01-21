@@ -1,7 +1,8 @@
-from app import ma
+from app.server.instance import app
+
 from app.databases.events.models    import LegalPerson
 
-class LegalPersonSchema(ma.SQLAlchemyAutoSchema):
+class LegalPersonSchema(app.ma.SQLAlchemyAutoSchema):
     class Meta:
         unknown = "exclude"
         ordered = True

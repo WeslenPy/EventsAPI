@@ -2,7 +2,8 @@ from .userTypeAccessModel import UserAccessTypes
 from .userTypesModel import UserTypes
 
 from app.utils.functions.date_fast import currentDate
-from app import db
+from app.server.instance import app
+db = app.db
 import bcrypt
 
 class Users(db.Model):

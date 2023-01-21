@@ -1,4 +1,5 @@
-from app import db
+from app.server.instance import app
+db = app.db
 
 class Category(db.Model):
     __tablename__ = 'category'

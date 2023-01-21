@@ -1,4 +1,5 @@
-from app import ma
+from app.server.instance import app
+
 from app.databases.events.models    import Users
 
 from app.databases.events.schema.physicalPersonSchema import PhysicalPersonSchema
@@ -7,16 +8,16 @@ from app.databases.events.schema.genreTypesSchema import GenreTypeSchema
 from app.databases.events.schema.termsEventSchema import TermsEventSchema
 from app.databases.events.schema.userAccessTypesSchema import UserAccessTypesSchema
 
-class UserSchema(ma.SQLAlchemyAutoSchema):
+class UserSchema(app.ma.SQLAlchemyAutoSchema):
     
-    physical_ship = ma.Nested(PhysicalPersonSchema)
-    legal_ship = ma.Nested(LegalPersonSchema)
-    genre_ship = ma.Nested(GenreTypeSchema)
+    physical_ship = app.ma.Nested(PhysicalPersonSchema)
+    legal_ship = app.ma.Nested(LegalPersonSchema)
+    genre_ship = app.ma.Nested(GenreTypeSchema)
     
-    types_children = ma.Nested(UserAccessTypesSchema,many=True)
-    terms_children = ma.Nested(TermsEventSchema,many=True)
+    types_children = app.ma.Nested(UserAccessTypesSchema,many=True)
+    terms_children = app.ma.Nested(TermsEventSchema,many=True)
 
-    email = ma.Email()
+    email = app.ma.Email()
     
     class Meta:
         unknown = "exclude"

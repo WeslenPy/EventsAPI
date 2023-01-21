@@ -1,8 +1,9 @@
-from app import ma
+from app.server.instance import app
+
 from app.databases.events.models    import Orders
 from marshmallow import fields,validate
 
-class OrderSchema(ma.SQLAlchemyAutoSchema):
+class OrderSchema(app.ma.SQLAlchemyAutoSchema):
 
     # status =fields.Str(validate=validate.OneOf(['Pending','Approved','Expired']))
 

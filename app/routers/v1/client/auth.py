@@ -1,28 +1,31 @@
-from app.utils.functions import validitys,decorators
+from flask_restx import Resource,Api,fields
 from app.databases.events.models import Users
-from flask import request,jsonify
-from app.blueprints import v1
-from app import jwt
+from app.utils.functions import validitys
+from app.server import app
 
+# payload = {}
+api = app.api
+auth_model =app.api.model('Auth', {
+    "email":fields.String(required=True),
+    "password":fields.String(required=True)
+})
 
-@v1.route('auth',methods=['POST'])
-@decorators.validityDecorator({"email":str,"password":str})
-def auth_user():
-    data = request.json
-    email = data.get('email',None)
-    password = data.get('password',None)
+@app.api.route("/auth")
+class Auth(Resource):
+    
+    @api.expect(auth_model)
+    def post(self,**kwargs):
+        data = api.payload
+        user:Users = Users.query.filter_by(email=data.get('email','')).first()
 
-    user:Users = Users.query.filter_by(email=email).first()
+        if user:
+            if validitys.comparePassword(data.get('password',''),user.password):
+                if not user.active:
+                    return {'message':'Activate your account to proceed with login.',
+                                     'success':False,'status':401},401
+            
+                return {'message':'login successfully','success':True,
+                                'token': app.jwt.generate(user.id),"status":200},200
 
-    if user:
-        if validitys.comparePassword(password,user.password):
-            # if not user.active:
-                # return jsonify({'message':'Activate your account to proceed with login.',
-                #                  'success':False,'status':401}),401
-        
-            token = jwt.generate(user.id)
-
-            return jsonify({'message':'login successfully','success':True,'token':token,"status":200}),200
-
-    return jsonify({'message':'Invalid email or password!','success':False,"status":401}),401
+        return {'message':'Invalid email or password!','success':False,"status":401},401
         

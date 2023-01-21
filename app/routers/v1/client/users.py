@@ -1,20 +1,37 @@
+from flask_restx import Resource,Api,fields
+from app.databases.events.models import Users
+from app.utils.functions import validitys
+from app.server import app
 
-from app.utils.functions import decorators,validitys,error_messages
-from app import db
-from flask import request,jsonify
-from datetime import datetime
+api = app.api
+user_model =app.api.model('User',{
+                                'email':fields.String,'password':fields.String,
+                                'phone':fields.Integer,'cep':fields.Integer,
+                                'address':fields.String,'number_address':int,
+                                'state':fields.String, 'complement':fields.String,
+                                'district':fields.String,'city':fields.String,
+                                'cpf':fields.String,'full_name':fields.String,
+                                'birth_date':fields.DateTime,'genre_id':fields.Integer})
 
-from app.databases.events.models  import Users,PhysicalPerson,LegalPerson,Events
-from app.databases.events.schema  import UserSchema,PhysicalPersonSchema,LegalPersonSchema,EventSchema
+@app.api.route("/physical")
+class PhisycalUser(Resource):
+    
+    @api.expect(user_model)
+    def post(self,**kwargs):
+        data = api.payload
+        user:Users = Users.query.filter_by(email=data.get('email','')).first()
 
-from marshmallow import ValidationError
-from app.blueprints import v1
+        if user:
+            if validitys.comparePassword(data.get('password',''),user.password):
+                if not user.active:
+                    return {'message':'Activate your account to proceed with login.',
+                                     'success':False,'status':401},401
+            
+                return {'message':'login successfully','success':True,
+                                'token': app.jwt.generate(user.id),"status":200},200
 
-
-"""
-POST REGISTER DATA 
-"""
-
+        return {'message':'Invalid email or password!','success':False,"status":401},401
+        
 
 @v1.route('register/physical',methods=['POST'])
 @decorators.validityDecorator({'email':str,'password':str,'phone':int,'cep':int,

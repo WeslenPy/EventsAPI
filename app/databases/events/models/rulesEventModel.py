@@ -1,5 +1,6 @@
 from app.utils.functions.date_fast import currentDate
-from app import db
+from app.server.instance import app
+db = app.db
 
 class RulesEvent(db.Model):
     __tablename__ = 'rules_events'

@@ -1,7 +1,7 @@
-from app import ma
+from app.server.instance import app
 from app.databases.events.models    import Category
 
-class CategorySchema(ma.SQLAlchemyAutoSchema):
+class CategorySchema(app.ma.SQLAlchemyAutoSchema):
     class Meta:
         unknown = "exclude"
         model = Category

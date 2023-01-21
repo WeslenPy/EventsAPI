@@ -1,8 +1,9 @@
-from app import ma
+from app.server.instance import app
+
 from app.databases.events.models    import UserTypes
 
 
-class UserTypesSchema(ma.SQLAlchemyAutoSchema):
+class UserTypesSchema(app.ma.SQLAlchemyAutoSchema):
     
     class Meta:
         unknown = "exclude"

@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 from marshmallow import ValidationError
 
 from app.blueprints import v1
-from app import db,s3,bucket_name
+from app.server.instance import db,s3,bucket_name
 
 
 """
