@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restx import Api
+from flask_restx import Api,Namespace
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -17,6 +17,15 @@ import boto3
 
 class App:
     def __init__(self):
+
+        self.authorizations = {
+                'JWT': {
+                    'type': 'apiKey',
+                    "in": "header",
+                    "name": "Authorization",
+                }
+        }
+
         self.app:Flask = Flask(__name__)
         self.app.config.from_pyfile("config.py")
 
@@ -30,8 +39,10 @@ class App:
                         version='1.0',
                         title="Moderna Pass API",
                         description="API para venda de ingressos",
-                        doc="/docs")
-
+                        doc="/docs",
+                        authorizations=self.authorizations,
+                        security='JWT',
+        )
 
         self.cors:CORS = CORS(self.app)
         self.db:SQLAlchemy = SQLAlchemy(self.app)
@@ -52,7 +63,30 @@ class App:
 
         self.bucket_name:str = self.app.config['BUCKET_NAME']
 
+        self.create_namespace()
         self.app.register_blueprint(self.api_v1)
+
+
+    def create_namespace(self):
+
+        self.user_api = Namespace("User",description="Routers of user.",path="/user")
+        self.category_api = Namespace("Category",description="Routers of category.",path='/category')
+        self.events_api = Namespace("Events",description="Routers of events.",path='/event')
+        self.lots_api = Namespace("Lots",description="Routers of lots.",path='/lot')
+        self.orders_api = Namespace("Orders",description="Routers of orders.",path="/order")
+        self.partner_api = Namespace("Partner",description="Routers of partner.",path='/partner')
+        self.rules_api = Namespace("Rules",description="Routers of rules.",path="/rules")
+        self.terms_api = Namespace("Terms",description="Routers of terms.",path="/terms")
+        self.tickets_api = Namespace("Tickets",description="Routers of tickets.",path="/ticket")
+
+        self.api.add_namespace(self.user_api)
+        self.api.add_namespace(self.events_api)
+        self.api.add_namespace(self.category_api)
+        self.api.add_namespace(self.orders_api)
+        self.api.add_namespace(self.partner_api)
+        self.api.add_namespace(self.rules_api)
+        self.api.add_namespace(self.terms_api)
+        self.api.add_namespace(self.tickets_api)
 
 
     def run(self):

@@ -1,5 +1,8 @@
 from app.server.instance import app
-db = app.db
+import sqlalchemy
+
+
+db:sqlalchemy = app.db
 
 class Category(db.Model):
     __tablename__ = 'category'

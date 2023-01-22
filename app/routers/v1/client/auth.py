@@ -1,21 +1,23 @@
-from flask_restx import Resource,Api,fields
+from flask_restx import Resource,fields
 from app.databases.events.models import Users
 from app.utils.functions import validitys
 from app.server import app
 
-# payload = {}
-api = app.api
-auth_model =app.api.model('Auth', {
-    "email":fields.String(required=True),
-    "password":fields.String(required=True)
+
+api_auth = app.user_api
+
+auth_model =api_auth.model('Auth', {
+    "email":fields.String(description='Email cadastrado.',required=True),
+    "password":fields.String(description="Senha cadastrada.",required=True)
 })
 
-@app.api.route("/auth")
+@api_auth.route("/auth",endpoint="Auth")
 class Auth(Resource):
     
-    @api.expect(auth_model)
+    @api_auth.expect(auth_model, validate=True)
+    @api_auth.doc("Rota para efetuar a autenticação do usuario.",security=None)
     def post(self,**kwargs):
-        data = api.payload
+        data = api_auth.payload
         user:Users = Users.query.filter_by(email=data.get('email','')).first()
 
         if user:

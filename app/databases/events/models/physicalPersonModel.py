@@ -1,5 +1,8 @@
 from app.server.instance import app
-db = app.db
+import sqlalchemy
+
+
+db:sqlalchemy = app.db
 
 class PhysicalPerson(db.Model):
     __tablename__ = 'physical_person'

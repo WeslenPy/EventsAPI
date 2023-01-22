@@ -3,9 +3,10 @@ from .userTypesModel import UserTypes
 
 from app.utils.functions.date_fast import currentDate
 from app.server.instance import app
-db = app.db
+import sqlalchemy
 import bcrypt
 
+db:sqlalchemy = app.db
 class Users(db.Model):
     __tablename__ = 'users'
 
@@ -15,7 +16,7 @@ class Users(db.Model):
     password = db.Column(db.String(255),nullable=False)
     
     phone = db.Column(db.BigInteger,unique=True,nullable=False)
-    cep = db.Column(db.BigInteger,nullable=False)
+    zip_code = db.Column(db.BigInteger,nullable=False)
     address = db.Column(db.String(100),nullable=False)
     number_address = db.Column(db.BigInteger,nullable=True)
     
@@ -64,7 +65,7 @@ class Users(db.Model):
         "UserAccessTypes", back_populates="user_ship",
         cascade="all, delete",passive_deletes=True) 
 
-    def __init__(self,email,password,phone,cep,address,number_address,
+    def __init__(self,email,password,phone,zip_code,address,number_address,
                  complement,district,city,state,genre_id=None,physical_id=None,legal_id=None,
                  is_admin=False,active=False,created_at=currentDate):
 
@@ -83,7 +84,7 @@ class Users(db.Model):
         self.email = email
         self.phone = phone
         self.city = city
-        self.cep = cep
+        self.zip_code = zip_code
 
     
     def default_add(self):

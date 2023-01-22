@@ -1,7 +1,10 @@
 from app.utils.functions.date_fast import currentDate
 from app.server.instance import app
 
-db = app.db
+import sqlalchemy
+
+
+db:sqlalchemy = app.db
 class Events(db.Model):
     __tablename__ = 'events'
 
