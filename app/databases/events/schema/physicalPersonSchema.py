@@ -5,8 +5,6 @@ from app.databases.events.models    import PhysicalPerson,GenreTypes
 from app.utils.functions.validitys import validity_field
 
 class PhysicalPersonSchema(app.ma.SQLAlchemyAutoSchema):
-    birth_date = app.ma.DateTime(format="iso")
-
 
     @post_load
     def new_physical(self,data,**kwargs):

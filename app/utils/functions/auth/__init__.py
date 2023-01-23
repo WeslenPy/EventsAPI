@@ -1,1 +1,0 @@
-from .authUser import GenerateJWT

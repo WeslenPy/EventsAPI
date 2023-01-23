@@ -1,15 +1,15 @@
 from flask import Flask
 from flask_restx import Api,Namespace
 
-from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
 from flask_marshmallow import Marshmallow
+from flask_sqlalchemy import SQLAlchemy
 from flask_executor import Executor
+from flask import Flask,Blueprint
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_mail import Mail
-from flask import Flask,Blueprint
 
-from ..utils.functions.auth import GenerateJWT
 from itsdangerous import URLSafeTimedSerializer
 from api import MercadoPago,ApiBrasil
 import boto3
@@ -29,6 +29,7 @@ class App:
         self.app:Flask = Flask(__name__)
         self.app.config.from_pyfile("config.py")
 
+
         self.api_v1 =Blueprint(
                     name = 'api_v1', 
                     import_name = __name__, 
@@ -44,10 +45,13 @@ class App:
                         security='JWT',
         )
 
+        self.jwt = JWTManager(self.app)
+
         self.cors:CORS = CORS(self.app)
         self.db:SQLAlchemy = SQLAlchemy(self.app)
         self.ma:Marshmallow = Marshmallow(self.app)
         self.migrate:Migrate = Migrate(self.app,self.db)
+
 
         self.mp_api:MercadoPago = MercadoPago(self.app.config['MP_ACCESS_PRIVATE_TOKEN'],self.app.config['WEBHOOK_URL_CONFIGS'])
         self.brasil_api:ApiBrasil = ApiBrasil()
@@ -59,30 +63,31 @@ class App:
         self.s3:boto3.resource = boto3.resource('s3')
         self.client_s3:boto3.client = boto3.client('s3')
 
-        self.jwt:GenerateJWT = GenerateJWT(self.app.config['SECRET_KEY'])
-
         self.bucket_name:str = self.app.config['BUCKET_NAME']
+
+        self.jwt._set_error_handler_callbacks(self.api)
 
         self.create_namespace()
         self.app.register_blueprint(self.api_v1)
+
 
         self.db.create_all()
 
 
     def create_namespace(self):
 
-        self.admin_api =  Namespace("Admin",description="Routers of admin.",path="/admin")
+        self.admin_api =  Namespace("Admin",description="Routers of admin.",path="/admin", validate=True)
 
-        self.user_api = Namespace("User",description="Routers of user.",path="/user")
-        self.category_api = Namespace("Category",description="Routers of category.",path='/category')
-        self.events_api = Namespace("Events",description="Routers of events.",path='/event')
-        self.lots_api = Namespace("Lots",description="Routers of lots.",path='/lot')
-        self.orders_api = Namespace("Orders",description="Routers of orders.",path="/order")
-        self.partner_api = Namespace("Partner",description="Routers of partner.",path='/partner')
-        self.rules_api = Namespace("Rules",description="Routers of rules.",path="/rules")
-        self.terms_api = Namespace("Terms",description="Routers of terms.",path="/terms")
-        self.tickets_api = Namespace("Ticket",description="Routers of tickets.",path="/ticket")
-        self.genre_api = Namespace("Genre",description="Routers of genres.",path="/genre")
+        self.user_api = Namespace("User",description="Routers of user.",path="/user", validate=True)
+        self.category_api = Namespace("Category",description="Routers of category.",path='/category', validate=True)
+        self.events_api = Namespace("Events",description="Routers of events.",path='/event', validate=True)
+        self.lots_api = Namespace("Lots",description="Routers of lots.",path='/lot', validate=True)
+        self.orders_api = Namespace("Orders",description="Routers of orders.",path="/order", validate=True)
+        self.partner_api = Namespace("Partner",description="Routers of partner.",path='/partner', validate=True)
+        self.rules_api = Namespace("Rules",description="Routers of rules.",path="/rules", validate=True)
+        self.terms_api = Namespace("Terms",description="Routers of terms.",path="/terms", validate=True)
+        self.tickets_api = Namespace("Ticket",description="Routers of tickets.",path="/ticket", validate=True)
+        self.genre_api = Namespace("Genre",description="Routers of genres.",path="/genre", validate=True)
 
         self.api.add_namespace(self.admin_api)
         self.api.add_namespace(self.user_api)
@@ -94,6 +99,7 @@ class App:
         self.api.add_namespace(self.terms_api)
         self.api.add_namespace(self.tickets_api)
         self.api.add_namespace(self.genre_api)
+        self.api.add_namespace(self.lots_api)
 
 
     def run(self):

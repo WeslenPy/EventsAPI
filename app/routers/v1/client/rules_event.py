@@ -1,50 +1,35 @@
 
-from app.utils.functions import decorators
-from flask import request,jsonify
+from app.databases.events.schema import RulesEventSchema
+from flask_restx import Resource,fields
+from marshmallow import ValidationError
+from app.server import app
 
-from app.databases.events.models    import RulesEvent
-from app.databases.events.schema  import RulesEventSchema
+api = app.rules_api
 
-from app.blueprints import v1
+rules_model =api.model('Rules', {
+    "type":fields.String(description='Tipo da regra.',required=True,),
+    "description":fields.String(description='Descrição da regra.',required=True,),
+    "event_id":fields.Integer(description='Id do evento.',required=True,),
+    "status":fields.Boolean(description='Status da regra.',default=True),
+    "created_at":fields.DateTime(description="Data de criação.",readonly=True),
 
-"""
-POST REGISTER DATA 
-"""
+})
+@api.route('/create')
+class Rules(Resource):
 
-@v1.route('create/rule',methods=['POST'])
-@decorators.authUserDecorator(required=True)
-@decorators.validityDecorator({'type':str,'description':str,"event_id":int,"user_id":int,"status":bool})
-def create_rule():
-    data = request.get_json()
+    @api.expect(rules_model, validate=True)
+    @api.doc("Rota para cadastro das regras do evento")
+    # @jwt_required()
+    def post(self,**kwargs):
+        data = api.payload
+        _schema =  RulesEventSchema()
 
-    findRule =RulesEvent.query.filter(RulesEvent.type==data['type'],
-                                      RulesEvent.event_id==data['event_id'],
-                                      RulesEvent.user_id==data['user_id']).first()
-    if not findRule:
-        rule:RulesEvent = RulesEventSchema().load(data)
-        rule.save()
+        try:data= _schema.load(data)
+        except ValidationError as erros:
+            return {"error":True,"message":"Algo deu errado.",
+                                "details":{"erros":erros.messages}},201
 
-        ruleData = RulesEventSchema().dump(rule)
-        return jsonify({'status':200,'message':'rule created successfully','data':ruleData,'success':True}),200
-
-    ruleData = RulesEventSchema().dump(findRule)
-    return jsonify({'status':200,'message':'rule has already been registered','data':ruleData,'success':False}),200
-    
-
-@v1.route('get/rules',methods=['GET'])
-def get_rules():
-
-    rules:RulesEvent = RulesEvent.query.all()
-    rules = RulesEventSchema(many=True).dump(rules)
-
-    return  jsonify({'status':200,'message':'success','data':rules,'success':True}),200
-
-@v1.route('get/rule/<int:id_rule>',methods=['GET'])
-@decorators.authUserDecorator()
-def get_rule(id_rule):
-
-    rule:RulesEvent = RulesEvent.query.get(id_rule)
-    rule = RulesEventSchema().dump(rule)
-
-    return  jsonify({'status':200,'message':'success','data':rule,'success':True}),200
-
+        return {
+            'status':200,
+            'message':'Rule created successfully',
+            'error':False},200

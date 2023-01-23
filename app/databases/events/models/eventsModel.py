@@ -1,8 +1,6 @@
 from app.utils.functions.date_fast import currentDate
 from app.server.instance import app
-
 import sqlalchemy
-
 
 db:sqlalchemy = app.db
 class Events(db.Model):
@@ -15,7 +13,7 @@ class Events(db.Model):
     image = db.Column(db.String(255),nullable=False)
     video = db.Column(db.String(255),nullable=False)
     
-    cep = db.Column(db.String(25),nullable=False)
+    zip_code = db.Column(db.String(8),nullable=False)
     state = db.Column(db.String(30),nullable=False)
     address = db.Column(db.String(255),nullable=False)
     number_address = db.Column(db.BigInteger,nullable=True)
@@ -53,7 +51,7 @@ class Events(db.Model):
         cascade="all, delete",passive_deletes=True)
 
 
-    def __init__(self,name,image,video,cep,address,number_address,state,
+    def __init__(self,name,image,video,zip_code,address,number_address,state,
                  complement,district,city,start_hour,start_date,end_date,category_id,
                  ticket_id,user_id,locale_name,status=False,created_at=currentDate):
 
@@ -75,7 +73,7 @@ class Events(db.Model):
         self.state = state
         self.name = name
         self.city = city
-        self.cep = cep
+        self.zip_code = zip_code
     
     def __repr__(self) -> str:
         return self.name

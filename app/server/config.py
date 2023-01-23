@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from os import environ
+from datetime import timedelta
 
 
 # SQLALCHEMY CONFIGS
@@ -11,6 +12,13 @@ SQLALCHEMY_POOL_TIMEOUT= int(environ.get('SQLALCHEMY_POOL_TIMEOUT',20))
 SQLALCHEMY_POOL_SIZE= int(environ.get('SQLALCHEMY_POOL_SIZE',300))
 SQLALCHEMY_MAX_OVERFLOW= int(environ.get('SQLALCHEMY_MAX_OVERFLOW',500))
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+JWT_SECRET_KEY = environ.get("JWT_SECRET_KEY","super-secret")
+JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)
+JWT_TOKEN_LOCATION = ['headers']
+JWT_HEADER_NAME = "Authorization"
+JWT_HEADER_TYPE = "Bearer"
 
 # CONFIGURAÇÕES DO JSON PARA UTF-8
 JSON_AS_ASCII = False

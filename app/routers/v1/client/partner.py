@@ -1,38 +1,34 @@
 
-from app.utils.functions import decorators
-from flask import request,jsonify
-from app import app
+from app.databases.events.schema import PartnerSchema
+from flask_restx import Resource,fields
+from marshmallow import ValidationError
+from app.server import app
 
-from app.databases.events.models    import Partner,Users,Events
-from app.databases.events.schema  import PartnerSchema
+api = app.partner_api
 
-from app.blueprints import v1
+partener_model =api.model('Partner', {
+    "event_id":fields.Integer(description='Id do evento.',required=True,),
+    "user_id":fields.Integer(description='Id do partner(user_id).',required=True,),
+    "status":fields.Boolean(description='Status do partner.',default=True),
+    "created_at":fields.DateTime(description="Data de criação.",readonly=True),
 
-"""
-POST REGISTER DATA 
-"""
+})
+@api.route('/create')
+class Partener(Resource):
 
-@v1.route('add/partner',methods=['POST'])
-@decorators.authUserDecorator()
-@decorators.validityDecorator({'user_id':int,'event_id':int,"status":bool})
-def add_partner():
-    data = request.get_json()
+    @api.expect(partener_model)
+    @api.doc("Rota para cadastro dos parceiros")
+    # @jwt_required()
+    def post(self,**kwargs):
+        data = api.payload
+        _schema =  PartnerSchema()
 
-    if not Users.query.filter_by(id=data['user_id'],active=True):
-        return jsonify({'status':400,'message':"Invalid user_id",'success':False}),400  
-        
-    elif not Events.query.filter_by(id=data['event_id'],status=True):
-        return jsonify({'status':400,'message':"Invalid event_id or inactive event",'success':False}),400
+        try:data= _schema.load(data)
+        except ValidationError as erros:
+            return {"error":True,"message":"Algo deu errado.",
+                                "details":{"erros":erros.messages}},201
 
-    partnerFind =Partner.query.filter_by(user_id=data['user_id'],event_id=data['event_id']).first()
-    if not partnerFind:
-        partner:Partner = PartnerSchema().load(data)
-        partner.save()
-
-        partnerData = PartnerSchema().dump(partner)
-        return jsonify({'status':200,'message':'partner created successfully','data':partnerData,'success':True}),200
-
-    partnerData = PartnerSchema().dump(partnerFind)
-    return jsonify({'status':200,'message':'partner has already been registered','data':partnerData,'success':False}),200
-    
-   
+        return {
+            'status':200,
+            'message':'Partner created successfully',
+            'error':False},200

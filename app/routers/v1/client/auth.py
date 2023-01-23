@@ -1,8 +1,8 @@
+from flask_jwt_extended import create_access_token
 from flask_restx import Resource,fields
 from app.databases.events.models import Users
 from app.utils.functions import validitys
 from app.server import app
-
 
 api_auth = app.user_api
 
@@ -27,7 +27,7 @@ class Auth(Resource):
                                      'success':False,'status':401},401
             
                 return {'message':'login successfully','success':True,
-                                'token': app.jwt.generate(user.id),"status":200},200
+                                'access_token': create_access_token(identity=user),"status":200},200
 
         return {'message':'Invalid email or password!','success':False,"status":401},401
         

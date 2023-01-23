@@ -25,7 +25,7 @@ user_physical = api.clone("Physical",user_model,{
                             'genre_id':fields.Integer(required=True,description="Id do genero"),
 })
 
-user_corporate = api.clone("Coporate",user_model,{
+user_corporate = api.clone("Corporate",user_model,{
                             'cnpj':fields.String(required=True,description="Identificação CNPJ",min_length=14,max_length=14),
                             'corporate_name':fields.String(required=True,description="Nome fantasia da empresa"),
 })
@@ -49,7 +49,7 @@ class Phisycal(Resource):
             'message':'Link send to email',
             'error':False},200
 @api.route("/coporate")
-class Coporate(Resource):
+class Corporate(Resource):
     
     @api.expect(user_corporate,validate=True)
     @api.doc("Rota para cadastrar usuários(PJ)",security=None)
