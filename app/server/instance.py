@@ -81,7 +81,8 @@ class App:
         self.partner_api = Namespace("Partner",description="Routers of partner.",path='/partner')
         self.rules_api = Namespace("Rules",description="Routers of rules.",path="/rules")
         self.terms_api = Namespace("Terms",description="Routers of terms.",path="/terms")
-        self.tickets_api = Namespace("Tickets",description="Routers of tickets.",path="/ticket")
+        self.tickets_api = Namespace("Ticket",description="Routers of tickets.",path="/ticket")
+        self.genre_api = Namespace("Genre",description="Routers of genres.",path="/genre")
 
         self.api.add_namespace(self.admin_api)
         self.api.add_namespace(self.user_api)
@@ -92,6 +93,7 @@ class App:
         self.api.add_namespace(self.rules_api)
         self.api.add_namespace(self.terms_api)
         self.api.add_namespace(self.tickets_api)
+        self.api.add_namespace(self.genre_api)
 
 
     def run(self):

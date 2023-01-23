@@ -1,5 +1,7 @@
 from .auth import *
 from .users import *
+from .genre import *
+
 # from .categorys import *
 # from .tickets import *
 # from .events import *

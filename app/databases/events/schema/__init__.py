@@ -2,8 +2,8 @@ from .legalPersonSchema import LegalPersonSchema
 from .userSchema import UserSchema
 from .partnerSchema import PartnerSchema
 from .eventSchema import EventSchema
-from .genreTypesSchema import GenreTypeSchema
-from .categorySchema import CategorySchema
+from .genreTypesSchema import GenreTypeSchema,genre_model
+from .categorySchema import CategorySchema,category_model
 from .ticketSchema import TicketSchema
 from .lotsSchema import LotSchema
 from .physicalPersonSchema import PhysicalPersonSchema

@@ -1,14 +1,4 @@
-from flask import jsonify
 
-from app.utils.functions import decorators,validitys,error_messages,aws
-from app.databases.events.models import Events,Category,Tickets
-from app.databases.events.schema import EventSchema
-
-from werkzeug.utils import secure_filename
-from marshmallow import ValidationError
-
-from app.blueprints import v1
-from app.server.instance import db,s3,bucket_name
 
 
 """

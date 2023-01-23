@@ -21,7 +21,7 @@ class GenreTypes(db.Model):
         "PhysicalPerson", back_populates="genre_ship",
         cascade="all, delete",passive_deletes=True) 
 
-    def __init__(self,type,description,status=True,created_at=currentDate):
+    def __init__(self,type,description='',status=True,created_at=currentDate):
 
         self.type = type
         self.status = status
