@@ -18,7 +18,7 @@ class GenreTypes(db.Model):
     status = db.Column(db.Boolean,default=True)
     
     genre_children = db.relationship(
-        "Users", back_populates="genre_ship",
+        "PhysicalPerson", back_populates="genre_ship",
         cascade="all, delete",passive_deletes=True) 
 
     def __init__(self,type,description,status=True,created_at=currentDate):

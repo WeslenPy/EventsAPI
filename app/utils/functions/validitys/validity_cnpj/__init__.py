@@ -1,26 +1,24 @@
+from marshmallow import ValidationError
+
 CNPJ_WEIGHTS = ((5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2),
                (6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2))
 
 def validityCNPJ(cnpj:str):
 
-    try:
 
-        cnpj = cnpj.translate(str.maketrans({".": None, "-": None, "/": None})).strip()
-        if not cnpj.isdigit():return False
-        if len(cnpj) != 14 or len(set(cnpj)) == 1:return False
+    if not cnpj.isdigit():raise ValidationError('CNPJ field only requires numbers.','cnpj')
+    if len(cnpj) != 14 or len(set(cnpj)) == 1:raise ValidationError('CNPJ is invalid.','cnpj')
 
-        first_part = cnpj[:12]
-        second_part = cnpj[:13]
-        first_digit = cnpj[12]
-        second_digit = cnpj[13]
+    first_part = cnpj[:12]
+    second_part = cnpj[:13]
+    first_digit = cnpj[12]
+    second_digit = cnpj[13]
 
-        if first_digit == digitValidity(first_part,0
-                            ) and second_digit == digitValidity(second_part,1):
-            return cnpj
+    if first_digit == digitValidity(first_part,0
+                        ) and second_digit == digitValidity(second_part,1):
+        return cnpj
 
-        return False
-
-    except:return False
+    raise ValidationError('CNPJ is invalid.','cnpj')
 
 
 

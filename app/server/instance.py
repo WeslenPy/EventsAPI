@@ -66,8 +66,12 @@ class App:
         self.create_namespace()
         self.app.register_blueprint(self.api_v1)
 
+        self.db.create_all()
+
 
     def create_namespace(self):
+
+        self.admin_api =  Namespace("Admin",description="Routers of admin.",path="/admin")
 
         self.user_api = Namespace("User",description="Routers of user.",path="/user")
         self.category_api = Namespace("Category",description="Routers of category.",path='/category')
@@ -79,6 +83,7 @@ class App:
         self.terms_api = Namespace("Terms",description="Routers of terms.",path="/terms")
         self.tickets_api = Namespace("Tickets",description="Routers of tickets.",path="/ticket")
 
+        self.api.add_namespace(self.admin_api)
         self.api.add_namespace(self.user_api)
         self.api.add_namespace(self.events_api)
         self.api.add_namespace(self.category_api)
