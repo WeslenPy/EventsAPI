@@ -62,6 +62,8 @@ class Users(db.Model):
     types_children = db.relationship(
         "UserAccessTypes", back_populates="user_ship",
         cascade="all, delete",passive_deletes=True) 
+    
+   
 
     def __init__(self,email,password,phone,zip_code,address,number_address,
                  complement,district,city,state,physical=True,

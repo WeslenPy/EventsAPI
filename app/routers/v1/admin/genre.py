@@ -1,17 +1,20 @@
 
 from app.databases.events.schema  import GenreTypeSchema,genre_model
+from app.utils.functions.decorators import auth
 from flask_restx import Resource,Api
 from marshmallow import ValidationError
 from app.server import app
+
 
 api:Api = app.admin_api
 
 
 @api.route("/create/genre")
-class GenreTypes(Resource):
+class Genre(Resource):
     
     @api.expect(genre_model,validate=True)
     @api.doc("Rota para cadastrar generos")
+    @auth.authType()
     def post(self,**kwargs):
         data = api.payload
         _schema =  GenreTypeSchema()

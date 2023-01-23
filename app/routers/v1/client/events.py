@@ -3,6 +3,7 @@
 from app.databases.events.schema import EventSchema
 from werkzeug.datastructures import FileStorage
 from flask_restx.inputs import datetime_from_iso8601
+from app.utils.functions.decorators import auth
 from marshmallow import ValidationError
 from flask_restx import Resource
 from app.server import app
@@ -57,7 +58,7 @@ class Event(Resource):
 
     @api.expect(event_parser)
     @api.doc("Rota para cadastro do evento")
-    # @jwt_required()
+    @auth.authType(required=True,location='form')
     def post(self,**kwargs):
         data = event_parser.parse_args()
         _schema =  EventSchema()

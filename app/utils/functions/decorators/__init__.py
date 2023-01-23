@@ -1,1 +1,1 @@
-from .auth import authUserDecorator
+from .auth import authType

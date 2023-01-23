@@ -3,6 +3,7 @@ from app.databases.events.schema import RulesEventSchema
 from flask_restx import Resource,fields
 from marshmallow import ValidationError
 from app.server import app
+from app.utils.functions.decorators import auth
 
 api = app.rules_api
 
@@ -19,7 +20,7 @@ class Rules(Resource):
 
     @api.expect(rules_model, validate=True)
     @api.doc("Rota para cadastro das regras do evento")
-    # @jwt_required()
+    @auth.authType(required=True,api=api)
     def post(self,**kwargs):
         data = api.payload
         _schema =  RulesEventSchema()

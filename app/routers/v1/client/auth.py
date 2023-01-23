@@ -27,7 +27,7 @@ class Auth(Resource):
                                      'success':False,'status':401},401
             
                 return {'message':'login successfully','success':True,
-                                'access_token': create_access_token(identity=user),"status":200},200
+                                'access_token': create_access_token(identity=user.id),"status":200},200
 
         return {'message':'Invalid email or password!','success':False,"status":401},401
         

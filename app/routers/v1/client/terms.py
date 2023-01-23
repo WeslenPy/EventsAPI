@@ -4,6 +4,7 @@ from werkzeug.datastructures import FileStorage
 from flask_restx import Resource,fields
 from marshmallow import ValidationError
 from app.server import app
+from app.utils.functions.decorators import auth
 
 api = app.terms_api
 
@@ -26,7 +27,7 @@ class Terms(Resource):
 
     @api.expect(terms_parser)
     @api.doc("Rota para cadastro ds termos")
-    # @jwt_required()
+    @auth.authType(required=True,api=api)
     def post(self,**kwargs):
         data = terms_parser.parse_args()
         _schema =  TermsEventSchema()

@@ -1,4 +1,5 @@
 from app.databases.events.schema import TicketSchema
+from app.utils.functions.decorators import auth
 from flask_restx import Resource,fields
 from marshmallow import ValidationError
 from app.server import app
@@ -20,7 +21,7 @@ class Tickets(Resource):
 
     @api.expect(ticket_model)
     @api.doc("Rota para cadastro dos tickets")
-    # @jwt_required()
+    @auth.authType(required=True,api=api)
     def post(self,**kwargs):
         data = api.payload
         _schema =  TicketSchema()
@@ -34,6 +35,9 @@ class Tickets(Resource):
             'status':200,
             'message':'Ticket created successfully',
             'error':False},200
+
+
+    
 
 # from app.utils.functions import decorators
 # from flask import request,jsonify

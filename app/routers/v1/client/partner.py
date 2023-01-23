@@ -3,6 +3,7 @@ from app.databases.events.schema import PartnerSchema
 from flask_restx import Resource,fields
 from marshmallow import ValidationError
 from app.server import app
+from app.utils.functions.decorators import auth
 
 api = app.partner_api
 
@@ -18,7 +19,7 @@ class Partener(Resource):
 
     @api.expect(partener_model)
     @api.doc("Rota para cadastro dos parceiros")
-    # @jwt_required()
+    @auth.authType(required=True,api=api)
     def post(self,**kwargs):
         data = api.payload
         _schema =  PartnerSchema()

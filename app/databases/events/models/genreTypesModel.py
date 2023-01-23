@@ -17,6 +17,7 @@ class GenreTypes(db.Model):
     created_at = db.Column(db.DateTime,nullable=False,default=currentDate)
     status = db.Column(db.Boolean,default=True)
     
+
     genre_children = db.relationship(
         "PhysicalPerson", back_populates="genre_ship",
         cascade="all, delete",passive_deletes=True) 

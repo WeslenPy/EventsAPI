@@ -1,8 +1,8 @@
 from app.databases.events.schema import LotSchema
-from flask_jwt_extended import jwt_required
 from flask_restx import Resource,fields
 from marshmallow import ValidationError
 from app.server import app
+from app.utils.functions.decorators import auth
 
 api = app.lots_api
 
@@ -20,7 +20,7 @@ class Lots(Resource):
 
     @api.expect(lots_model)
     @api.doc("Rota para cadastro dos lotes")
-    # @jwt_required()
+    @auth.authType()
     def post(self,**kwargs):
         data = api.payload
         _schema =  LotSchema()
