@@ -1,11 +1,15 @@
 from app.utils.functions.validitys import validity_field
 from app.databases.events.models import TermsEvent,Events,Users
-from marshmallow import validates,pre_load
+from marshmallow import validates,pre_load,post_load
 from app.server.instance import app
 
 class TermsEventSchema(app.ma.SQLAlchemyAutoSchema):
 
-    
+    @post_load
+    def _new(self,data,**kwargs):
+        data.save()
+        return data
+
     @validates('event_id')
     def exists_event_id(self,data,**kwargs):
         validity_field.find_field_model(Events,'id',data,'event_id')

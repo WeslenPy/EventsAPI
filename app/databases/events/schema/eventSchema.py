@@ -9,6 +9,7 @@ from app.databases.events.schema.partnerUserSchema import PartnerUserSchema
 from app.databases.events.schema.rulesEventSchema import RulesEventSchema
 from app.databases.events.schema.termsEventSchema import TermsEventSchema
 
+from marshmallow import post_load
 class EventSchema(app.ma.SQLAlchemyAutoSchema):
     
     event_partner_children = app.ma.Nested(PartnerUserSchema,many=True)
@@ -17,6 +18,12 @@ class EventSchema(app.ma.SQLAlchemyAutoSchema):
     ticket_ship = app.ma.Nested(TicketSchema)
     category_ship = app.ma.Nested(CategorySchema)
     user_ship = app.ma.Nested(UserSchema)
+
+    @post_load
+    def _new(self,data,**kwargs):
+        data.save()
+        return data
+
 
     class Meta:
         model = Events

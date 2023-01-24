@@ -1,5 +1,5 @@
+from flask_restx import Api,Namespace,fields
 from flask import Flask
-from flask_restx import Api,Namespace
 
 from flask_jwt_extended import JWTManager
 from flask_marshmallow import Marshmallow
@@ -43,6 +43,10 @@ class App:
                         doc="/docs",
                         authorizations=self.authorizations,
                         security='JWT',
+                        validate=True,
+                        ordered=True,
+                        serve_challenge_on_401=True,
+                        
         )
 
         self.jwt = JWTManager(self.app)
@@ -71,23 +75,30 @@ class App:
         self.app.register_blueprint(self.api_v1)
 
 
+        self.default_model = self.api.model("Message",{
+            'message':fields.String(description="Mensagem de resposta",default="Success"),
+            "code":fields.Integer(description="Código HTTP",default=200),
+            "error":fields.Boolean(default=False,description="Identifica se houve error."),
+        })
+
+
         self.db.create_all()
 
 
     def create_namespace(self):
 
-        self.admin_api =  Namespace("Admin",description="Routers of admin.",path="/admin", validate=True)
+        self.admin_api =  Namespace("Admin",description="Routers of admin.",path="/admin")
 
-        self.user_api = Namespace("User",description="Routers of user.",path="/user", validate=True)
-        self.category_api = Namespace("Category",description="Routers of category.",path='/category', validate=True)
-        self.events_api = Namespace("Events",description="Routers of events.",path='/event', validate=True)
-        self.lots_api = Namespace("Lots",description="Routers of lots.",path='/lot', validate=True)
-        self.orders_api = Namespace("Orders",description="Routers of orders.",path="/order", validate=True)
-        self.partner_api = Namespace("Partner",description="Routers of partner.",path='/partner', validate=True)
-        self.rules_api = Namespace("Rules",description="Routers of rules.",path="/rules", validate=True)
-        self.terms_api = Namespace("Terms",description="Routers of terms.",path="/terms", validate=True)
-        self.tickets_api = Namespace("Ticket",description="Routers of tickets.",path="/ticket", validate=True)
-        self.genre_api = Namespace("Genre",description="Routers of genres.",path="/genre", validate=True)
+        self.user_api = Namespace("User",description="Routers of user.",path="/user")
+        self.category_api = Namespace("Category",description="Routers of category.",path='/category')
+        self.events_api = Namespace("Events",description="Routers of events.",path='/event',)
+        self.lots_api = Namespace("Lots",description="Routers of lots.",path='/lot')
+        self.orders_api = Namespace("Orders",description="Routers of orders.",path="/order")
+        self.partner_api = Namespace("Partner",description="Routers of partner.",path='/partner',)
+        self.rules_api = Namespace("Rules",description="Routers of rules.",path="/rules",)
+        self.terms_api = Namespace("Terms",description="Routers of terms.",path="/terms")
+        self.tickets_api = Namespace("Ticket",description="Routers of tickets.",path="/ticket")
+        self.genre_api = Namespace("Genre",description="Routers of genres.",path="/genre")
 
         self.api.add_namespace(self.admin_api)
         self.api.add_namespace(self.user_api)
