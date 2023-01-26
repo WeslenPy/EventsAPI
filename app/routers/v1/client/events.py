@@ -69,7 +69,7 @@ class Event(Resource):
                                 "details":{"erros":erros.messages}},201
 
         return {
-            'status':200,
+            'code':200,
             'message':'Event created successfully',
             'error':False},200
 

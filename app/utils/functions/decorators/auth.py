@@ -18,7 +18,7 @@ def authType(required:bool=False,
             if required:
                 if location == 'json':api.payload['user_id'] = user
                 elif location == "form":request.form['user_id']=user
-                elif location == "param":kwargs['user_id']=user
+                elif location == "params":kwargs['user_id']=user
                 
             return func(*args,**kwargs)
 

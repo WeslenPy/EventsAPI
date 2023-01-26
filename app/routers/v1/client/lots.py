@@ -1,4 +1,5 @@
 from app.databases.events.schema import LotSchema
+from app.databases.events.models import Lots
 from flask_restx import Resource,fields
 from marshmallow import ValidationError
 from app.server import app
@@ -6,7 +7,7 @@ from app.utils.functions.decorators import auth
 
 api = app.lots_api
 
-lots_model =api.model('Lots', {
+lot_model =api.model('Lot', {
     "quantity":fields.Integer(description='Quantidade do lote.',required=True,min=1),
     "price":fields.Float(description="Preço do ticket.",required=True,min=1),
     "start_date":fields.DateTime(description="Data de inicio do lote.",required=True),
@@ -15,10 +16,15 @@ lots_model =api.model('Lots', {
     "status":fields.Boolean(description="Status do lote.",required=True,default=True),
     "created_at":fields.DateTime(description="Data de criação.",readonly=True),
 })
-@api.route('/create')
-class Lots(Resource):
 
-    @api.expect(lots_model)
+lots_model = api.clone("Lots",app.default_model,{
+    'data':fields.Nested(lot_model,description="Todos os lots cadastrados",as_list=True),
+})
+
+@api.route('/create')
+class LotsRouter(Resource):
+
+    @api.expect(lot_model)
     @api.doc("Rota para cadastro dos lotes")
     @auth.authType()
     def post(self,**kwargs):
@@ -31,57 +37,23 @@ class Lots(Resource):
                                 "details":{"erros":erros.messages}},201
 
         return {
-            'status':200,
+            'code':200,
             'message':'Lot created successfully',
             'error':False},200
 
-# """
-# POST REGISTER DATA 
-# """
 
-# @v1.route('create/lot',methods=['POST'])
-# @decorators.authUserDecorator(required=True)
-# @decorators.validityDecorator({'quantity':int,'price':[float,int],'start_date':datetime,"user_id":int,
-#                                 "end_date":datetime,'ticket_lot_id':int,'status':bool})
-# def create_lot():
+@api.route('/all')
+class LotsRouter(Resource):
 
-#     data = request.get_json()
+    @api.doc("Rota para pegar todos os lots")
+    @api.response(401,"Unauthorized")
+    @api.response(200,"Success",lots_model)
+    @auth.authType(required=True,location='params')
+    def get(self,**kwargs):
 
-#     if not validitys.dateValidity(data['start_date'],data['end_date']):
-#         return jsonify({'status':400,'message':"Invalid end_date",'success':False}),400
+        ticktes = Lots.query.filter_by(user_id=kwargs['user_id'],status=True).all()
+        data = LotSchema(many=True).dump(ticktes)
 
-#     findTicket:Tickets = Tickets.query.get(data['ticket_lot_id'])
-#     if not findTicket:
-#         return jsonify({'status':400,'message':'invalid ticket_lot_id','success':False}),200
-
-#     if data['user_id'] != findTicket.user_id:
-#         return jsonify({'status':404,'message':"event not found",'success':False}),404
+        return {"message":"Success","data":data,"code":200,"error":False},200
 
 
-#     new_lot:Lots = LotSchema().load(data)
-#     new_lot.save()
-
-#     lotData = LotSchema().dump(new_lot)
-#     return jsonify({'status':200,'message':'lot created successfully','data':lotData,'success':True}),200
-
-    
-
-# @v1.route('get/lots',methods=['GET'])
-# @decorators.authUserDecorator()
-# def get_lots():
-
-#     lots:Lots = Lots.query.all()
-#     lots = LotSchema(many=True).dump(lots)
-
-#     return  jsonify({'status':200,'message':'success','data':lots,'success':True}),200
-
-
-# @v1.route('get/lot/<int:id_lot>',methods=['GET'])
-# @decorators.authUserDecorator()
-# def get_lot(id_lot):
-
-#     lot:Lots = Lots.query.get(id_lot)
-#     lot = LotSchema().dump(lot)
-
-#     return  jsonify({'status':200,'message':'success','data':lot,'success':True}),200
-    

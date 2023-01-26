@@ -25,7 +25,7 @@ tickets_model = api.clone("Tickets",app.default_model,{
 
 
 @api.route('/create')
-class Tickets(Resource):
+class TicketRouter(Resource):
 
     @api.expect(ticket_model)
     @api.doc("Rota para cadastro dos tickets")
@@ -47,16 +47,16 @@ class Tickets(Resource):
             'error':False},200
 
 @api.route('/all')
-class TicketsAll(Resource):
+class TicketsAllRouter(Resource):
 
     @api.doc("Rota para pegar todos os tickets")
     @api.response(401,"Unauthorized")
     @api.response(200,"Success",tickets_model)
-    @auth.authType(required=True)
+    @auth.authType(required=True,location='params')
     def get(self,**kwargs):
         ticktes = Tickets.query.filter_by(user_id=kwargs['user_id'],status=True).all()
         data = TicketSchema(many=True).dump(ticktes)
 
-        return data,200
+        return {"message":"Success","data":data,"code":200,"error":False},200
 
 

@@ -24,10 +24,10 @@ class Auth(Resource):
             if validitys.comparePassword(data.get('password',''),user.password):
                 if not user.active:
                     return {'message':'Activate your account to proceed with login.',
-                                     'success':False,'status':401},401
+                                     'success':False,'code':401},401
             
                 return {'message':'login successfully','success':True,
-                                'access_token': create_access_token(identity=user.id),"status":200},200
+                                'access_token': create_access_token(identity=user.id),"code":200},200
 
-        return {'message':'Invalid email or password!','success':False,"status":401},401
+        return {'message':'Invalid email or password!','success':False,"code":401},401
         
