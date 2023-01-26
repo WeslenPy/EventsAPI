@@ -19,7 +19,7 @@ event_parser.add_argument('video', location='files',help="Video do evento.",
 event_parser.add_argument('name', location='form',help="Nome do evento.",
                            type=str, required=True)
 event_parser.add_argument('zip_code', location='form',help="Cep do evento.",
-                           type=str, required=True)
+                           type=int, required=True)
 
 event_parser.add_argument('state', location='form',help="Estado do evento.",
                            type=str, required=True)
@@ -45,9 +45,9 @@ event_parser.add_argument('start_hour', location='form',help="Horario de inicio.
                            type=datetime_from_iso8601, required=True)     
 
 event_parser.add_argument('category_id', location='form',help="Id da categoria do evento.",
-                           type=int, required=False,default=True)                                                 
+                           type=int, required=True)                                                 
 event_parser.add_argument('ticket_id', location='form',help="Id do ticket do evento.",
-                           type=bool, required=False,default=True)     
+                           type=int, required=True)     
                                                
 event_parser.add_argument('status', location='form',help="Status do termo.",
                            type=bool, required=False,default=True)

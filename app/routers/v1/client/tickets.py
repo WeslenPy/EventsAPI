@@ -20,7 +20,7 @@ ticket_model =api.model('Ticket', {
 })
 
 tickets_model = api.clone("Tickets",app.default_model,{
-                'data':fields.Nested(ticket_model,description="Todos os tickets cadastrados",as_list=True)
+    'data':fields.Nested(ticket_model,description="Todos os tickets cadastrados",as_list=True),
 })
 
 
