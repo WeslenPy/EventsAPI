@@ -45,3 +45,18 @@ class OrderRouter(Resource):
             'error':False},200
 
 
+@api.route('/all')
+class OrdersRouters(Resource):
+
+    @api.doc("Rota para pegar todos os pedidos")
+    @api.response(401,"Unauthorized")
+    @api.response(200,"Success",orders_model)
+    @auth.authType(required=True,location='params')
+    def get(self,**kwargs):
+
+        items = Orders.query.filter_by(status=True,user_id=kwargs.get('user_id',None)).all()
+        data = OrderSchema(many=True).dump(items)
+
+        return {"message":"Success","data":data,"code":200,"error":False},200
+
+

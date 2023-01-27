@@ -9,12 +9,15 @@ from app.databases.events.schema.partnerUserSchema import PartnerUserSchema
 from app.databases.events.schema.rulesEventSchema import RulesEventSchema
 from app.databases.events.schema.termsEventSchema import TermsEventSchema
 
-from marshmallow import post_load
+from marshmallow import pre_load,post_load,fields
 
 
-def make_url(obj):
-    print(obj)
-    return obj
+
+class DateTimeIso(fields.Field):
+    def _serialize(self, value, attr, obj,**kwargs):
+        print(value,attr,obj)
+        if value is None:return None
+        return obj.datetime_isoformat(value)
 
 class EventSchema(app.ma.SQLAlchemyAutoSchema):
     
@@ -25,12 +28,21 @@ class EventSchema(app.ma.SQLAlchemyAutoSchema):
     category_ship = app.ma.Nested(CategorySchema)
     user_ship = app.ma.Nested(UserSchema)
 
-    image = app.ma.Function(serialize=make_url)
-    video = app.ma.Function(serialize=make_url)
+    image = app.ma.String(required=True)
+    video = app.ma.String(required=True)
 
-    @post_load
-    def _new(self,data,**kwargs):
-        data.save()
+    start_date = DateTimeIso(required=True)
+    start_hour = DateTimeIso(required=True)
+    end_date = DateTimeIso(required=True)
+
+    @pre_load
+    def upload_files(self,data,**kwargs):
+        pass
+        return data
+
+    @post_load(pass_original=True)
+    def _new(self,data,original_data,**kwargs):
+        Events(**original_data).save()
         return data
 
 

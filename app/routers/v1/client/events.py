@@ -20,7 +20,7 @@ event_parser.add_argument('video', location='files',help="Video do evento.",
 event_parser.add_argument('name', location='form',help="Nome do evento.",
                            type=str, required=True)
 event_parser.add_argument('zip_code', location='form',help="Cep do evento.",
-                           type=int, required=True)
+                           type=str, required=True)
 
 event_parser.add_argument('state', location='form',help="Estado do evento.",
                            type=str, required=True)
@@ -40,7 +40,7 @@ event_parser.add_argument('city', location='form',help="Cidade.",
                            type=str, required=True)                            
 event_parser.add_argument('start_date', location='form',help="Data de inicio do evento.",
                            type=datetime_from_iso8601, required=True)                            
-event_parser.add_argument('start_date', location='form',help="Data final do evento.",
+event_parser.add_argument('end_date', location='form',help="Data final do evento.",
                            type=datetime_from_iso8601, required=True)                            
 event_parser.add_argument('start_hour', location='form',help="Horario de inicio.",
                            type=datetime_from_iso8601, required=True)     
@@ -59,9 +59,13 @@ class EventRouter(Resource):
 
     @api.expect(event_parser)
     @api.doc("Rota para cadastro do evento")
-    @auth.authType(required=True,location='form')
+    @auth.authType(required=True,location='params')
     def post(self,**kwargs):
         data = event_parser.parse_args()
+        data['user_id'] = kwargs['user_id']
+
+        print(data)
+
         _schema =  EventSchema()
 
         try:data= _schema.load(data)
