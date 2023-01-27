@@ -12,7 +12,7 @@ lot_model =api.model('Lot', {
     "price":fields.Float(description="Preço do ticket.",required=True,min=1),
     "start_date":fields.DateTime(description="Data de inicio do lote.",required=True),
     "end_date":fields.DateTime(description="Data de finalização do lote.",required=True),
-    "ticket_lot_id":fields.Integer(description="Id do ticket.",required=True),
+    "ticket_id":fields.Integer(description="Id do ticket.",required=True),
     "status":fields.Boolean(description="Status do lote.",required=True,default=True),
     "created_at":fields.DateTime(description="Data de criação.",readonly=True),
 })
@@ -48,10 +48,10 @@ class LotsRouter(Resource):
     @api.doc("Rota para pegar todos os lots")
     @api.response(401,"Unauthorized")
     @api.response(200,"Success",lots_model)
-    @auth.authType(required=True,location='params')
+    @auth.authType()
     def get(self,**kwargs):
 
-        ticktes = Lots.query.filter_by(user_id=kwargs['user_id'],status=True).all()
+        ticktes = Lots.query.filter_by(status=True).all()
         data = LotSchema(many=True).dump(ticktes)
 
         return {"message":"Success","data":data,"code":200,"error":False},200

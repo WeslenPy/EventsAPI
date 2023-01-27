@@ -1,63 +1,47 @@
+from app.databases.events.schema import OrderSchema
+from app.databases.events.models import Orders
+from flask_restx import Resource,fields
+from marshmallow import ValidationError
+from app.server import app
+from app.utils.functions.decorators import auth
+from api.mp_api import MercadoPago
 
-from app.utils.functions import decorators
-from flask import request,jsonify
-from app import mp_api
+api = app.orders_api
 
-from datetime import datetime
-from app.databases.events.models    import Orders,Lots
-from app.databases.events.schema  import OrderSchema
+order_model =api.model('Order', {
+    "lot_id":fields.Integer(description="Id do lot.",required=True),
+    "quantity":fields.Integer(description="Quantidade de tickets",required=True,default=1,min=1),
+    "user_id":fields.Integer(description="Id do usuário.",readonly=True),
+})
 
-from app.blueprints import v1
+orders_model = api.clone("Orders",app.default_model,{
+    'data':fields.Nested(order_model,description="Todos os pedidos.",as_list=True),
+})
 
-"""
-POST REGISTER DATA 
-"""
+@api.route('/create')
+class OrderRouter(Resource):
 
-@v1.route('create/order',methods=['POST'])
-@decorators.authUserDecorator(required=True)
-@decorators.validityDecorator({'lot_id':int,'quantity':int,"user_id":int})
-def create_order():
-    data = request.get_json()
+    @api.expect(order_model)
+    @api.doc("Rota para gerar pedido")
+    @auth.authType(required=True,api=api)
+    def post(self,**kwargs):
+        data = api.payload
+        _schema =  OrderSchema()
 
-    actual  =datetime.now()
-    lotFind:Lots =Lots.query.filter_by(status=True,closed=False,id=data['lot_id']
-                    ).first()
+        try:data:Orders= _schema.load(data)
+        except ValidationError as erros:
+            return {"error":True,"message":"Algo deu errado.","code":400,
+                                "details":{"erros":erros.messages}},400
 
-    if not lotFind:
-        return jsonify({'status':400,'message':'Invalid lot_id','success':False}),200
+        mp:MercadoPago = app.mp_api
 
-    if lotFind.lot_children and len (lotFind.lot_children) >=lotFind.quantity:
-        return jsonify({'status':400,'message':'available quantity',
-                            'quantity':lotFind.quantity-len(lotFind.lot_children),'success':False}),200
+        preference = mp.create_preference(data.id,data.unit_price,
+                                        quantity=data.quantity).get('id','')
 
+        return {
+            'code':200,
+            'message':'Order created successfully',
+            "preference_id":preference,
+            'error':False},200
 
-    data = {'lot_id':lotFind.id,'user_id':data["user_id"],
-                'method':'teste','value':lotFind.price,'quantity':data['quantity']}
-
-    new:Orders = OrderSchema().load(data)
-    new.save()
-
-    order = OrderSchema().dump(new)
-    order_generate = mp_api.create_preference(new.id,lotFind.price,quantity=new.quantity)
-
-    return jsonify({'status':200,'message':'order created successfully',"data":order,'order':order_generate,'success':False}),200
-    
-
-@v1.route('get/orders',methods=['GET'])
-@decorators.authUserDecorator(param=True)
-def get_orders(currentUser):
-
-    orders:Orders = Orders.query.filter_by(user_id=currentUser).all()
-    orders = OrderSchema(many=True).dump(orders)
-
-    return  jsonify({'status':200,'message':'success','data':orders,'success':True}),200
-
-@v1.route('get/order/<int:id_order>',methods=['GET'])
-@decorators.authUserDecorator(param=True)
-def get_order(id_order,currentUser):
-
-    order:Orders = Orders.query.filter_by(user_id=currentUser).get(id_order)
-    order = OrderSchema().dump(order)
-
-    return  jsonify({'status':200,'message':'success','data':order,'success':True}),200
 

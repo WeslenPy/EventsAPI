@@ -24,8 +24,8 @@ class Tickets(db.Model):
     
     user_ticket_ship = db.relationship('Users', back_populates="user_tickets_children")
     
-    ticket_lot_children = db.relationship(
-        "Lots", back_populates="ticket_lot_ship",
+    lot_children = db.relationship(
+        "Lots", back_populates="ticket_ship",
         cascade="all, delete",passive_deletes=True)
       
     ticket_event_children = db.relationship(

@@ -8,6 +8,6 @@ from .terms import *
 from .events import *
 from .rules_event import *
 from .category import *
-# from .orders import *
+from .orders import *
 
 

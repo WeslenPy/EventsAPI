@@ -71,25 +71,25 @@ class App:
 
         self.jwt._set_error_handler_callbacks(self.api)
 
-        self.create_namespace()
+        self.create_namespaces()
+        self.create_default_models()
         self.app.register_blueprint(self.api_v1)
 
 
+    def create_default_models(self):
+
+
         self.default_model = self.api.model("Message",{
-            'message':fields.String(description="Mensagem de resposta",default="Success"),
+            'message':fields.String(description="Mensagem de resposta"),
             "code":fields.Integer(description="Código HTTP",default=200),
             "error":fields.Boolean(default=False,description="Identifica se houve error."),
         })
 
-
-        self.db.create_all()
-
-
-    def create_namespace(self):
+    def create_namespaces(self):
 
         self.admin_api =  Namespace("Admin",description="Routers of admin.",path="/admin")
-
         self.user_api = Namespace("User",description="Routers of user.",path="/user")
+
         self.category_api = Namespace("Category",description="Routers of category.",path='/category')
         self.events_api = Namespace("Events",description="Routers of events.",path='/event',)
         self.lots_api = Namespace("Lots",description="Routers of lots.",path='/lot')

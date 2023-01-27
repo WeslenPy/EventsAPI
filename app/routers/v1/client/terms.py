@@ -35,8 +35,8 @@ class TermRouter(Resource):
 
         try:data= _schema.load(data)
         except ValidationError as erros:
-            return {"error":True,"message":"Algo deu errado.",
-                                "details":{"erros":erros.messages}},201
+            return {"error":True,"message":"Algo deu errado.","code":400,
+                                "details":{"erros":erros.messages}},400
 
         return {
             'code':200,
