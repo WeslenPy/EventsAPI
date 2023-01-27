@@ -1,5 +1,6 @@
 
 from app.databases.events.schema import TermsEventSchema
+from app.databases.events.models import TermsEvent
 from werkzeug.datastructures import FileStorage
 from flask_restx import Resource,fields
 from marshmallow import ValidationError
@@ -23,10 +24,10 @@ terms_parser.add_argument('status', location='form',help="Status do termo.",
 
 
 @api.route('/create')
-class Terms(Resource):
+class TermRouter(Resource):
 
     @api.expect(terms_parser)
-    @api.doc("Rota para cadastro ds termos")
+    @api.doc("Rota para cadastro dos termos")
     @auth.authType(required=True,api=api)
     def post(self,**kwargs):
         data = terms_parser.parse_args()
@@ -42,3 +43,16 @@ class Terms(Resource):
             'message':'Term created successfully',
             'error':False},200
 
+@api.route('/all')
+class TermsRouter(Resource):
+
+    @api.doc("Rota para pegar todos os termos do evento")
+    @api.response(401,"Unauthorized")
+    @api.response(200,"Success")
+    @auth.authType()
+    def get(self,**kwargs):
+        
+        items = TermsEvent.query.filter_by(status=True).all()
+        data = TermsEventSchema(many=True).dump(items)
+
+        return {"message":"Success","data":data,"code":200,"error":False},200

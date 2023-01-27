@@ -11,7 +11,7 @@ class MercadoPago:
         return preference_response["response"]
 
 
-    def create_preference(self, id_pedido, valor, titulo_produto="Compra de ingresso - ModernPass",quantity=1):
+    def create_preference(self, id_pedido, valor, titulo_produto="Compra de ingresso - ModernaPass",quantity=1):
         
         preference_data = {
             "notification_url":self.webhook_url['notify'],
@@ -36,7 +36,6 @@ class MercadoPago:
 
    
     def get_payment_info(self, id_ordem):
-        """ Obtém as informações do pagamento """
         payment_info = self.api.payment().get(id_ordem)
         if payment_info["status"] == 200:
             return payment_info["response"]

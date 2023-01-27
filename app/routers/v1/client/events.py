@@ -1,6 +1,7 @@
 
 
 from app.databases.events.schema import EventSchema
+from app.databases.events.models import Events
 from werkzeug.datastructures import FileStorage
 from flask_restx.inputs import datetime_from_iso8601
 from app.utils.functions.decorators import auth
@@ -54,7 +55,7 @@ event_parser.add_argument('status', location='form',help="Status do termo.",
 
 
 @api.route('/create')
-class Event(Resource):
+class EventRouter(Resource):
 
     @api.expect(event_parser)
     @api.doc("Rota para cadastro do evento")
@@ -75,82 +76,18 @@ class Event(Resource):
 
 
 
-# """
-# POST REGISTER DATA 
-# """
-# @v1.route('create/event',methods=['POST'])
-# @decorators.authUserDecorator(param=True)
-# @decorators.validityDecoratorForm(['name','image','video','cep','state','address',"locale_name",
-#                                 'number_address','complement','district','city','start_date',"start_hour",
-#                                 'end_date','status','category_id','ticket_id','user_id'])
-# def create_event(currentUser,data):
+@api.route('/all')
+class EventsRouter(Resource):
 
-#     if not validitys.dateValidity(data['start_date'],data['end_date'],data['start_hour'],format="%Y-%m-%dT%H:%M:%S.%fZ"):
-#         return jsonify({'status':400,'message':"Invalid datetime format",'success':False}),400
-
-#     getCategory = Category.query.filter_by(id=data['category_id'],status=True).first()
-#     if not getCategory:return jsonify({'status':400,'message':"Invalid category_id",'success':False}),400
-
-#     getTicket:Tickets = Tickets.query.filter_by(id=data['ticket_id'],user_id=data['user_id'],status=True).first()
-#     if not getTicket:return jsonify({'status':400,'message':"Invalid ticket_id",'success':False}),400
-
-#     image,image_filename= data['image'],secure_filename(data['image'].filename)
-#     video,video_filename = data['video'],secure_filename(data['video'].filename)
-
-#     data["image"] = aws.upload_file(image,image_filename)
-#     data["video"] =  aws.upload_file(video,video_filename)
-
-#     try:
-#         event:Events = EventSchema().load(data)
-#         event.save()
+    @api.doc("Rota para pegar todos os eventos")
+    @api.response(401,"Unauthorized")
+    @api.response(200,"Success")
+    @auth.authType()
+    def get(self,**kwargs):
         
-#     except ValidationError as err: 
-#         message = error_messages.parseMessage(err.messages)
-#         return jsonify({'status':400,'message':message,'success':False}),400
+        items = Events.query.filter_by(status=True).all()
+        data = EventSchema(many=True).dump(items)
 
-#     eventData = EventSchema().dump(event)
-#     return jsonify({'status':200,'message':'event created successfully','data':eventData,'success':True}),200
-
-
-# """
-# DELETE EVENT API DATA 
-# """
-# @v1.route('delete/event/<int:id_event>',methods=['DELETE'])
-# @decorators.authUserDecorator()
-# def delete_event(id_event):
-
-#     event:Events = Events.query.filter_by(id=id_event,status=False).first()
-#     if event:
-#         db.session.delete(event)
-#         db.session.commit()
-    
-#         return  jsonify({'status':200,'message':'success','success':True}),200
-
-#     return  jsonify({'status':404,'message':'event not found or not eligible','success':False}),404
-
-
-
-# """
-# GET DATA EVENT API
-# """
-
-# @v1.route('get/events',methods=['GET'])
-# @decorators.authUserDecorator()
-# def get_events():
-
-#     events:Events = Events.query.all()
-#     events = EventSchema(many=True).dump(events)
-
-#     return  jsonify({'status':200,'message':'success','data':events,'success':True}),200
-
-
-# @v1.route('get/event/<int:id_event>',methods=['GET'])
-# @decorators.authUserDecorator()
-# def get_event(id_event):
-
-#     event:Events = Events.query.get(id_event)
-#     event = EventSchema().dump(event)
-
-#     return  jsonify({'status':200,'message':'success','data':event,'success':True}),200
+        return {"message":"Success","data":data,"code":200,"error":False},200
 
 
