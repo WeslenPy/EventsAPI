@@ -11,6 +11,9 @@ from app.databases.events.schema.termsEventSchema import TermsEventSchema
 
 from marshmallow import pre_load,post_load,fields
 
+from app.utils.functions import aws
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
 
 
 class DateTimeIso(fields.Field):
@@ -37,7 +40,12 @@ class EventSchema(app.ma.SQLAlchemyAutoSchema):
 
     @pre_load
     def upload_files(self,data,**kwargs):
-        pass
+        video:FileStorage  = data.get('video',None)
+        image:FileStorage =  data.get('image',None)
+
+        if video:data['video'] = aws.generate_uri(secure_filename(video.filename))
+        if image:data['image'] = aws.generate_uri(secure_filename(image.filename))
+
         return data
 
     @post_load(pass_original=True)

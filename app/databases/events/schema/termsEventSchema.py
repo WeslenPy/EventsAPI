@@ -3,11 +3,22 @@ from app.databases.events.models import TermsEvent,Events,Users
 from marshmallow import validates,pre_load,post_load
 from app.server.instance import app
 
+from app.utils.functions import aws
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
 class TermsEventSchema(app.ma.SQLAlchemyAutoSchema):
 
-    @post_load
-    def _new(self,data,**kwargs):
-        data.save()
+    @post_load(pass_original=True)
+    def _new(self,data,original_data,**kwargs):
+        TermsEvent(**original_data).save()
+        return data
+
+    @pre_load
+    def upload_files(self,data,**kwargs):
+        term:FileStorage =  data.get('term_file',None)
+
+        if term:data['url'] = aws.generate_uri(secure_filename(term.filename))
+
         return data
 
     @validates('event_id')
