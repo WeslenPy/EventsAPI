@@ -17,7 +17,7 @@ class TermsEventSchema(app.ma.SQLAlchemyAutoSchema):
     def upload_files(self,data,**kwargs):
         term:FileStorage =  data.get('term_file',None)
 
-        if term:data['url'] = aws.generate_uri(secure_filename(term.filename))
+        if term:data['url'] = aws.upload_file(term,secure_filename(term.filename))
 
         return data
 

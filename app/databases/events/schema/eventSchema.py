@@ -18,7 +18,6 @@ from werkzeug.datastructures import FileStorage
 
 class DateTimeIso(fields.Field):
     def _serialize(self, value, attr, obj,**kwargs):
-        print(value,attr,obj)
         if value is None:return None
         return obj.datetime_isoformat(value)
 
@@ -43,8 +42,8 @@ class EventSchema(app.ma.SQLAlchemyAutoSchema):
         video:FileStorage  = data.get('video',None)
         image:FileStorage =  data.get('image',None)
 
-        if video:data['video'] = aws.generate_uri(secure_filename(video.filename))
-        if image:data['image'] = aws.generate_uri(secure_filename(image.filename))
+        if video:data['video'] = aws.upload_file(video,secure_filename(video.filename))
+        if image:data['image'] = aws.upload_file(image,secure_filename(image.filename))
 
         return data
 
