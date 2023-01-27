@@ -1,2 +1,2 @@
 # EventsAPI
-API de eventos 
+API de eventos ModernaPass
