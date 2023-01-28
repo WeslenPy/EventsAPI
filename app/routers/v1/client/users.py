@@ -1,6 +1,8 @@
 from app.databases.events.schema import UserSchema,PhysicalPersonSchema,LegalPersonSchema
+from app.databases.events.models import Users
 from flask_restx import Resource,Api,fields
 from marshmallow import ValidationError
+from app.utils.functions.decorators import auth
 from app.server import app
 
 api:Api = app.user_api
@@ -29,6 +31,7 @@ user_corporate = api.clone("Corporate",user_model,{
                             'cnpj':fields.String(required=True,description="Identificação CNPJ",min_length=14,max_length=14),
                             'corporate_name':fields.String(required=True,description="Nome fantasia da empresa"),
 })
+
 
 @api.route("/physical")
 class Phisycal(Resource):
@@ -69,3 +72,17 @@ class Corporate(Resource):
             'error':False},200
 
         
+
+@api.route('/profile')
+class UserProfileRouter(Resource):
+
+    @api.doc("Rota para pegar todos os dados do usuário")
+    @api.response(401,"Unauthorized")
+    @api.response(200,"Success")
+    @auth.authType(required=True,location='params')
+    def get(self,**kwargs):
+        
+        items = Users.query.filter_by(active=True,id=kwargs['user_id']).all()
+        data = UserSchema().dump(items)
+
+        return {"message":"Success","data":data,"code":200,"error":False},200
