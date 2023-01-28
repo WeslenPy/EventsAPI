@@ -11,4 +11,4 @@ from .orderSchema import OrderSchema
 from .rulesEventSchema import RulesEventSchema
 from .termsEventSchema import TermsEventSchema
 from .userAccessTypesSchema import UserAccessTypesSchema
-from .userTypesSchema import UserTypesSchema
+from .userTypesSchema import UserTypesSchema,user_types_model

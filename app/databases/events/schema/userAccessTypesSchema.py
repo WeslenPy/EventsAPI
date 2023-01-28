@@ -7,8 +7,6 @@ from app.databases.events.schema.userTypesSchema import UserTypesSchema
 class UserAccessTypesSchema(app.ma.SQLAlchemyAutoSchema):
 
     type_ship = app.ma.Nested(UserTypesSchema)
-
-    
     
     class Meta:
         unknown = "exclude"

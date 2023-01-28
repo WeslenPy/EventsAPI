@@ -1,49 +1,44 @@
 
-from app.utils.functions import decorators
-from flask import request,jsonify
-from app import app
+from app.databases.events.schema  import UserTypesSchema,user_types_model
+from app.databases.events.models import UserTypes
+from app.utils.functions.decorators import auth
+from flask_restx import Resource,Api
+from marshmallow import ValidationError
+from app.server import app
 
-from app.databases.events.models    import UserTypes
-from app.databases.events.schema  import UserTypesSchema
 
-from app.blueprints import v1
+api:Api = app.admin_api
 
-"""
-POST REGISTER DATA 
-"""
-
-@v1.route('create/type/user',methods=['POST'])
-@decorators.authUserDecorator(is_admin=True)
-@decorators.validityDecorator({'type':str,'description':str,"status":bool})
-def create_type_user():
-    data = request.get_json()
-
-    find =UserTypes.query.filter(UserTypes.type==data['type']).first()
-    if not find:
-        new:UserTypes = UserTypesSchema().load(data)
-        new.save()
-
-        data = UserTypesSchema().dump(new)
-        return jsonify({'status':200,'message':'type user created successfully','data':data,'success':True}),200
-
-    data = UserTypesSchema().dump(find)
-    return jsonify({'status':200,'message':'type user has already been registered','data':data,'success':False}),200
+@api.route("/create/user/type")
+class UserTypeRouter(Resource):
     
+    @api.expect(user_types_model,validate=True)
+    @api.doc("Rota para cadastrar tipos de acesso")
+    @auth.authType()
+    def post(self,**kwargs):
+        data = api.payload
+        _schema =  UserTypesSchema()
 
-@v1.route('get/types',methods=['GET'])
-def get_types():
+        try:data= _schema.load(data)
+        except ValidationError as erros:
+            return {"error":True,"message":"Algo deu errado.",
+                                "details":{"erros":erros.messages}},201
 
-    find:UserTypes = UserTypes.query.all()
-    find = UserTypesSchema(many=True).dump(find)
+        return {
+            'status':200,
+            'message':'User type created successfully',
+            'error':False},200
 
-    return  jsonify({'status':200,'message':'success','data':find,'success':True}),200
 
-@v1.route('get/type/<int:id>',methods=['GET'])
-@decorators.authUserDecorator()
-def get_type(id):
+@api.route("/user/types/all")
+class Genre(Resource):
+    
+    @api.doc("Lista de tipos de usuario",security=None)
+    @api.marshal_list_with(user_types_model)
+    def get(self):
 
-    find:UserTypes = UserTypes.query.get(id)
-    find = UserTypesSchema().dump(find)
+        data:list[UserTypes] = UserTypes.query.filter_by(status=True).all()
+        _schema:UserTypesSchema =  UserTypesSchema(many=True)
+        data= _schema.dump(data)
 
-    return  jsonify({'status':200,'message':'success','data':find,'success':True}),200
-
+        return data,200

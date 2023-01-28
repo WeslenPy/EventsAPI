@@ -26,7 +26,7 @@ class App:
                 }
         }
 
-        self.app:Flask = Flask(__name__)
+        self.app:Flask = Flask(__name__,template_folder="templates")
         self.app.config.from_pyfile("config.py")
 
 

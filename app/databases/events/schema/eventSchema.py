@@ -18,6 +18,7 @@ from werkzeug.datastructures import FileStorage
 
 class DateTimeIso(fields.Field):
     def _serialize(self, value, attr, obj,**kwargs):
+        print(value,obj,attr)
         if value is None:return None
         return obj.datetime_isoformat(value)
 

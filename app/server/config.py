@@ -31,6 +31,7 @@ JSONIFY_PRETTYPRINT_REGULAR = True
 SECRET_KEY = environ.get('SECRET_KEY','secret fuerte')
 
 # configurações de email
+ENABLED_EMAIL = bool(environ.get('ENABLED_EMAIL',False))
 MAIL_PORT = int(environ.get('MAIL_PORT',0))
 MAIL_SERVER = environ.get('MAIL_SERVER','')
 MAIL_USERNAME = environ.get('MAIL_USERNAME','')

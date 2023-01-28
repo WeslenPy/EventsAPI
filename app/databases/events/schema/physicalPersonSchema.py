@@ -2,9 +2,11 @@ from marshmallow import post_load,post_dump,validates_schema,pre_load,pre_dump,v
 from app.server.instance import app
 
 from app.databases.events.models    import PhysicalPerson,GenreTypes
+from app.databases.events.schema.genreTypesSchema import GenreTypeSchema
 from app.utils.functions.validitys import validity_field
 
 class PhysicalPersonSchema(app.ma.SQLAlchemyAutoSchema):
+    genre_ship = app.ma.Nested(GenreTypeSchema)
 
     @post_load
     def new_physical(self,data,**kwargs):

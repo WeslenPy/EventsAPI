@@ -82,7 +82,7 @@ class UserProfileRouter(Resource):
     @auth.authType(required=True,location='params')
     def get(self,**kwargs):
         
-        items = Users.query.filter_by(active=True,id=kwargs['user_id']).all()
+        items = Users.query.filter_by(active=True,id=kwargs['user_id']).first()
         data = UserSchema().dump(items)
 
         return {"message":"Success","data":data,"code":200,"error":False},200

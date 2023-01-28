@@ -8,23 +8,26 @@ from app.databases.events.schema.genreTypesSchema import GenreTypeSchema
 from app.databases.events.schema.termsEventSchema import TermsEventSchema
 from app.databases.events.schema.userAccessTypesSchema import UserAccessTypesSchema
 
+from flask import request,render_template
+from flask_mail import Message
+
 from app.utils.functions.validitys import validity_field,validity_cnpj,validity_cpf
 from marshmallow import (ValidationError,
                         validates_schema,
                         validates,
-                        pre_load,
+                        pre_dump,
                         post_load,)
 
 class UserSchema(app.ma.SQLAlchemyAutoSchema):
     
     physical_ship = app.ma.Nested(PhysicalPersonSchema)
     legal_ship = app.ma.Nested(LegalPersonSchema)
-    genre_ship = app.ma.Nested(GenreTypeSchema)
     
     types_children = app.ma.Nested(UserAccessTypesSchema,many=True)
     terms_children = app.ma.Nested(TermsEventSchema,many=True)
 
     email = app.ma.Email()
+
 
     @post_load(pass_original=True)
     def new_user(self,data,original_data,**kwargs):
@@ -37,6 +40,19 @@ class UserSchema(app.ma.SQLAlchemyAutoSchema):
         type_ = self.context.get('type_user',True)
         setattr(data, field,result.id)
         setattr(data, 'physical',type_)
+
+        if app.app.config.get("ENABLED_EMAIL",False):
+            token_url = app.tokenSafe.dumps(data.email,salt='emailConfirmUser')
+            msg = Message("Não responda este e-mail",
+                    sender=app.app.config['MAIL_USERNAME'],
+                    recipients=[data.email])
+
+            url_root = request.base_url.replace(request.path,f'/confirm/{token_url}')
+            
+            msg.html = str(render_template('email/confirm_email.html',url_validity=url_root,username=result.full_name.split(' ')[0].capitalize()))
+            app.executor.submit(app.mail.send,msg)
+
+        else:data.active=True
 
         data.save()
         return data
