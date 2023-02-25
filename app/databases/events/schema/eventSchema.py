@@ -5,7 +5,7 @@ from app.databases.events.models    import Events,Tickets,Category,Users
 from app.databases.events.schema.categorySchema import CategorySchema
 from app.databases.events.schema.ticketSchema import TicketSchema
 from app.databases.events.schema.userSchema import UserSchema
-from app.databases.events.schema.partnerUserSchema import PartnerUserSchema
+from app.databases.events.schema.partnerSchema import PartnerUserSchema
 from app.databases.events.schema.rulesEventSchema import RulesEventSchema
 from app.databases.events.schema.termsEventSchema import TermsEventSchema
 

@@ -21,7 +21,10 @@ class Lots(db.Model):
     closed  = db.Column(db.Boolean,nullable=False,default=False)
     
     ticket_id = db.Column(db.ForeignKey("tickets.id",ondelete='cascade'),nullable=False)
+    user_id = db.Column(db.ForeignKey("users.id",ondelete='cascade'),nullable=False)
+
     ticket_ship = db.relationship('Tickets', back_populates="lot_children")
+    user_ship = db.relationship('Users', back_populates="lot_children")
         
     lot_children = db.relationship(
         "Orders", back_populates="lot_ship",

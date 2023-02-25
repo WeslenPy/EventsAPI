@@ -42,14 +42,16 @@ class UserSchema(app.ma.SQLAlchemyAutoSchema):
         setattr(data, 'physical',type_)
 
         if app.app.config.get("ENABLED_EMAIL",False):
-            token_url = app.tokenSafe.dumps(data.email,salt='emailConfirmUser')
+            token_url = app.tokenSafe.dumps(data.email,salt=app.app.config["TOKEN_SALT"])
             msg = Message("Não responda este e-mail",
                     sender=app.app.config['MAIL_USERNAME'],
                     recipients=[data.email])
 
             url_root = request.base_url.replace(request.path,f'/confirm/{token_url}')
+
+            name:str = result.full_name if getattr(result,"full_name") !=None else getattr(result,"corporate_name")
             
-            msg.html = str(render_template('email/confirm_email.html',url_validity=url_root,username=result.full_name.split(' ')[0].capitalize()))
+            msg.html = str(render_template('email/confirm_email.html',url_validity=url_root,username=name.split(' ')[0].capitalize()))
             app.executor.submit(app.mail.send,msg)
 
         else:data.active=True

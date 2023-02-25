@@ -62,6 +62,9 @@ class Users(db.Model):
     types_children = db.relationship(
         "UserAccessTypes", back_populates="user_ship",
         cascade="all, delete",passive_deletes=True) 
+    lot_children = db.relationship(
+        "Lots", back_populates="user_ship",
+        cascade="all, delete",passive_deletes=True) 
     
    
 
