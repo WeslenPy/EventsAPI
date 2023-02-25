@@ -23,8 +23,8 @@ class PartnerSchema(app.ma.SQLAlchemyAutoSchema):
         user_id = data.get('user_id',None)
         event_id = data.get('event_id',None)
 
-        validity_field.find_field_model(Users,'id',user_id,'user_id')
-        validity_field.find_field_model(Events,'id',event_id,'event_id')
+        validity_field.find_field_model(Users,{'id':user_id,"active":True},'user_id')
+        validity_field.find_field_model(Events,{'id':event_id,'status':True},'event_id')
 
     class Meta:
         model = Partner

@@ -23,12 +23,12 @@ class TermsEventSchema(app.ma.SQLAlchemyAutoSchema):
 
     @validates('event_id')
     def exists_event_id(self,data,**kwargs):
-        validity_field.find_field_model(Events,'id',data,'event_id')
+        validity_field.find_field_model(Events,{'id':data,"status":True},'event_id')
         return data    
     
     @validates('user_id')
     def exists_user_id(self,data,**kwargs):
-        validity_field.find_field_model(Users,'id',data,'user_id')
+        validity_field.find_field_model(Users,{'id':data,"status":True},'user_id')
         return data
         
     class Meta:

@@ -23,7 +23,7 @@ class CategorySchema(app.ma.SQLAlchemyAutoSchema):
 
     @validates('name')
     def unique(self,data,**kwargs):
-        validity_field.unique(Category,{"name":data})
+        validity_field.unique(Category,{"name":data,"status":True})
         return data
 
     class Meta:

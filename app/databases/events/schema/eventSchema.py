@@ -1,6 +1,6 @@
 from app.server.instance import app
 
-from app.databases.events.models    import Events
+from app.databases.events.models    import Events,Tickets,Category,Users
 
 from app.databases.events.schema.categorySchema import CategorySchema
 from app.databases.events.schema.ticketSchema import TicketSchema
@@ -9,7 +9,8 @@ from app.databases.events.schema.partnerUserSchema import PartnerUserSchema
 from app.databases.events.schema.rulesEventSchema import RulesEventSchema
 from app.databases.events.schema.termsEventSchema import TermsEventSchema
 
-from marshmallow import pre_load,post_load,fields
+from marshmallow import pre_load,post_load,fields,validates_schema
+from app.utils.functions.validitys import validity_field
 
 from app.utils.functions import aws
 from werkzeug.utils import secure_filename
@@ -18,7 +19,6 @@ from werkzeug.datastructures import FileStorage
 
 class DateTimeIso(fields.Field):
     def _serialize(self, value, attr, obj,**kwargs):
-        print(value,obj,attr)
         if value is None:return None
         return obj.datetime_isoformat(value)
 
@@ -37,6 +37,20 @@ class EventSchema(app.ma.SQLAlchemyAutoSchema):
     start_date = DateTimeIso(required=True)
     start_hour = DateTimeIso(required=True)
     end_date = DateTimeIso(required=True)
+    
+    @validates_schema
+    def validates_fields(self,data,**kwargs):
+        category_id = data.get('category_id',None)
+        ticket_id = data.get('ticket_id',None)
+        user_id = data.get('user_id',None)
+
+        validity_field.find_field_model(Users,{'id':user_id,"active":True},'user_id')
+        validity_field.find_field_model(Category,{'id':category_id,"status":True},'category_id')
+        validity_field.find_field_model(Tickets,{'id':ticket_id,'user_id':user_id,"status":True},'ticket_id')
+
+        return data
+
+
 
     @pre_load
     def upload_files(self,data,**kwargs):
@@ -52,6 +66,8 @@ class EventSchema(app.ma.SQLAlchemyAutoSchema):
     def _new(self,data,original_data,**kwargs):
         Events(**original_data).save()
         return data
+    
+
 
 
     class Meta:

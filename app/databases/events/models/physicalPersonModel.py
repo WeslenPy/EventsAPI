@@ -24,7 +24,7 @@ class PhysicalPerson(db.Model):
     def __init__(self,full_name,cpf,birth_date,genre_id):
 
         self.birth_date = birth_date
-        self.full_name = full_name
+        self.full_name = full_name.strip().capitalize()
         self.genre_id = genre_id
         self.cpf = cpf
         

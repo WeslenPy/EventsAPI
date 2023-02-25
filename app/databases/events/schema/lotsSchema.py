@@ -19,7 +19,7 @@ class LotSchema(app.ma.SQLAlchemyAutoSchema):
 
     @validates('ticket_id')
     def exists_id(self,data,**kwargs):
-        validity_field.find_field_model(Tickets,'id',data,'ticket_id')
+        validity_field.find_field_model(Tickets,{'id':data},'ticket_id')
         return data
 
     

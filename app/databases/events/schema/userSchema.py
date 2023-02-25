@@ -67,8 +67,6 @@ class UserSchema(app.ma.SQLAlchemyAutoSchema):
         validity_field.unique(Users,check)
         return data
 
-  
-    
     class Meta:
         unknown = "exclude"
         model = Users

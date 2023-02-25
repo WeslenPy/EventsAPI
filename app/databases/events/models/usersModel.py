@@ -82,7 +82,7 @@ class Users(db.Model):
         self.address = address
         self.active = active
         self.state = state
-        self.email = email
+        self.email = email.strip().lower()
         self.phone = phone
         self.city = city
         self.zip_code = zip_code

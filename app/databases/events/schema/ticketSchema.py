@@ -12,7 +12,7 @@ class TicketSchema(app.ma.SQLAlchemyAutoSchema):
 
     @validates('user_id')
     def check_user_id(self,data,**kwargs):
-        validity_field.find_field_model(Users,'id',data,'user_id')
+        validity_field.find_field_model(Users,{'id':data,'active':True},'user_id')
         return data
 
     class Meta:

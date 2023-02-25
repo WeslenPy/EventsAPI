@@ -21,7 +21,7 @@ class PhysicalPersonSchema(app.ma.SQLAlchemyAutoSchema):
 
     @validates('genre_id')
     def genre_exists(self,data,**kwargs):
-        validity_field.find_field_model(GenreTypes,'id',data,'genre_id')
+        validity_field.find_field_model(GenreTypes,{'id':data,"status":True},'genre_id')
 
     class Meta:
         unknown = 'exclude'

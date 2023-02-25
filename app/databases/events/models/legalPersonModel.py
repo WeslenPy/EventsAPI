@@ -18,7 +18,7 @@ class LegalPerson(db.Model):
 
     def __init__(self,corporate_name,cnpj):
 
-        self.corporate_name = corporate_name
+        self.corporate_name = corporate_name.strip().capitalize()
         self.cnpj = cnpj
         
     def __repr__(self) -> str:

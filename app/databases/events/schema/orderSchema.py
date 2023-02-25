@@ -13,8 +13,8 @@ class OrderSchema(app.ma.SQLAlchemyAutoSchema):
         user_id = data.get('user_id',None)
         lot_id = data.get('lot_id',None)
 
-        validity_field.find_field_model(Users,'id',user_id,'user_id')
-        lot:Lots = validity_field.find_field_model(Lots,'id',lot_id,'lot_id')
+        validity_field.find_field_model(Users,{'id':user_id,"active":True},'user_id')
+        lot:Lots = validity_field.find_field_model(Lots,{'id':lot_id,"status":True},'lot_id')
 
         data['unit_price'] = lot.price
         data['final_price']= data['quantity'] * lot.price
