@@ -11,7 +11,7 @@ class LotSchema(app.ma.SQLAlchemyAutoSchema):
         return data
 
     @validates_schema
-    def validetes_fields(self,data,**kwargs):
+    def validates_fields(self,data,**kwargs):
         start_date =  data.get('start_date')
         end_date =  data.get('end_date')
 
