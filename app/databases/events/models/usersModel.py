@@ -68,27 +68,27 @@ class Users(db.Model):
     
    
 
-    def __init__(self,email,password,phone,zip_code,address,number_address,
-                 complement,district,city,state,physical=True,
+    def __init__(self,email:str,password:str,phone:str,zip_code:str,address:str,number_address:int,
+                 complement:str,district:str,city:str,state:str,physical=True,
                 physical_id=None,legal_id=None,
                  is_admin=False,active=False,created_at=currentDate):
 
-        self.password = encryptPassword(password)
+        self.password = encryptPassword(password.strip())
         self.number_address= number_address
         self.created_at  = created_at()
         self.physical_id = physical_id
         self.physical = physical
-        self.complement = complement
+        self.complement = complement.strip()
         self.legal_id = legal_id
         self.is_admin = is_admin
-        self.district = district
-        self.address = address
+        self.district = district.strip().capitalize()
+        self.address = address.strip().capitalize()
         self.active = active
-        self.state = state
+        self.state = state.strip()
         self.email = email.strip().lower()
-        self.phone = phone
-        self.city = city
-        self.zip_code = zip_code
+        self.phone = phone.strip()
+        self.city = city.strip().capitalize()
+        self.zip_code = zip_code.strip()
 
     
     def default_add(self):

@@ -49,7 +49,7 @@ class UserSchema(app.ma.SQLAlchemyAutoSchema):
 
             url_root = request.base_url.replace(request.path,f'/confirm/{token_url}')
 
-            name:str = result.full_name if getattr(result,"full_name") !=None else getattr(result,"corporate_name")
+            name:str = result.full_name if getattr(result,"full_name",None) !=None else getattr(result,"corporate_name",None)
             
             msg.html = str(render_template('email/confirm_email.html',url_validity=url_root,username=name.split(' ')[0].capitalize()))
             app.executor.submit(app.mail.send,msg)

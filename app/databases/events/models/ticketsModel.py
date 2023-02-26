@@ -32,17 +32,17 @@ class Tickets(db.Model):
         "Events", back_populates="ticket_ship",
         cascade="all, delete",passive_deletes=True)
     
-    def __init__(self,title,max_buy,min_buy,paid,user_id,price,description='',
-                        status=True,created_at=currentDate):
+    def __init__(self,title:str,max_buy:int,min_buy:int,paid:bool,user_id:int,price:float,description:str='',
+                        status:bool=True,created_at=currentDate):
 
-        self.description = description
+        self.description = description.strip()
         self.created_at = created_at()
         self.max_buy = max_buy
         self.min_buy = min_buy
         self.user_id = user_id
         self.status = status
         self.price = price
-        self.title = title
+        self.title = title.strip()
         self.paid = paid
         
     def __repr__(self) -> str:

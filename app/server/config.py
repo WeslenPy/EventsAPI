@@ -36,8 +36,8 @@ MAIL_PORT = int(environ.get('MAIL_PORT',0))
 MAIL_SERVER = environ.get('MAIL_SERVER','')
 MAIL_USERNAME = environ.get('MAIL_USERNAME','')
 MAIL_PASSWORD = environ.get('MAIL_PASSWORD','')
-MAIL_USE_TLS = False 
-MAIL_USE_SSL = True 
+MAIL_USE_TLS = True 
+MAIL_USE_SSL = False 
 
 # expiracao token em minutos
 EXPIRATION_TOKEN = 180

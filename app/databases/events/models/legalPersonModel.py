@@ -9,14 +9,14 @@ class LegalPerson(db.Model):
 
     id  = db.Column(db.Integer, primary_key=True,autoincrement=True)
     
-    corporate_name = db.Column(db.String(255),unique=True,nullable=False)
+    corporate_name = db.Column(db.String(255),nullable=False)
     cnpj = db.Column(db.String(20),nullable=False,unique=True)
     
     legal_children = db.relationship(
         "Users", back_populates="legal_ship",
         cascade="all, delete",passive_deletes=True) 
 
-    def __init__(self,corporate_name,cnpj):
+    def __init__(self,corporate_name:str,cnpj:str,**kwargs):
 
         self.corporate_name = corporate_name.strip().capitalize()
         self.cnpj = cnpj
