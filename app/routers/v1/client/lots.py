@@ -13,6 +13,7 @@ lot_model =api.model('Lot', {
     "start_date":fields.DateTime(description="Data de inicio do lote.",required=True),
     "end_date":fields.DateTime(description="Data de finalização do lote.",required=True),
     "ticket_id":fields.Integer(description="Id do ticket.",required=True),
+    "user_id":fields.Integer(description="Id do user.",readonly=True),
     "status":fields.Boolean(description="Status do lote.",required=True,default=True),
     "created_at":fields.DateTime(description="Data de criação.",readonly=True),
 })
@@ -25,8 +26,9 @@ lots_model = api.clone("Lots",app.default_model,{
 class LotsRouter(Resource):
 
     @api.expect(lot_model)
+    @api.response(401,"Unauthorized")
     @api.doc("Rota para cadastro dos lotes")
-    @auth.authType()
+    @auth.authType(required=True,api=api)
     def post(self,**kwargs):
         data = api.payload
         _schema =  LotSchema()
