@@ -19,7 +19,6 @@ def test_create_ticket(headers):
     }
 
     response = request("POST",f"{BASE}/create",headers=headers,json=data)
-    print(response.json())
 
     assert response.status_code == 200
 
