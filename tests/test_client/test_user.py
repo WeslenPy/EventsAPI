@@ -1,11 +1,12 @@
 
 from tests import BASE_URL,HEADERS
 from requests import request,Response
-
+import pytest
 
 BASE  = f"{BASE_URL}/user"
 
 
+@pytest.mark.run(order=1)
 def test_create_new_user_physical():
     """
     Testar se a criação de um novo usuario está funcionando.
@@ -33,7 +34,7 @@ def test_create_new_user_physical():
     assert response.status_code == 200,"Tudo certo"
     
 
-
+@pytest.mark.run(order=2)
 def test_create_new_user_corporate():
     """
     Testa a criação de conta pessoa juridica 

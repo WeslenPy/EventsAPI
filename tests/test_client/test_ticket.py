@@ -1,10 +1,11 @@
 from tests import BASE_URL
 from requests import request
-
+import pytest
 
 BASE = f"{BASE_URL}/ticket"
 
 
+@pytest.mark.run(order=4)
 def test_create_ticket(headers):
 
 

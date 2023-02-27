@@ -1,9 +1,11 @@
 from tests import BASE_URL,HEADERS
-from pytest import fixture
+from pytest import fixture,mark
 from requests import request
 
 BASE = f"{BASE_URL}/user/auth"
 
+
+@mark.run(order=3)
 @fixture(scope="session")
 def headers():
 
